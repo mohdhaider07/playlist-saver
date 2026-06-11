@@ -18,7 +18,6 @@ import {
   Search,
   Filter,
   Inbox,
-  Sparkles,
 } from "lucide-react";
 
 export default function DashboardPage() {
@@ -27,10 +26,6 @@ export default function DashboardPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [channelFilter, setChannelFilter] = useState("");
-
-  useEffect(() => {
-    loadPlaylists();
-  }, []);
 
   const loadPlaylists = async () => {
     try {
@@ -42,6 +37,11 @@ export default function DashboardPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadPlaylists();
+  }, []);
 
   const handleDelete = async (id: string) => {
     try {

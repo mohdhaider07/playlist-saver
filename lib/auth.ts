@@ -18,10 +18,10 @@ export async function comparePassword(
 }
 
 export function generateToken(payload: object): string {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN,
-  } as any);
+  const options: jwt.SignOptions = {
+    expiresIn: JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
+  };
+  return jwt.sign(payload, JWT_SECRET, options);
 }
 
 export function verifyToken(token: string): jwt.JwtPayload | null {

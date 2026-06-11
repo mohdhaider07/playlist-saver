@@ -52,12 +52,6 @@ export default function PlaylistPage({
     activeVideoStr.current = activeVideoId;
   }, [activeVideoId]);
 
-  useEffect(() => {
-    if (!playlistId) return;
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playlistId]);
-
   const loadData = async () => {
     try {
       const res = await apiFetch(`/api/playlists/${playlistId}`);
@@ -75,6 +69,13 @@ export default function PlaylistPage({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!playlistId) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playlistId]);
 
   const activeVideo = data?.playlist?.videos?.find(
     (v) => v.youtubeVideoId === activeVideoId
