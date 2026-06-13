@@ -1,5 +1,7 @@
 1. Landing page is finazlied
 
+TODO
+
 2. buy new domain.
 3. add new domain email
 4. Setup the SEO after the new domain
