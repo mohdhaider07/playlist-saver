@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { motion } from "motion/react";
+import { registerSchema } from "@/lib/validation";
 
 interface RegisterFormProps {
   onSuccess: (email: string) => void;
@@ -18,13 +19,27 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const validation = registerSchema.safeParse({ email, password, confirmPassword });
+  const fieldErrors: Record<string, string> = {};
+  if (!validation.success) {
+    validation.error.issues.forEach((err) => {
+      const path = err.path[0] as string;
+      if (path && touched[path]) {
+        fieldErrors[path] = err.message;
+      }
+    });
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTouched({ email: true, password: true, confirmPassword: true });
     setError("");
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
+    const validation = registerSchema.safeParse({ email, password, confirmPassword });
+    if (!validation.success) {
+      setError(validation.error.issues[0].message);
       return;
     }
 
@@ -79,10 +94,20 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           type="email"
           required
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setTouched((prev) => ({ ...prev, email: true }));
+          }}
           placeholder="you@example.com"
-          className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
+          className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
+            fieldErrors.email ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+          }`}
         />
+        {fieldErrors.email && (
+          <p className="text-[10px] font-bold text-destructive pl-1">
+            {fieldErrors.email}
+          </p>
+        )}
       </div>
 
       <div className="space-y-1.5">
@@ -93,10 +118,20 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           type="password"
           required
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setTouched((prev) => ({ ...prev, password: true }));
+          }}
           placeholder="••••••••"
-          className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
+          className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
+            fieldErrors.password ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+          }`}
         />
+        {fieldErrors.password && (
+          <p className="text-[10px] font-bold text-destructive pl-1">
+            {fieldErrors.password}
+          </p>
+        )}
       </div>
 
       <div className="space-y-1.5">
@@ -107,10 +142,20 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           type="password"
           required
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            setTouched((prev) => ({ ...prev, confirmPassword: true }));
+          }}
           placeholder="••••••••"
-          className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
+          className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
+            fieldErrors.confirmPassword ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+          }`}
         />
+        {fieldErrors.confirmPassword && (
+          <p className="text-[10px] font-bold text-destructive pl-1">
+            {fieldErrors.confirmPassword}
+          </p>
+        )}
       </div>
 
       <Button
@@ -130,4 +175,3 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     </form>
   );
 }
-

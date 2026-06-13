@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "@/lib/db";
 import { comparePassword, generateToken } from "@/lib/auth";
+import { loginSchema } from "@/lib/validation";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
-
-    if (!email || !password) {
+    const body = await request.json();
+    const result = loginSchema.safeParse(body);
+    if (!result.success) {
       return NextResponse.json(
-        { error: "Email and password required" },
+        { error: result.error.issues[0].message },
         { status: 400 }
       );
     }
+    const { email, password } = result.data;
 
     const emailLower = email.toLowerCase().trim();
     const users = await getUsersCollection();

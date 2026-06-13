@@ -8,18 +8,39 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/hooks/use-auth";
 import { motion } from "motion/react";
+import { loginSchema } from "@/lib/validation";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const { login } = useAuth();
 
+  const validation = loginSchema.safeParse({ email, password });
+  const fieldErrors: Record<string, string> = {};
+  if (!validation.success) {
+    validation.error.issues.forEach((err) => {
+      const path = err.path[0] as string;
+      if (path && touched[path]) {
+        fieldErrors[path] = err.message;
+      }
+    });
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setTouched({ email: true, password: true });
     setError("");
+
+    const validation = loginSchema.safeParse({ email, password });
+    if (!validation.success) {
+      setError(validation.error.issues[0].message);
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -60,10 +81,20 @@ export function LoginForm() {
           type="email"
           required
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setTouched((prev) => ({ ...prev, email: true }));
+          }}
           placeholder="you@example.com"
-          className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
+          className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
+            fieldErrors.email ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+          }`}
         />
+        {fieldErrors.email && (
+          <p className="text-[10px] font-bold text-destructive pl-1">
+            {fieldErrors.email}
+          </p>
+        )}
       </div>
 
       <div className="space-y-1.5">
@@ -74,10 +105,20 @@ export function LoginForm() {
           type="password"
           required
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setTouched((prev) => ({ ...prev, password: true }));
+          }}
           placeholder="••••••••"
-          className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
+          className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
+            fieldErrors.password ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+          }`}
         />
+        {fieldErrors.password && (
+          <p className="text-[10px] font-bold text-destructive pl-1">
+            {fieldErrors.password}
+          </p>
+        )}
       </div>
 
       <Button
@@ -97,4 +138,3 @@ export function LoginForm() {
     </form>
   );
 }
-

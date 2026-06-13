@@ -1,47 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "@/lib/db";
 import { hashPassword, generateOtp } from "@/lib/auth";
+import { registerSchema } from "@/lib/validation";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password, confirmPassword } = await request.json();
-
-    if (!email || !password || !confirmPassword) {
+    const body = await request.json();
+    const result = registerSchema.safeParse(body);
+    if (!result.success) {
       return NextResponse.json(
-        { error: "All fields are required" },
+        { error: result.error.issues[0].message },
         { status: 400 }
       );
     }
-
-    if (password !== confirmPassword) {
-      return NextResponse.json(
-        { error: "Passwords do not match" },
-        { status: 400 }
-      );
-    }
+    const { email, password } = result.data;
 
     const emailLower = email.toLowerCase().trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLower)) {
-      return NextResponse.json(
-        { error: "Invalid email format" },
-        { status: 400 }
-      );
-    }
-
-    if (
-      password.length < 8 ||
-      !/[A-Z]/.test(password) ||
-      !/[a-z]/.test(password) ||
-      !/[0-9]/.test(password)
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one digit",
-        },
-        { status: 400 }
-      );
-    }
 
     const users = await getUsersCollection();
     const existing = await users.findOne({ email: emailLower });
