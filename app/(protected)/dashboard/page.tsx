@@ -169,17 +169,7 @@ export default function DashboardPage() {
           transition={{ duration: 0.4, delay: 0.2 }}
           className="flex flex-col sm:flex-row gap-3 items-center justify-between mb-6"
         >
-          {/* Search bar */}
-          <div className="relative w-full sm:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4" />
-            <Input
-              type="text"
-              placeholder="Search playlist title or channel..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-10 rounded-xl bg-card border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
-            />
-          </div>
+        
 
           {/* Filter drop down */}
           <div className="flex gap-2 w-full sm:w-auto justify-end">
