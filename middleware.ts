@@ -6,7 +6,7 @@ const JWT_SECRET =
   "your_very_long_random_secret_here_at_least_64_chars";
 
 // Routes that require authentication
-const protectedRoutes = ["/dashboard", "/playlist"];
+const protectedRoutes = ["/dashboard", "/playlist", "/profile"];
 // Routes only for unauthenticated users
 const authRoutes = ["/login", "/register"];
 

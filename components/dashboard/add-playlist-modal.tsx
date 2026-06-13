@@ -56,12 +56,12 @@ export function AddPlaylistModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md rounded-3xl glass-panel border border-white/5 shadow-2xl p-6 overflow-hidden">
+      <DialogContent className="sm:max-w-md rounded-xl bg-card border border-border shadow-lg p-6 overflow-hidden">
         <DialogHeader className="select-none">
-          <DialogTitle className="text-xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
-            <Sparkles className="size-5 text-primary fill-primary/10" /> Add New Playlist
+          <DialogTitle className="text-xl font-serif font-semibold text-foreground flex items-center gap-2">
+            <Sparkles className="size-5 text-primary" /> Add New Playlist
           </DialogTitle>
-          <DialogDescription className="text-xs text-muted-foreground/80 mt-1">
+          <DialogDescription className="text-xs text-muted-foreground mt-1 font-light">
             Connect a public YouTube playlist to watch and save your progress.
           </DialogDescription>
         </DialogHeader>
@@ -80,7 +80,7 @@ export function AddPlaylistModal({
           )}
 
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">
               YouTube Playlist Link
             </label>
             <div className="relative">
@@ -90,32 +90,32 @@ export function AddPlaylistModal({
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 disabled={loading}
-                className="pl-9 h-10 rounded-xl bg-muted/20 border-white/5 focus-visible:border-primary/50 text-foreground text-sm"
+                className="pl-9 h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground text-sm"
               />
             </div>
             <p className="text-[10px] text-muted-foreground/70 leading-relaxed pl-1">
-              Example: <code className="text-primary font-mono font-medium">https://www.youtube.com/playlist?list=PL...</code>
+              Example: <code className="text-primary font-mono font-semibold">https://www.youtube.com/playlist?list=PL...</code>
             </p>
           </div>
 
-          <DialogFooter className="pt-4 mt-2">
+          <DialogFooter className="pt-4 mt-2 gap-2 sm:gap-0">
             <Button
               type="button"
               variant="ghost"
               onClick={() => onOpenChange(false)}
               disabled={loading}
-              className="h-10 rounded-xl font-semibold hover:bg-muted/30"
+              className="h-10 rounded-full font-semibold hover:bg-stone-200/50 dark:hover:bg-stone-800/50 px-5"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading || !url}
-              className="h-10 rounded-xl bg-gradient-to-r from-primary to-violet-500 hover:from-primary/95 hover:to-violet-500/95 text-white font-bold shadow-md shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-[1.01] active:scale-[0.99] px-5"
+              className="h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold transition-all px-5 shadow-sm"
             >
               {loading ? (
                 <span className="flex items-center gap-1.5">
-                  <span className="h-4.5 w-4.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="h-4.5 w-4.5 border-2 border-background border-t-transparent rounded-full animate-spin" />
                   Adding...
                 </span>
               ) : (

@@ -8,8 +8,10 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-serif);
+  --color-nobel-gold: var(--primary);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -49,76 +51,76 @@
 }
 
 :root {
-  --background: oklch(0.98 0.005 260);
-  --foreground: oklch(0.18 0.015 260);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.015 260);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.015 260);
-  --primary: oklch(0.55 0.23 275);
-  --primary-foreground: oklch(0.99 0.005 260);
-  --secondary: oklch(0.94 0.015 260);
-  --secondary-foreground: oklch(0.25 0.05 270);
-  --muted: oklch(0.95 0.01 260);
-  --muted-foreground: oklch(0.48 0.015 260);
-  --accent: oklch(0.95 0.03 270);
-  --accent-foreground: oklch(0.55 0.23 275);
-  --destructive: oklch(0.6 0.18 20);
-  --border: oklch(0.92 0.015 260);
-  --input: oklch(0.92 0.015 260);
-  --ring: oklch(0.55 0.23 275 / 30%);
-  --chart-1: oklch(0.55 0.23 275);
-  --chart-2: oklch(0.45 0.2 240);
-  --chart-3: oklch(0.65 0.22 300);
-  --chart-4: oklch(0.7 0.18 330);
-  --chart-5: oklch(0.4 0.15 210);
+  --background: #F9F8F4;
+  --foreground: #292524;
+  --card: #FFFFFF;
+  --card-foreground: #292524;
+  --popover: #FFFFFF;
+  --popover-foreground: #292524;
+  --primary: #C5A059;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5F4F0;
+  --secondary-foreground: #44403C;
+  --muted: #F5F4F0;
+  --muted-foreground: #78716C;
+  --accent: #F5F4F0;
+  --accent-foreground: #C5A059;
+  --destructive: #EF4444;
+  --border: #E7E5E4;
+  --input: #E7E5E4;
+  --ring: #C5A059;
+  --chart-1: #C5A059;
+  --chart-2: #44403C;
+  --chart-3: #78716C;
+  --chart-4: #878681;
+  --chart-5: #A8A29E;
   --radius: 0.75rem;
-  --sidebar: oklch(0.99 0.005 260);
-  --sidebar-foreground: oklch(0.18 0.015 260);
-  --sidebar-primary: oklch(0.55 0.23 275);
-  --sidebar-primary-foreground: oklch(0.99 0.005 260);
-  --sidebar-accent: oklch(0.95 0.03 270);
-  --sidebar-accent-foreground: oklch(0.55 0.23 275);
-  --sidebar-border: oklch(0.92 0.015 260);
-  --sidebar-ring: oklch(0.55 0.23 275 / 30%);
-  --bg-glow: oklch(0.92 0.03 270 / 25%);
-  --bg-glow-sec: oklch(0.92 0.03 240 / 15%);
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #292524;
+  --sidebar-primary: #C5A059;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F5F4F0;
+  --sidebar-accent-foreground: #C5A059;
+  --sidebar-border: #E7E5E4;
+  --sidebar-ring: #C5A059;
+  --bg-glow: rgba(197, 160, 89, 0.08);
+  --bg-glow-sec: rgba(68, 64, 60, 0.04);
 }
 
 .dark {
-  --background: oklch(0.11 0.015 260);
-  --foreground: oklch(0.94 0.01 260);
-  --card: oklch(0.14 0.018 260);
-  --card-foreground: oklch(0.94 0.01 260);
-  --popover: oklch(0.13 0.018 260);
-  --popover-foreground: oklch(0.94 0.01 260);
-  --primary: oklch(0.65 0.21 275);
-  --primary-foreground: oklch(0.99 0.005 260);
-  --secondary: oklch(0.18 0.015 260);
-  --secondary-foreground: oklch(0.9 0.01 260);
-  --muted: oklch(0.17 0.015 260);
-  --muted-foreground: oklch(0.62 0.02 260);
-  --accent: oklch(0.2 0.035 270);
-  --accent-foreground: oklch(0.65 0.21 275);
-  --destructive: oklch(0.55 0.18 20);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 8%);
-  --ring: oklch(0.65 0.21 275 / 50%);
-  --chart-1: oklch(0.65 0.21 275);
-  --chart-2: oklch(0.5 0.18 240);
-  --chart-3: oklch(0.72 0.2 300);
-  --chart-4: oklch(0.75 0.15 330);
-  --chart-5: oklch(0.45 0.12 210);
-  --sidebar: oklch(0.13 0.018 260);
-  --sidebar-foreground: oklch(0.94 0.01 260);
-  --sidebar-primary: oklch(0.65 0.21 275);
-  --sidebar-primary-foreground: oklch(0.99 0.005 260);
-  --sidebar-accent: oklch(0.18 0.025 270);
-  --sidebar-accent-foreground: oklch(0.65 0.21 275);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.65 0.21 275 / 50%);
-  --bg-glow: oklch(0.24 0.06 270 / 14%);
-  --bg-glow-sec: oklch(0.18 0.04 240 / 8%);
+  --background: #1C1917;
+  --foreground: #F5F4F0;
+  --card: #292524;
+  --card-foreground: #F5F4F0;
+  --popover: #292524;
+  --popover-foreground: #F5F4F0;
+  --primary: #C5A059;
+  --primary-foreground: #1C1917;
+  --secondary: #44403C;
+  --secondary-foreground: #F5F4F0;
+  --muted: #44403C;
+  --muted-foreground: #A8A29E;
+  --accent: #44403C;
+  --accent-foreground: #C5A059;
+  --destructive: #EF4444;
+  --border: #44403C;
+  --input: #44403C;
+  --ring: #C5A059;
+  --chart-1: #C5A059;
+  --chart-2: #878681;
+  --chart-3: #A8A29E;
+  --chart-4: #D6D3D1;
+  --chart-5: #E7E5E4;
+  --sidebar: #292524;
+  --sidebar-foreground: #F5F4F0;
+  --sidebar-primary: #C5A059;
+  --sidebar-primary-foreground: #1C1917;
+  --sidebar-accent: #44403C;
+  --sidebar-accent-foreground: #C5A059;
+  --sidebar-border: #44403C;
+  --sidebar-ring: #C5A059;
+  --bg-glow: rgba(197, 160, 89, 0.12);
+  --bg-glow-sec: rgba(28, 25, 22, 0.25);
 }
 
 @layer base {
@@ -128,7 +130,7 @@
 
   html {
     @apply font-sans scroll-smooth;
-    color-scheme: dark;
+    color-scheme: light dark;
   }
 
   body {
@@ -150,12 +152,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: oklch(1 0 0 / 10%);
+    background: rgba(197, 160, 89, 0.15);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: oklch(1 0 0 / 20%);
+    background: rgba(197, 160, 89, 0.3);
   }
 }
 
@@ -168,20 +170,22 @@
 }
 
 .glass-nav {
-  background: oklch(from var(--background) l c h / 75%);
+  background: rgba(249, 248, 244, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
 
+.dark .glass-nav {
+  background: rgba(28, 25, 22, 0.85);
+}
+
 /* Equalizer Indicator animation */
 @keyframes eq-pulse {
-
   0%,
   100% {
     height: 4px;
   }
-
   50% {
     height: 16px;
   }
@@ -207,6 +211,18 @@
   animation-delay: 0.5s;
 }
 
+/* Elegant Premium Styling Details */
+.drop-cap::first-letter {
+  @apply text-5xl font-serif text-nobel-gold float-left mr-3 mt-[-8px] font-bold;
+}
+
+.gold-callout {
+  @apply p-6 bg-secondary/60 border border-border rounded-xl border-l-4 border-l-nobel-gold;
+}
+
+.gold-divider {
+  @apply w-12 h-0.5 bg-nobel-gold/80 my-4;
+}
 
 a,
 button,

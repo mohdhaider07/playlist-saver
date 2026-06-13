@@ -176,82 +176,80 @@ export default function PlaylistPage({
   if (!data) return null;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pt-14">
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden h-[calc(100vh-56px)]">
+    <div className="min-h-screen bg-background pt-24 px-4 sm:px-6 pb-16 w-full max-w-[1600px] mx-auto z-10 relative">
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Left/Main Column - Player */}
-        <div className="w-full md:w-[70%] lg:w-[75%] flex flex-col bg-background overflow-y-auto border-r border-white/5">
-          <div className="p-4 sm:p-6 pb-0 flex-shrink-0">
-            {activeVideoId ? (
-              <VideoPlayer
-                videoId={activeVideoId}
-                startAt={startAt}
-                onProgress={handleProgress}
-                onEnded={handleVideoEnded}
-              />
-            ) : (
-              <div className="aspect-video flex items-center justify-center text-muted-foreground bg-card rounded-2xl border border-white/5">
-                Select a video to play
-              </div>
-            )}
+        <div className="w-full flex-1 flex flex-col">
+          {activeVideoId ? (
+            <VideoPlayer
+              videoId={activeVideoId}
+              startAt={startAt}
+              onProgress={handleProgress}
+              onEnded={handleVideoEnded}
+            />
+          ) : (
+            <div className="aspect-video flex items-center justify-center text-muted-foreground bg-card rounded-xl border border-border">
+              Select a video to play
+            </div>
+          )}
 
-            {/* Video Controls Bar */}
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 bg-card/40 border border-white/5 p-3 rounded-2xl backdrop-blur-md select-none">
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={playPrev}
-                  disabled={!hasPrev}
-                  className="rounded-xl h-9 px-3 gap-1 hover:bg-muted/30"
-                >
-                  ◀ Prev
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={playNext}
-                  disabled={!hasNext}
-                  className="rounded-xl h-9 px-3 gap-1 hover:bg-muted/30"
-                >
-                  Next ▶
-                </Button>
-              </div>
+          {/* Video Controls Bar */}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 bg-card border border-border p-3.5 rounded-xl shadow-sm select-none">
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={playPrev}
+                disabled={!hasPrev}
+                className="rounded-full h-9 px-4 gap-1 border-border text-xs font-semibold hover:bg-secondary"
+              >
+                ◀ Prev
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={playNext}
+                disabled={!hasNext}
+                className="rounded-full h-9 px-4 gap-1 border-border text-xs font-semibold hover:bg-secondary"
+              >
+                Next ▶
+              </Button>
+            </div>
 
-              {/* Autoplay toggle */}
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-bold text-muted-foreground tracking-wider uppercase cursor-pointer" htmlFor="autoplay-toggle">
-                  Autoplay Next
-                </label>
-                <button
-                  id="autoplay-toggle"
-                  onClick={() => setAutoplay(!autoplay)}
-                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out outline-none ${
-                    autoplay ? "bg-primary" : "bg-muted"
+            {/* Autoplay toggle */}
+            <div className="flex items-center gap-2">
+              <label className="text-[10px] font-bold text-muted-foreground tracking-widest uppercase cursor-pointer select-none" htmlFor="autoplay-toggle">
+                Autoplay Next
+              </label>
+              <button
+                id="autoplay-toggle"
+                onClick={() => setAutoplay(!autoplay)}
+                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out outline-none ${
+                  autoplay ? "bg-primary" : "bg-secondary"
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-y-[1px] ${
+                    autoplay ? "translate-x-[17px]" : "translate-x-[1px]"
                   }`}
-                >
-                  <span
-                    className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-y-[1px] ${
-                      autoplay ? "translate-x-[17px]" : "translate-x-[1px]"
-                    }`}
-                  />
-                </button>
-              </div>
+                />
+              </button>
             </div>
           </div>
 
-          <div className="p-6 pt-4 bg-background flex-1">
-            <h1 className="text-xl sm:text-2xl font-extrabold text-foreground tracking-tight mb-1">
+          <div className="mt-6 bg-background">
+            <h1 className="font-serif text-2xl md:text-3xl font-medium tracking-wide text-foreground mb-1 leading-snug">
               {activeVideo?.title || data.playlist.title}
             </h1>
-            <p className="text-sm font-semibold text-primary/90 mb-6">
+            <p className="text-[10px] font-bold text-primary tracking-widest uppercase mb-6">
               {activeVideo?.channelTitle || data.playlist.channelTitle}
             </p>
 
             {/* Tabbed Info Pane */}
-            <div className="flex gap-4 border-b border-white/5 mb-4 select-none">
+            <div className="flex gap-6 border-b border-border mb-5 select-none">
               <button
                 onClick={() => setActiveTab("info")}
-                className={`pb-2.5 text-xs font-bold tracking-wider uppercase border-b-2 px-1 transition-all ${
+                className={`pb-3 text-[10px] font-bold tracking-widest uppercase border-b-2 px-1 transition-all ${
                   activeTab === "info"
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground"
@@ -261,7 +259,7 @@ export default function PlaylistPage({
               </button>
               <button
                 onClick={() => setActiveTab("playlist")}
-                className={`pb-2.5 text-xs font-bold tracking-wider uppercase border-b-2 px-1 transition-all ${
+                className={`pb-3 text-[10px] font-bold tracking-widest uppercase border-b-2 px-1 transition-all ${
                   activeTab === "playlist"
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground"
@@ -271,7 +269,7 @@ export default function PlaylistPage({
               </button>
             </div>
 
-            <div className="text-sm text-foreground/80 leading-relaxed bg-card/30 p-5 rounded-2xl border border-white/5 whitespace-pre-wrap max-h-[400px] overflow-y-auto shadow-inner">
+            <div className="text-sm text-foreground/80 leading-relaxed bg-card/40 p-6 rounded-xl border border-border border-l-4 border-l-primary whitespace-pre-wrap max-h-[400px] overflow-y-auto shadow-inner font-light">
               {activeTab === "info"
                 ? activeVideo?.description || "No description available for this video."
                 : data.playlist.description || "No description available for this playlist."}
@@ -279,13 +277,13 @@ export default function PlaylistPage({
           </div>
         </div>
 
-        {/* Right Column - Sidebar */}
-        <div className="w-full md:w-[30%] lg:w-[25%] flex flex-col bg-card overflow-hidden">
-          <div className="px-4 py-3.5 bg-card/60 border-b border-white/5 shrink-0 select-none">
-            <h2 className="font-bold text-foreground text-sm line-clamp-1">
+        {/* Right Column - Playlist Panel */}
+        <div className="w-full lg:w-[400px] shrink-0 lg:sticky lg:top-24 bg-card border border-border rounded-xl overflow-hidden flex flex-col h-[600px] shadow-sm select-none">
+          <div className="px-4 py-4 bg-card border-b border-border shrink-0 select-none">
+            <h2 className="font-serif font-semibold text-foreground text-sm line-clamp-1 leading-snug">
               {data.playlist.title}
             </h2>
-            <p className="text-[10px] font-bold text-muted-foreground/80 tracking-wide uppercase mt-0.5">
+            <p className="text-[9px] font-bold text-muted-foreground/80 tracking-widest uppercase mt-1">
               {data.playlist.channelTitle} • {data.playlist.videos.length} videos
             </p>
           </div>

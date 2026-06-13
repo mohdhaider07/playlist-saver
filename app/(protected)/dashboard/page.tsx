@@ -98,16 +98,16 @@ export default function DashboardPage() {
         className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
       >
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
-            Workspace <span className="text-[10px] bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Dashboard</span>
+          <h1 className="text-3xl md:text-4xl font-serif font-semibold tracking-wide text-foreground flex items-center gap-3">
+            Workspace <span className="text-[9px] bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-sans font-bold uppercase tracking-widest">Dashboard</span>
           </h1>
-          <p className="text-muted-foreground text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-2 font-light">
             Track and manage your online learning paths and video playlists.
           </p>
         </div>
         <Button
           onClick={() => setModalOpen(true)}
-          className="h-10 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/15 hover:shadow-primary/25 transition-all hover:scale-[1.01] active:scale-[0.99] gap-1.5 self-start md:self-auto"
+          className="h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold transition-all shadow-sm gap-1.5 self-start md:self-auto border-none px-6"
         >
           <Plus className="size-4" /> Add Playlist
         </Button>
@@ -120,43 +120,43 @@ export default function DashboardPage() {
         animate="show"
         className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
       >
-        <motion.div variants={cardVariants} className="glass-panel p-4 rounded-2xl flex items-center gap-4 border border-white/5">
-          <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+        <motion.div variants={cardVariants} className="bg-card p-5 rounded-xl flex items-center gap-4 border border-border hover:border-primary/40 transition-colors">
+          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
             <BookOpen className="size-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Playlists</p>
-            <h3 className="text-xl font-extrabold text-foreground">{totalPlaylists}</h3>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Playlists</p>
+            <h3 className="text-xl font-serif font-semibold text-foreground">{totalPlaylists}</h3>
           </div>
         </motion.div>
 
-        <motion.div variants={cardVariants} className="glass-panel p-4 rounded-2xl flex items-center gap-4 border border-white/5">
-          <div className="h-10 w-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 shrink-0">
+        <motion.div variants={cardVariants} className="bg-card p-5 rounded-xl flex items-center gap-4 border border-border hover:border-primary/40 transition-colors">
+          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
             <Video className="size-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Total Videos</p>
-            <h3 className="text-xl font-extrabold text-foreground">{totalVideos}</h3>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Total Videos</p>
+            <h3 className="text-xl font-serif font-semibold text-foreground">{totalVideos}</h3>
           </div>
         </motion.div>
 
-        <motion.div variants={cardVariants} className="glass-panel p-4 rounded-2xl flex items-center gap-4 border border-white/5">
-          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
+        <motion.div variants={cardVariants} className="bg-card p-5 rounded-xl flex items-center gap-4 border border-border hover:border-primary/40 transition-colors">
+          <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
             <CheckCircle2 className="size-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Completed</p>
-            <h3 className="text-xl font-extrabold text-foreground">{completedVideos}</h3>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Completed</p>
+            <h3 className="text-xl font-serif font-semibold text-foreground">{completedVideos}</h3>
           </div>
         </motion.div>
 
-        <motion.div variants={cardVariants} className="glass-panel p-4 rounded-2xl flex items-center gap-4 border border-white/5">
-          <div className="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500 shrink-0">
+        <motion.div variants={cardVariants} className="bg-card p-5 rounded-xl flex items-center gap-4 border border-border hover:border-primary/40 transition-colors">
+          <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
             <TrendingUp className="size-5" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Progress Avg</p>
-            <h3 className="text-xl font-extrabold text-foreground">{overallProgress}%</h3>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Progress Avg</p>
+            <h3 className="text-xl font-serif font-semibold text-foreground">{overallProgress}%</h3>
           </div>
         </motion.div>
       </motion.div>
@@ -177,7 +177,7 @@ export default function DashboardPage() {
               placeholder="Search playlist title or channel..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-10 rounded-xl bg-card border-white/5 focus-visible:border-primary/50 text-foreground"
+              className="pl-9 h-10 rounded-xl bg-card border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
             />
           </div>
 
@@ -188,7 +188,7 @@ export default function DashboardPage() {
               <select
                 value={channelFilter}
                 onChange={(e) => setChannelFilter(e.target.value)}
-                className="w-full h-10 pl-8 pr-3 rounded-xl bg-card border border-white/5 text-sm font-medium text-foreground focus:outline-none focus:border-primary/50 cursor-pointer appearance-none"
+                className="w-full h-10 pl-8 pr-3 rounded-xl bg-card border border-border text-xs font-semibold text-foreground focus:outline-none focus:border-primary/60 cursor-pointer appearance-none"
               >
                 <option value="">All Channels</option>
                 {channels.map((chan) => (
@@ -206,30 +206,30 @@ export default function DashboardPage() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="aspect-[4/3] w-full rounded-2xl bg-muted/20" />
+            <Skeleton key={i} className="aspect-[4/3] w-full rounded-xl bg-secondary/50" />
           ))}
         </div>
       ) : playlists.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="glass-panel text-center py-20 rounded-3xl border border-white/5 relative overflow-hidden"
+          className="bg-card text-center py-20 rounded-xl border border-border relative overflow-hidden shadow-sm"
         >
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
           
           <div className="relative z-10 max-w-sm mx-auto flex flex-col items-center">
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-tr from-primary/10 to-violet-500/10 flex items-center justify-center text-primary mb-6 border border-primary/20">
+            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-6 border border-primary/25">
               <Inbox className="size-8" />
             </div>
-            <h3 className="text-xl font-bold text-foreground mb-2">
+            <h3 className="text-2xl font-serif font-semibold text-foreground mb-2">
               No playlists added yet
             </h3>
-            <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
+            <p className="text-muted-foreground text-sm mb-6 leading-relaxed font-light">
               Connect and save your first YouTube playlist URL to begin tracking your watch progress and learning steps.
             </p>
             <Button
               onClick={() => setModalOpen(true)}
-              className="h-10 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/20 gap-1.5"
+              className="h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold shadow-sm gap-1.5 border-none px-6"
             >
               <Plus className="size-4" /> Add Your First Playlist
             </Button>

@@ -5,10 +5,13 @@ import { apiFetch } from "@/lib/api";
 
 interface AuthContextType {
   isAuthenticated: boolean | null;
-  user: { id: string; email: string } | null;
+  user: { id: string; email: string; createdAt?: string | Date } | null;
   checkAuth: () => Promise<void>;
   logout: () => Promise<void>;
-  login: (token: string, user?: { id: string; email: string }) => void;
+  login: (
+    token: string,
+    user?: { id: string; email: string; createdAt?: string | Date }
+  ) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -21,7 +24,11 @@ const AuthContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [user, setUser] = useState<{ id: string; email: string } | null>(null);
+  const [user, setUser] = useState<{
+    id: string;
+    email: string;
+    createdAt?: string | Date;
+  } | null>(null);
 
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
@@ -31,8 +38,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    // Optimistic auth using token existence
-    setIsAuthenticated(true);
+    try {
+      const data = await apiFetch("/api/auth/me");
+      setUser(data.user);
+      setIsAuthenticated(true);
+    } catch {
+      localStorage.removeItem("token");
+      setIsAuthenticated(false);
+      setUser(null);
+    }
   };
 
   useEffect(() => {
@@ -63,12 +77,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = (
     token: string,
-    userData?: { id: string; email: string }
+    userData?: { id: string; email: string; createdAt?: string | Date }
   ) => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
     if (userData) {
       setUser(userData);
+    } else {
+      checkAuth();
     }
   };
 

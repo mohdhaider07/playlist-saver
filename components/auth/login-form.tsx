@@ -53,7 +53,7 @@ export function LoginForm() {
       )}
 
       <div className="space-y-1.5">
-        <label className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
+        <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
           Email Address
         </label>
         <Input
@@ -62,12 +62,12 @@ export function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="h-10 rounded-xl bg-muted/20 border-white/5 focus-visible:border-primary/50 text-foreground"
+          className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
         />
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-xs font-bold tracking-wider text-muted-foreground uppercase flex justify-between">
+        <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase flex justify-between pl-1">
           <span>Password</span>
         </label>
         <Input
@@ -76,18 +76,18 @@ export function LoginForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="••••••••"
-          className="h-10 rounded-xl bg-muted/20 border-white/5 focus-visible:border-primary/50 text-foreground"
+          className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
         />
       </div>
 
       <Button
         type="submit"
-        className="w-full h-10 rounded-xl bg-gradient-to-r from-primary to-violet-500 hover:from-primary/95 hover:to-violet-500/95 text-white font-bold shadow-md shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-[1.01] active:scale-[0.99] mt-6"
+        className="w-full h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold transition-all mt-6 shadow-sm"
         disabled={loading}
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
-            <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
             Signing in...
           </span>
         ) : (

@@ -78,7 +78,7 @@ export function OtpForm({ email }: OtpFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="text-center select-none">
-        <h2 className="text-xl font-bold text-foreground mb-1">
+        <h2 className="text-xl font-serif font-semibold text-foreground mb-1">
           Verify your email
         </h2>
         <p className="text-sm text-muted-foreground mb-3">
@@ -114,7 +114,7 @@ export function OtpForm({ email }: OtpFormProps) {
             value={digit}
             onChange={(e) => handleChange(index, e.target.value)}
             onKeyDown={(e) => handleKeyDown(index, e)}
-            className="w-12 h-14 text-center text-2xl font-bold rounded-xl bg-muted/20 border-white/5 focus-visible:border-primary/50 focus-visible:ring-primary/20"
+            className="w-12 h-14 text-center text-2xl font-bold rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
             autoFocus={index === 0}
           />
         ))}
@@ -122,12 +122,12 @@ export function OtpForm({ email }: OtpFormProps) {
 
       <Button
         type="submit"
-        className="w-full h-10 rounded-xl bg-gradient-to-r from-primary to-violet-500 hover:from-primary/95 hover:to-violet-500/95 text-white font-bold shadow-md shadow-primary/20 hover:shadow-primary/30 transition-all hover:scale-[1.01] active:scale-[0.99]"
+        className="w-full h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold transition-all shadow-sm"
         disabled={loading}
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
-            <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
             Verifying...
           </span>
         ) : (
@@ -140,7 +140,7 @@ export function OtpForm({ email }: OtpFormProps) {
           type="button"
           variant="link"
           onClick={handleResend}
-          className="text-xs text-muted-foreground hover:text-primary transition-colors font-medium"
+          className="text-xs text-muted-foreground hover:text-primary transition-colors font-medium hover:no-underline"
         >
           Resend OTP
         </Button>

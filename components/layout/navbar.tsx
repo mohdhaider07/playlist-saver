@@ -1,70 +1,45 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Play, LogOut } from "lucide-react";
 
 export function Navbar() {
-  const { isAuthenticated, user, logout } = useAuth();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await logout();
-    router.push("/login");
-  };
+  const { isAuthenticated, user } = useAuth();
 
   const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : "U";
 
   return (
-    <nav className="fixed top-0 left-0 w-full h-14 glass-nav flex items-center justify-between px-6 z-50">
+    <nav className="fixed top-0 left-0 w-full h-16 glass-nav flex items-center justify-between px-6 z-50 border-b border-border/80 shadow-sm">
       <Link
         href="/"
-        className="text-xl font-extrabold tracking-tight text-foreground flex items-center gap-2.5 group"
+        className="flex items-center cursor-pointer select-none group"
       >
-        <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-primary to-violet-500 flex items-center justify-center shadow-md shadow-primary/20 transition-all duration-300 group-hover:scale-105 group-hover:shadow-primary/30">
-          <Play className="size-4 fill-white text-white translate-x-[1px]" />
-        </div>
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground to-primary group-hover:to-violet-400 transition-all duration-300">
-          Playlist<span className="text-primary font-black">Hub</span>
-        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo.png"
+          alt="Playzen Logo"
+          className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-102"
+        />
       </Link>
 
       <div>
         {isAuthenticated === true && (
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex flex-col items-end select-none">
-              <span className="text-xs font-semibold text-foreground/90 truncate max-w-[160px]">
-                {user?.email}
-              </span>
-              <span className="text-[10px] text-primary font-semibold tracking-wider uppercase">
-                Learner
-              </span>
-            </div>
-            <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-primary to-violet-500 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-primary/20 border border-white/10 select-none">
+          <Link href="/profile" className="flex items-center">
+            <div className="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-serif font-bold shadow-sm select-none border border-white/5 pb-[2px] transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer">
               {userInitial}
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleLogout}
-              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 gap-1.5 h-8 px-2.5"
-            >
-              <LogOut className="size-4" />
-              <span className="hidden sm:inline">Logout</span>
-            </Button>
-          </div>
+          </Link>
         )}
         {isAuthenticated === false && (
-          <div className="flex gap-2.5">
+          <div className="flex gap-3">
             <Link href="/login">
-              <Button variant="ghost" size="sm" className="h-8 px-3">
+              <Button variant="ghost" size="sm" className="h-9 px-5 rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-800/50 text-muted-foreground hover:text-foreground font-semibold">
                 Login
               </Button>
             </Link>
             <Link href="/register">
-              <Button size="sm" className="h-8 px-3 shadow-md shadow-primary/10">
+              <Button size="sm" className="h-9 px-5 bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 rounded-full transition-colors shadow-sm font-semibold border-none">
                 Sign Up
               </Button>
             </Link>
