@@ -24,7 +24,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
 
   for (const recipient of recipients) {
     const mailOptions = {
-      from: "Mohd Haider <mohdhaider.altide@gmail.com>",
+      from: "Playzen<mohdhaider.altide@gmail.com>",
       to: recipient,
       subject: options.subject,
       text: options.text,
