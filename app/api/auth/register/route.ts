@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     if (!result.success) {
       return NextResponse.json(
         { error: result.error.issues[0].message },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const { email, password } = result.data;
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     if (existing) {
       return NextResponse.json(
         { error: "Email already registered" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -41,37 +41,29 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date(),
     });
 
-    try {
-      await sendEmail({
-        to: emailLower,
-        subject: "Verify your Playzen Account",
-        text: `This email is safe for account registration. Your Playzen verification code is: ${otpCode}. It is valid for 10 minutes.`,
-        html: `
+    void sendEmail({
+      to: emailLower,
+      subject: "Verify your Playzen Account",
+      text: `This email is safe for account registration. Your Playzen verification code is: ${otpCode}. It is valid for 10 minutes.`,
+      html: `
           <div style="font-family: sans-serif; padding: 20px; color: #333;">
             <p>This email is safe for account registration. Your Playzen OTP code is: <strong>${otpCode}</strong></p>
             <p>This code is valid for 10 minutes.</p>
           </div>
         `,
-      });
-    } catch (emailError) {
+    }).catch((emailError) => {
       console.error("[REGISTER_EMAIL_ERROR]", emailError);
-      // Clean up the created user record so they can retry registration
-      await users.deleteOne({ email: emailLower });
-      return NextResponse.json(
-        { error: "Failed to send verification email. Please try again." },
-        { status: 500 }
-      );
-    }
+    });
 
     return NextResponse.json(
       { message: "OTP sent to your email address. Please check your inbox." },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error("[POST /api/auth/register]", error);
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

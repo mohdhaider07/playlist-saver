@@ -8,10 +8,7 @@ export async function POST(request: NextRequest) {
     const { email } = await request.json();
 
     if (!email) {
-      return NextResponse.json(
-        { error: "Email is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
     const emailLower = email.toLowerCase().trim();
@@ -21,7 +18,7 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { error: "No account found with this email address." },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -36,38 +33,32 @@ export async function POST(request: NextRequest) {
           otpExpiresAt,
           updatedAt: new Date(),
         },
-      }
+      },
     );
 
-    try {
-      await sendEmail({
-        to: emailLower,
-        subject: "Playzen Password Reset OTP",
-        text: `This email is safe for resetting the password. Your Playzen password reset verification code is: ${otpCode}. It is valid for 10 minutes.`,
-        html: `
+    void sendEmail({
+      to: emailLower,
+      subject: "Playzen Password Reset OTP",
+      text: `This email is safe for resetting the password. Your Playzen password reset verification code is: ${otpCode}. It is valid for 10 minutes.`,
+      html: `
           <div style="font-family: sans-serif; padding: 20px; color: #333;">
             <p>This email is safe for resetting the password. Your Playzen password reset OTP code is: <strong>${otpCode}</strong></p>
             <p>This code is valid for 10 minutes.</p>
           </div>
         `,
-      });
-    } catch (emailError) {
+    }).catch((emailError) => {
       console.error("[FORGOT_PASSWORD_EMAIL_ERROR]", emailError);
-      return NextResponse.json(
-        { error: "Failed to send reset email. Please try again later." },
-        { status: 500 }
-      );
-    }
+    });
 
     return NextResponse.json(
       { message: "Password reset OTP sent to your email address." },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("[POST /api/auth/forgot-password]", error);
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

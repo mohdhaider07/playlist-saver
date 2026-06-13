@@ -8,10 +8,7 @@ export async function POST(request: NextRequest) {
     const { email } = await request.json();
 
     if (!email) {
-      return NextResponse.json(
-        { error: "Email is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
     const emailLower = email.toLowerCase().trim();
@@ -19,16 +16,13 @@ export async function POST(request: NextRequest) {
     const user = await users.findOne({ email: emailLower });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     if (user.isEmailVerified) {
       return NextResponse.json(
         { error: "Email already verified" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -43,38 +37,32 @@ export async function POST(request: NextRequest) {
           otpExpiresAt,
           updatedAt: new Date(),
         },
-      }
+      },
     );
 
-    try {
-      await sendEmail({
-        to: emailLower,
-        subject: "Verify your Playzen Account",
-        text: `This email is safe for account registration verification. Your Playzen verification code is: ${otpCode}. It is valid for 10 minutes.`,
-        html: `
+    void sendEmail({
+      to: emailLower,
+      subject: "Verify your Playzen Account",
+      text: `This email is safe for account registration verification. Your Playzen verification code is: ${otpCode}. It is valid for 10 minutes.`,
+      html: `
           <div style="font-family: sans-serif; padding: 20px; color: #333;">
             <p>This email is safe for account registration verification. Your Playzen OTP code is: <strong>${otpCode}</strong></p>
             <p>This code is valid for 10 minutes.</p>
           </div>
         `,
-      });
-    } catch (emailError) {
+    }).catch((emailError) => {
       console.error("[RESEND_EMAIL_ERROR]", emailError);
-      return NextResponse.json(
-        { error: "Failed to send email. Please try again later." },
-        { status: 500 }
-      );
-    }
+    });
 
     return NextResponse.json(
       { message: "Verification code resent successfully." },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("[POST /api/auth/resend-otp]", error);
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
