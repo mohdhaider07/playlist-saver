@@ -6,7 +6,6 @@ import { PlaylistCard } from "@/components/dashboard/playlist-card";
 import { AddPlaylistModal } from "@/components/dashboard/add-playlist-modal";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Input } from "@/components/ui/input";
 import { PlaylistFormatted } from "@/types";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -15,7 +14,6 @@ import {
   CheckCircle2,
   TrendingUp,
   Plus,
-  Search,
   Filter,
   Inbox,
 } from "lucide-react";
@@ -24,7 +22,7 @@ export default function DashboardPage() {
   const [playlists, setPlaylists] = useState<PlaylistFormatted[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = "";
   const [channelFilter, setChannelFilter] = useState("");
 
   const loadPlaylists = async () => {
