@@ -1,14 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "@/lib/db";
-import { generateToken } from "@/lib/auth";
+import { hashPassword } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, otp } = await request.json();
+    const { email, otp, password, confirmPassword } = await request.json();
 
-    if (!email || !otp) {
+    if (!email || !otp || !password || !confirmPassword) {
       return NextResponse.json(
-        { error: "Email and OTP required" },
+        { error: "All fields are required" },
+        { status: 400 }
+      );
+    }
+
+    if (password !== confirmPassword) {
+      return NextResponse.json(
+        { error: "Passwords do not match" },
+        { status: 400 }
+      );
+    }
+
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: "Password must be at least 6 characters" },
         { status: 400 }
       );
     }
@@ -24,29 +38,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (user.isEmailVerified) {
-      return NextResponse.json(
-        { error: "Email already verified" },
-        { status: 409 }
-      );
-    }
-
-    const isValidReal =
+    const isValid =
       otp === user.otpCode &&
       user.otpExpiresAt &&
       new Date() < user.otpExpiresAt;
 
-    if (!isValidReal) {
+    if (!isValid) {
       return NextResponse.json(
         { error: "Invalid or expired OTP" },
         { status: 400 }
       );
     }
 
+    const passwordHash = await hashPassword(password);
+
     await users.updateOne(
       { _id: user._id },
       {
         $set: {
+          passwordHash,
           isEmailVerified: true,
           otpCode: null,
           otpExpiresAt: null,
@@ -55,26 +65,12 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    const token = generateToken({
-      sub: user._id.toString(),
-      email: user.email,
-    });
-
-    const response = NextResponse.json(
-      { token, message: "Email verified successfully." },
+    return NextResponse.json(
+      { message: "Password reset successfully. You can now log in." },
       { status: 200 }
     );
-
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    });
-
-    return response;
   } catch (error) {
-    console.error("[POST /api/auth/verify-otp]", error);
+    console.error("[POST /api/auth/reset-password]", error);
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },
       { status: 500 }

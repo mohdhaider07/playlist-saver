@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { apiFetch } from "@/lib/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -98,8 +99,14 @@ export function LoginForm() {
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase flex justify-between pl-1">
+        <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase flex justify-between items-center pl-1">
           <span>Password</span>
+          <Link
+            href="/forgot-password"
+            className="text-primary hover:underline font-semibold transition-colors normal-case"
+          >
+            Forgot Password?
+          </Link>
         </label>
         <Input
           type="password"

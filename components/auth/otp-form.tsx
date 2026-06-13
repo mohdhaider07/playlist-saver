@@ -16,13 +16,27 @@ interface OtpFormProps {
 export function OtpForm({ email }: OtpFormProps) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
   const { login } = useAuth();
 
-  const handleResend = () => {
-    console.log("OTP resend not implemented");
+  const handleResend = async () => {
+    setError("");
+    setSuccess("");
+    setLoading(true);
+    try {
+      const data = await apiFetch("/api/auth/resend-otp", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+      });
+      setSuccess(data.message || "OTP resent successfully!");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to resend OTP");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (index: number, value: string) => {
@@ -56,6 +70,7 @@ export function OtpForm({ email }: OtpFormProps) {
 
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
       const data = await apiFetch("/api/auth/verify-otp", {
@@ -84,9 +99,6 @@ export function OtpForm({ email }: OtpFormProps) {
         <p className="text-sm text-muted-foreground mb-3">
           We sent a verification code to <span className="font-semibold text-foreground">{email}</span>
         </p>
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-          Dev Bypass: Use 666666
-        </span>
       </div>
 
       {error && (
@@ -97,6 +109,18 @@ export function OtpForm({ email }: OtpFormProps) {
         >
           <Alert variant="destructive" className="rounded-xl border border-destructive/20 bg-destructive/5 text-destructive-foreground">
             <AlertDescription className="text-xs font-semibold">{error}</AlertDescription>
+          </Alert>
+        </motion.div>
+      )}
+
+      {success && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          className="overflow-hidden"
+        >
+          <Alert className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-500">
+            <AlertDescription className="text-xs font-semibold">{success}</AlertDescription>
           </Alert>
         </motion.div>
       )}
@@ -140,7 +164,8 @@ export function OtpForm({ email }: OtpFormProps) {
           type="button"
           variant="link"
           onClick={handleResend}
-          className="text-xs text-muted-foreground hover:text-primary transition-colors font-medium hover:no-underline"
+          disabled={loading}
+          className="text-xs text-muted-foreground hover:text-primary transition-colors font-medium hover:no-underline disabled:opacity-50"
         >
           Resend OTP
         </Button>

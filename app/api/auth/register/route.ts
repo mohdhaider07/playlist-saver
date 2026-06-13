@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "@/lib/db";
 import { hashPassword, generateOtp } from "@/lib/auth";
 import { registerSchema } from "@/lib/validation";
+import { sendEmail } from "@/lib/Email-service";
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,6 +40,28 @@ export async function POST(request: NextRequest) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
+    try {
+      await sendEmail({
+        to: emailLower,
+        subject: "Verify your Playzen Account",
+        text: `This email is safe for account registration. Your Playzen verification code is: ${otpCode}. It is valid for 10 minutes.`,
+        html: `
+          <div style="font-family: sans-serif; padding: 20px; color: #333;">
+            <p>This email is safe for account registration. Your Playzen OTP code is: <strong>${otpCode}</strong></p>
+            <p>This code is valid for 10 minutes.</p>
+          </div>
+        `,
+      });
+    } catch (emailError) {
+      console.error("[REGISTER_EMAIL_ERROR]", emailError);
+      // Clean up the created user record so they can retry registration
+      await users.deleteOne({ email: emailLower });
+      return NextResponse.json(
+        { error: "Failed to send verification email. Please try again." },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       { message: "OTP sent to your email address. Please check your inbox." },
