@@ -1,3 +1,7 @@
-1. finalize the landing page. add images over there and eveything should be clean like professional
+1. Landing page is finazlied
 
-2. add email over there. for the otp => can be done now. 
+2. buy new domain.
+3. add new domain email
+4. Setup the SEO after the new domain
+5. change entire website into arabic targer the middle east
+6. Promote the website
