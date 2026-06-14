@@ -21,7 +21,11 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const validation = registerSchema.safeParse({ email, password, confirmPassword });
+  const validation = registerSchema.safeParse({
+    email,
+    password,
+    confirmPassword,
+  });
   const fieldErrors: Record<string, string> = {};
   if (!validation.success) {
     validation.error.issues.forEach((err) => {
@@ -37,7 +41,11 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     setTouched({ email: true, password: true, confirmPassword: true });
     setError("");
 
-    const validation = registerSchema.safeParse({ email, password, confirmPassword });
+    const validation = registerSchema.safeParse({
+      email,
+      password,
+      confirmPassword,
+    });
     if (!validation.success) {
       setError(validation.error.issues[0].message);
       return;
@@ -48,7 +56,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     try {
       await apiFetch("/api/auth/register", {
         method: "POST",
-        body: JSON.stringify({ email, password, confirmPassword }),
+        body: JSON.stringify({ name, email, password, confirmPassword }),
       });
       onSuccess(email);
     } catch (err: unknown) {
@@ -66,8 +74,13 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           animate={{ opacity: 1, height: "auto" }}
           className="overflow-hidden"
         >
-          <Alert variant="destructive" className="rounded-xl border border-destructive/20 bg-destructive/5 text-destructive-foreground">
-            <AlertDescription className="text-xs font-semibold">{error}</AlertDescription>
+          <Alert
+            variant="destructive"
+            className="rounded-xl border border-destructive/20 bg-destructive/5 text-destructive-foreground"
+          >
+            <AlertDescription className="text-xs font-semibold">
+              {error}
+            </AlertDescription>
           </Alert>
         </motion.div>
       )}
@@ -100,7 +113,9 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           }}
           placeholder="you@example.com"
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
-            fieldErrors.email ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+            fieldErrors.email
+              ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
+              : ""
           }`}
         />
         {fieldErrors.email && (
@@ -124,7 +139,9 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           }}
           placeholder="••••••••"
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
-            fieldErrors.password ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+            fieldErrors.password
+              ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
+              : ""
           }`}
         />
         {fieldErrors.password && (
@@ -148,7 +165,9 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           }}
           placeholder="••••••••"
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
-            fieldErrors.confirmPassword ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+            fieldErrors.confirmPassword
+              ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
+              : ""
           }`}
         />
         {fieldErrors.confirmPassword && (

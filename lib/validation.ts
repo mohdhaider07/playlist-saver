@@ -6,13 +6,16 @@ export const loginSchema = z.object({
     .trim()
     .min(1, "Email is required")
     .email("Invalid email format"),
-  password: z
-    .string()
-    .min(1, "Password is required"),
+  password: z.string().min(1, "Password is required"),
 });
 
 export const registerSchema = z
   .object({
+    name: z
+      .string()
+      .trim()
+      .min(1, "Name is required")
+      .min(2, "Name must be at least 2 characters"),
     email: z
       .string()
       .trim()
@@ -25,9 +28,7 @@ export const registerSchema = z
       .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
       .regex(/[a-z]/, "Password must contain at least one lowercase letter")
       .regex(/[0-9]/, "Password must contain at least one digit"),
-    confirmPassword: z
-      .string()
-      .min(1, "Please confirm your password"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",

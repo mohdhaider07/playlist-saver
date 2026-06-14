@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-    const { email, password } = result.data;
+    const { name, email, password } = result.data;
 
     const emailLower = email.toLowerCase().trim();
 
@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
     const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     await users.insertOne({
+      name,
       email: emailLower,
       passwordHash,
       isEmailVerified: false,
