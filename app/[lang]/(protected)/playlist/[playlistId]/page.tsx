@@ -90,7 +90,16 @@ export default function PlaylistPage({
   const activeVideo = data?.playlist?.videos?.find(
     (v) => v.youtubeVideoId === activeVideoId,
   );
-  const startAt = data?.progress?.[activeVideoId || ""]?.watchedSeconds || 0;
+  // If a video is already completed, always start from the beginning (second 0).
+  // This prevents the player from resuming near the end and immediately firing
+  // onEnded → auto-next when the user intentionally revisits a completed video.
+  // For in-progress (not yet completed) videos we resume from where they left off.
+  const startAt = (() => {
+    const prog = data?.progress?.[activeVideoId || ""];
+    if (!prog) return 0; // never watched — start from beginning
+    if (prog.isCompleted) return 0; // completed — restart from beginning
+    return prog.watchedSeconds || 0; // in-progress — resume
+  })();
   const activeVideoProgress = activeVideoId
     ? data?.progress?.[activeVideoId]
     : undefined;
