@@ -8,13 +8,10 @@ interface EmailOptions {
   attachments?: { filename: string; content: Buffer }[];
 }
 
-console.log(
-  "Email Service Init - EMAIL_USER exists:",
-  !!process.env.EMAIL_USER,
-);
+console.log("Email Service Init - EMAIL_USER exists:", process.env.EMAIL_USER);
 console.log(
   "Email Service Init - EMAIL_PASSWORD exists:",
-  !!process.env.EMAIL_PASSWORD,
+  process.env.EMAIL_PASSWORD,
 );
 
 const transporter = nodemailer.createTransport({
