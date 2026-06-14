@@ -41,7 +41,9 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
     console.log("e4");
 
     try {
-      await transporter.sendMail(mailOptions);
+      const res = await transporter.sendMail(mailOptions);
+      console.log("e6");
+      console.log("res", res);
     } catch (error) {
       console.error("Email sending failed for", recipient, ":", error);
       throw error;
