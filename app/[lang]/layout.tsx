@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import { ClientProviders } from "../providers";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import {
   Locale,
   getLocaleDirection,
@@ -66,6 +67,7 @@ export default async function RootLayout({
           {children}
         </ClientProviders>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
