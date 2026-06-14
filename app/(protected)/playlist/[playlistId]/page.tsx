@@ -7,7 +7,7 @@ import { useProgress } from "@/hooks/use-progress";
 import { VideoPlayer } from "@/components/player/video-player";
 import { PlaylistSidebar } from "@/components/player/playlist-sidebar";
 import { PlaylistVideoItem, ProgressMap } from "@/types";
-import { Loader2 } from "lucide-react";
+import { CheckCircle2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface PlaylistData {
@@ -38,6 +38,8 @@ export default function PlaylistPage({
   const [error, setError] = useState("");
   const [autoplay, setAutoplay] = useState(true);
   const [activeTab, setActiveTab] = useState<"info" | "playlist">("info");
+  const [isMarkingComplete, setIsMarkingComplete] = useState(false);
+  const [manualCompleteError, setManualCompleteError] = useState("");
 
   const { saveProgress } = useProgress(playlistId || "");
 
@@ -60,7 +62,7 @@ export default function PlaylistPage({
       // Auto-select first video if none selected
       if (!searchParams.get("v") && res.playlist.videos.length > 0) {
         router.replace(
-          `/playlist/${playlistId}?v=${res.playlist.videos[0].youtubeVideoId}`
+          `/playlist/${playlistId}?v=${res.playlist.videos[0].youtubeVideoId}`,
         );
       }
     } catch (e: unknown) {
@@ -78,63 +80,126 @@ export default function PlaylistPage({
   }, [playlistId]);
 
   const activeVideo = data?.playlist?.videos?.find(
-    (v) => v.youtubeVideoId === activeVideoId
+    (v) => v.youtubeVideoId === activeVideoId,
   );
-  const startAt =
-    data?.progress?.[activeVideoId || ""]?.watchedSeconds || 0;
+  const startAt = data?.progress?.[activeVideoId || ""]?.watchedSeconds || 0;
+  const activeVideoProgress = activeVideoId
+    ? data?.progress?.[activeVideoId]
+    : undefined;
+  const isActiveVideoCompleted = Boolean(activeVideoProgress?.isCompleted);
 
   const handleProgress = useCallback(
     (seconds: number) => {
       if (!activeVideoId || !activeVideo) return;
+      const durationSeconds = activeVideo.durationSeconds;
+      if (durationSeconds <= 0) return;
+
       currentProgressRef.current = {
         watched: seconds,
-        duration: activeVideo.durationSeconds,
+        duration: durationSeconds,
       };
-      saveProgress(activeVideoId, seconds, activeVideo.durationSeconds);
+      saveProgress(activeVideoId, seconds, durationSeconds);
 
       // Update local state to reflect in UI immediately
       setData((prev) => {
         if (!prev) return prev;
         const p = prev.progress[activeVideoId] || {};
-        const percent =
-          Math.round(
-            (seconds / activeVideo.durationSeconds) * 10000
-          ) / 100;
+        const nextWatchedSeconds = Math.max(
+          p.watchedSeconds || 0,
+          Math.min(Math.max(seconds, 0), durationSeconds),
+        );
+        const computedPercent =
+          Math.round((nextWatchedSeconds / durationSeconds) * 10000) / 100;
+        const percent = Math.max(p.percentComplete || 0, computedPercent);
         return {
           ...prev,
           progress: {
             ...prev.progress,
             [activeVideoId]: {
               ...p,
-              watchedSeconds: seconds,
+              watchedSeconds: nextWatchedSeconds,
+              durationSeconds,
               percentComplete: percent,
-              isCompleted: percent >= 90,
+              isCompleted: Boolean(p.isCompleted) || percent >= 90,
             },
           },
         };
       });
     },
-    [activeVideoId, activeVideo, saveProgress]
+    [activeVideoId, activeVideo, saveProgress],
   );
 
   const handleSelectVideo = (videoId: string) => {
+    setManualCompleteError("");
     // Save last progress of current before switching
-    if (
-      activeVideoStr.current &&
-      currentProgressRef.current.duration > 0
-    ) {
+    if (activeVideoStr.current && currentProgressRef.current.duration > 0) {
       saveProgress(
         activeVideoStr.current,
         currentProgressRef.current.watched,
-        currentProgressRef.current.duration
+        currentProgressRef.current.duration,
       );
     }
     router.replace(`/playlist/${playlistId}?v=${videoId}`);
   };
 
+  const handleMarkComplete = async () => {
+    if (
+      !activeVideoId ||
+      !activeVideo ||
+      activeVideo.durationSeconds <= 0 ||
+      isActiveVideoCompleted ||
+      isMarkingComplete
+    ) {
+      return;
+    }
+
+    setManualCompleteError("");
+    setIsMarkingComplete(true);
+
+    const saved = await saveProgress(
+      activeVideoId,
+      activeVideo.durationSeconds,
+      activeVideo.durationSeconds,
+    );
+
+    if (!saved) {
+      setManualCompleteError("Could not mark this video complete. Try again.");
+      setIsMarkingComplete(false);
+      return;
+    }
+
+    currentProgressRef.current = {
+      watched: activeVideo.durationSeconds,
+      duration: activeVideo.durationSeconds,
+    };
+
+    setData((prev) => {
+      if (!prev) return prev;
+      const p = prev.progress[activeVideoId] || {};
+      return {
+        ...prev,
+        progress: {
+          ...prev.progress,
+          [activeVideoId]: {
+            ...p,
+            watchedSeconds: activeVideo.durationSeconds,
+            durationSeconds: activeVideo.durationSeconds,
+            percentComplete: 100,
+            isCompleted: true,
+            lastWatchedAt: new Date(),
+          },
+        },
+      };
+    });
+
+    setIsMarkingComplete(false);
+  };
+
   // Video indexes for navigation
   const videos = data?.playlist?.videos || [];
-  const activeIndex = videos.findIndex((v) => v.youtubeVideoId === activeVideoId);
+  const activeIndex = videos.findIndex(
+    (v) => v.youtubeVideoId === activeVideoId,
+  );
   const hasPrev = activeIndex > 0;
   const hasNext = activeIndex !== -1 && activeIndex < videos.length - 1;
 
@@ -168,9 +233,7 @@ export default function PlaylistPage({
   }
 
   if (error) {
-    return (
-      <div className="text-center pt-20 text-destructive">{error}</div>
-    );
+    return <div className="text-center pt-20 text-destructive">{error}</div>;
   }
 
   if (!data) return null;
@@ -195,7 +258,7 @@ export default function PlaylistPage({
 
           {/* Video Controls Bar */}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 bg-card border border-border p-3.5 rounded-xl shadow-sm select-none">
-            <div className="flex gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -203,7 +266,8 @@ export default function PlaylistPage({
                 disabled={!hasPrev}
                 className="rounded-full h-9 px-4 gap-1 border-border text-xs font-semibold hover:bg-secondary"
               >
-                ◀ Prev
+                <ChevronLeft className="size-3.5" />
+                Prev
               </Button>
               <Button
                 variant="outline"
@@ -212,13 +276,39 @@ export default function PlaylistPage({
                 disabled={!hasNext}
                 className="rounded-full h-9 px-4 gap-1 border-border text-xs font-semibold hover:bg-secondary"
               >
-                Next ▶
+                Next
+                <ChevronRight className="size-3.5" />
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleMarkComplete}
+                disabled={
+                  !activeVideo ||
+                  activeVideo.durationSeconds <= 0 ||
+                  isActiveVideoCompleted ||
+                  isMarkingComplete
+                }
+                className={`rounded-full h-9 px-4 gap-1.5 text-xs font-semibold ${
+                  isActiveVideoCompleted
+                    ? "border-primary/40 bg-primary/10 text-primary hover:bg-primary/15"
+                    : "border-foreground bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200"
+                }`}
+              >
+                {isMarkingComplete ? (
+                  <Loader2 className="size-3.5 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="size-3.5" />
+                )}
+                {isActiveVideoCompleted ? "Completed" : "Mark Complete"}
               </Button>
             </div>
 
             {/* Autoplay toggle */}
             <div className="flex items-center gap-2">
-              <label className="text-[10px] font-bold text-muted-foreground tracking-widest uppercase cursor-pointer select-none" htmlFor="autoplay-toggle">
+              <label
+                className="text-[10px] font-bold text-muted-foreground tracking-widest uppercase cursor-pointer select-none"
+                htmlFor="autoplay-toggle"
+              >
                 Autoplay Next
               </label>
               <button
@@ -236,6 +326,11 @@ export default function PlaylistPage({
               </button>
             </div>
           </div>
+          {manualCompleteError && (
+            <p className="mt-2 text-xs font-medium text-destructive">
+              {manualCompleteError}
+            </p>
+          )}
 
           <div className="mt-6 bg-background">
             <h1 className="font-serif text-2xl md:text-3xl font-medium tracking-wide text-foreground mb-1 leading-snug">
@@ -271,8 +366,10 @@ export default function PlaylistPage({
 
             <div className="text-sm text-foreground/80 leading-relaxed bg-card/40 p-6 rounded-xl border border-border border-l-4 border-l-primary whitespace-pre-wrap max-h-[400px] overflow-y-auto shadow-inner font-light">
               {activeTab === "info"
-                ? activeVideo?.description || "No description available for this video."
-                : data.playlist.description || "No description available for this playlist."}
+                ? activeVideo?.description ||
+                  "No description available for this video."
+                : data.playlist.description ||
+                  "No description available for this playlist."}
             </div>
           </div>
         </div>
@@ -284,7 +381,8 @@ export default function PlaylistPage({
               {data.playlist.title}
             </h2>
             <p className="text-[9px] font-bold text-muted-foreground/80 tracking-widest uppercase mt-1">
-              {data.playlist.channelTitle} • {data.playlist.videos.length} videos
+              {data.playlist.channelTitle} • {data.playlist.videos.length}{" "}
+              videos
             </p>
           </div>
 
