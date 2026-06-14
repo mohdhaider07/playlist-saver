@@ -20,8 +20,9 @@ export function PlaylistSidebar({
   progressMap,
   onSelectVideo,
 }: PlaylistSidebarProps) {
-  const { dictionary } = useI18n();
+  const { dictionary, direction } = useI18n();
   const t = dictionary.playlistSidebar;
+  const isRtl = direction === "rtl";
   const [searchQuery, setSearchQuery] = useState("");
   const [displayCount, setDisplayCount] = useState(50);
 
@@ -61,7 +62,9 @@ export function PlaylistSidebar({
         </div>
         <div className="w-full h-1 bg-secondary rounded-full overflow-hidden border border-border/20">
           <div
-            className="h-full bg-primary rounded-full transition-all duration-500"
+            className={`h-full bg-primary rounded-full transition-all duration-500${
+              isRtl ? " ms-auto" : ""
+            }`}
             style={{ width: `${overallPct}%` }}
           ></div>
         </div>

@@ -33,7 +33,8 @@ export function VideoListItem({
   isCompleted,
   onClick,
 }: VideoListItemProps) {
-  const { dictionary } = useI18n();
+  const { dictionary, direction } = useI18n();
+  const isRtl = direction === "rtl";
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const thumbnailUrl = video.thumbnailUrl?.trim();
@@ -60,10 +61,15 @@ export function VideoListItem({
     <div
       onClick={onClick}
       className={cn(
-        "flex gap-3 p-2.5 rounded-lg cursor-pointer transition-all duration-200 group border-l-4 select-none border-y border-r border-y-transparent border-r-transparent",
+        "flex gap-3 p-2.5 rounded-lg cursor-pointer transition-all duration-200 group select-none border-y",
+        isRtl
+          ? "border-r-4 border-l border-l-transparent"
+          : "border-l-4 border-r border-r-transparent",
         isActive
-          ? "bg-primary/5 dark:bg-primary/10 border-primary pl-2 border-y-border/40 border-r-border/40"
-          : "hover:bg-secondary/60 border-transparent pl-2"
+          ? "bg-primary/5 dark:bg-primary/10 border-primary border-y-border/40"
+          : isRtl
+            ? "hover:bg-secondary/60 border-transparent"
+            : "hover:bg-secondary/60 border-transparent"
       )}
     >
       <div 
@@ -105,7 +111,10 @@ export function VideoListItem({
         {/* Progress bar overlay at bottom */}
         <div className="absolute bottom-0 left-0 w-full h-[3px] bg-secondary/50">
           <div
-            className="h-full bg-primary rounded-full transition-all duration-300"
+            className={cn(
+              "h-full bg-primary rounded-full transition-all duration-300",
+              isRtl ? "ms-auto" : ""
+            )}
             style={{ width: `${progressPct}%` }}
           ></div>
         </div>
