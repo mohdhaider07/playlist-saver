@@ -20,7 +20,7 @@ import { Link2, Sparkles } from "lucide-react";
 interface AddPlaylistModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess: (playlist: PlaylistFormatted) => void;
+  onSuccess: (playlist: PlaylistFormatted) => void | Promise<void>;
 }
 
 export function AddPlaylistModal({
@@ -44,7 +44,7 @@ export function AddPlaylistModal({
         method: "POST",
         body: JSON.stringify({ playlistUrl: url }),
       });
-      onSuccess(data.playlist);
+      await onSuccess(data.playlist);
       setUrl("");
       onOpenChange(false);
     } catch (err: unknown) {
@@ -128,4 +128,3 @@ export function AddPlaylistModal({
     </Dialog>
   );
 }
-

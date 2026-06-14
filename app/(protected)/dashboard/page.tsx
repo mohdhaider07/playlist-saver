@@ -27,8 +27,8 @@ export default function DashboardPage() {
 
   const loadPlaylists = async () => {
     try {
-      const data = await apiFetch("/api/playlists");
-      setPlaylists(data.playlists);
+      const data = await apiFetch("/api/playlists", { cache: "no-store" });
+      setPlaylists(data.playlists ?? []);
     } catch (e) {
       console.error(e);
     } finally {
@@ -48,6 +48,21 @@ export default function DashboardPage() {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const handlePlaylistAdded = async (newPlaylist: PlaylistFormatted) => {
+    const normalizedPlaylist = {
+      ...newPlaylist,
+      completedCount: newPlaylist.completedCount ?? 0,
+      progressPercent: newPlaylist.progressPercent ?? 0,
+    };
+
+    setChannelFilter("");
+    setPlaylists((prev) => [
+      normalizedPlaylist,
+      ...prev.filter((playlist) => playlist.id !== normalizedPlaylist.id),
+    ]);
+    await loadPlaylists();
   };
 
   // Statistics calculations
@@ -252,11 +267,8 @@ export default function DashboardPage() {
       <AddPlaylistModal
         open={modalOpen}
         onOpenChange={setModalOpen}
-        onSuccess={(newPlaylist) =>
-          setPlaylists([newPlaylist, ...playlists])
-        }
+        onSuccess={handlePlaylistAdded}
       />
     </div>
   );
 }
-

@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { motion } from "motion/react";
-import { LogOut, User, Calendar, Shield, ArrowLeft } from "lucide-react";
+import { LogOut, User, Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export default function ProfilePage() {

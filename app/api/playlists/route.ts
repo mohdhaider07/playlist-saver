@@ -8,6 +8,8 @@ import {
   parseISO8601Duration,
 } from "@/lib/youtube";
 
+const NO_STORE_HEADERS = { "Cache-Control": "no-store" };
+
 // GET /api/playlists — list all playlists for authenticated user with progress stats
 export async function GET(request: NextRequest) {
   try {
@@ -25,6 +27,7 @@ export async function GET(request: NextRequest) {
     // Do not return `videos` array here
     const playlists = await playlistsCol
       .find({ userId: user.id }, { projection: { videos: 0 } })
+      .sort({ addedAt: -1 })
       .toArray();
 
     // Fetch progress for this user
@@ -65,7 +68,10 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    return NextResponse.json({ playlists: formatted });
+    return NextResponse.json(
+      { playlists: formatted },
+      { headers: NO_STORE_HEADERS }
+    );
   } catch (error) {
     console.error("[GET /api/playlists]", error);
     return NextResponse.json(
@@ -193,9 +199,14 @@ export async function POST(request: NextRequest) {
       channelTitle: metadata.channelTitle,
       videoCount: videos.length,
       addedAt: newDoc.addedAt,
+      completedCount: 0,
+      progressPercent: 0,
     };
 
-    return NextResponse.json({ playlist: formatted }, { status: 201 });
+    return NextResponse.json(
+      { playlist: formatted },
+      { status: 201, headers: NO_STORE_HEADERS }
+    );
   } catch (error: unknown) {
     console.error("[POST /api/playlists]", error);
     const message = error instanceof Error ? error.message : "Unknown error";
