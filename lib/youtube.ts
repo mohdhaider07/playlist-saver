@@ -7,6 +7,10 @@ export function parseISO8601Duration(duration: string): number {
   return hours * 3600 + minutes * 60 + seconds;
 }
 
+export function getYouTubeThumbnailUrl(videoId: string): string {
+  return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : "";
+}
+
 export async function getPlaylistMetadata(
   playlistId: string,
   apiKey: string

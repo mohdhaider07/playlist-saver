@@ -8,6 +8,9 @@ interface EmailOptions {
   attachments?: { filename: string; content: Buffer }[];
 }
 
+console.log("Email Service Init - EMAIL_USER exists:", !!process.env.EMAIL_USER);
+console.log("Email Service Init - EMAIL_PASSWORD exists:", !!process.env.EMAIL_PASSWORD);
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   host: "smtp.gmail.com",
@@ -32,6 +35,11 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
       attachments: options.attachments,
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.error("Email sending failed for", recipient, ":", error);
+      throw error;
+    }
   }
 };

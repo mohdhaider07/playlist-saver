@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getPlaylistsCollection, getProgressCollection } from "@/lib/db";
 import { getAuthUser } from "@/lib/auth-helpers";
+import { getYouTubeThumbnailUrl } from "@/lib/youtube";
+import { PlaylistVideoItem } from "@/types";
 
 // GET /api/playlists/[playlistId] — get single playlist with progress
 export async function GET(
@@ -61,6 +63,12 @@ export async function GET(
       };
     });
 
+    const videos = playlist.videos.map((video: PlaylistVideoItem) => ({
+      ...video,
+      thumbnailUrl:
+        video.thumbnailUrl || getYouTubeThumbnailUrl(video.youtubeVideoId),
+    }));
+
     const formatted = {
       id: playlist._id.toString(),
       youtubePlaylistId: playlist.youtubePlaylistId,
@@ -69,7 +77,7 @@ export async function GET(
       thumbnailUrl: playlist.thumbnailUrl,
       channelTitle: playlist.channelTitle,
       videoCount: playlist.videoCount,
-      videos: playlist.videos,
+      videos,
       addedAt: playlist.addedAt,
     };
 

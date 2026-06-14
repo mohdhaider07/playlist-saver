@@ -5,6 +5,7 @@ import {
   getPlaylistMetadata,
   getPlaylistItems,
   getVideoDurations,
+  getYouTubeThumbnailUrl,
   parseISO8601Duration,
 } from "@/lib/youtube";
 
@@ -165,7 +166,7 @@ export async function POST(request: NextRequest) {
         thumbnailUrl:
           item.snippet.thumbnails?.high?.url ||
           item.snippet.thumbnails?.medium?.url ||
-          "",
+          getYouTubeThumbnailUrl(videoId),
         duration: durationStr,
         durationSeconds: parseISO8601Duration(durationStr),
         channelTitle:

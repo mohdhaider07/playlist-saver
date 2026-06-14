@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { PlaylistVideoItem } from "@/types";
-import { Play, Check } from "lucide-react";
+import { Play, Check, Film } from "lucide-react";
 
 interface VideoListItemProps {
   video: PlaylistVideoItem;
@@ -34,6 +34,7 @@ export function VideoListItem({
 }: VideoListItemProps) {
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const thumbnailUrl = video.thumbnailUrl?.trim();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,16 +68,18 @@ export function VideoListItem({
         ref={containerRef}
         className="relative w-28 shrink-0 aspect-video rounded overflow-hidden border border-border/80 shadow-sm bg-secondary/40"
       >
-        {isVisible ? (
+        {isVisible && thumbnailUrl ? (
           <Image
-            src={video.thumbnailUrl}
+            src={thumbnailUrl}
             alt={video.title}
             fill
             className="object-cover"
             sizes="112px"
           />
         ) : (
-          <div className="absolute inset-0 bg-secondary/30" />
+          <div className="absolute inset-0 flex items-center justify-center bg-secondary/40 text-muted-foreground">
+            {isVisible ? <Film className="size-5" /> : null}
+          </div>
         )}
         
         {/* Hover / Active Overlays */}
@@ -131,4 +134,3 @@ export function VideoListItem({
     </div>
   );
 }
-

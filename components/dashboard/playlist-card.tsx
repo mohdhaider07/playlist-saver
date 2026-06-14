@@ -14,6 +14,7 @@ interface PlaylistCardProps {
 export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
   const completedCount = playlist.completedCount || 0;
   const progressPercent = playlist.progressPercent || 0;
+  const thumbnailUrl = playlist.thumbnailUrl?.trim();
 
   return (
     <div className="bg-card rounded-xl overflow-hidden shadow-sm border border-border hover:shadow-md hover:border-primary/50 flex flex-col group transition-all duration-300 relative">
@@ -21,14 +22,20 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
         href={`/playlist/${playlist.id}`}
         className="block relative aspect-video overflow-hidden"
       >
-        <Image
-          src={playlist.thumbnailUrl}
-          alt={playlist.title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          priority={false}
-        />
+        {thumbnailUrl ? (
+          <Image
+            src={thumbnailUrl}
+            alt={playlist.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            priority={false}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-secondary/50 text-muted-foreground">
+            <Film className="size-8" />
+          </div>
+        )}
         <div className="absolute bottom-2.5 right-2.5 bg-stone-900/90 dark:bg-stone-950/90 backdrop-blur-md px-2 py-1 rounded text-[9px] font-bold text-stone-100 tracking-wider flex items-center gap-1 uppercase">
           <Film className="size-3 text-primary" /> {playlist.videoCount} videos
         </div>
@@ -95,4 +102,3 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
     </div>
   );
 }
-
