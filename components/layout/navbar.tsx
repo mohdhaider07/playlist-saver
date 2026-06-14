@@ -2,18 +2,76 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
+import {
+  Locale,
+  localeCookieName,
+  localeLabels,
+  locales,
+  localizeHref,
+  stripLocale,
+} from "@/lib/i18n/config";
+
+function LocaleSwitcher({ onSwitch }: { onSwitch?: () => void }) {
+  const { locale, dictionary } = useI18n();
+  const pathname = usePathname();
+  const router = useRouter();
+  const currentPath = stripLocale(pathname || "/");
+
+  const switchLocale = (nextLocale: Locale) => {
+    if (nextLocale === locale) return;
+    const query = window.location.search;
+    const hash = window.location.hash;
+    onSwitch?.();
+    router.push(localizeHref(`${currentPath}${query}${hash}`, nextLocale));
+  };
+
+  return (
+    <div
+      aria-label={dictionary.nav.language}
+      className="inline-flex h-9 items-center rounded-full border border-border bg-secondary/40 p-1 shadow-xs"
+      role="group"
+    >
+      {locales.map((item) => {
+        const active = item === locale;
+        const label =
+          item === "ar" ? localeLabels[item].native : localeLabels[item].short;
+
+        return (
+          <button
+            key={item}
+            type="button"
+            aria-pressed={active}
+            lang={item}
+            dir={item === "ar" ? "rtl" : "ltr"}
+            onClick={() => switchLocale(item)}
+            className={`h-7 min-w-10 rounded-full px-3 text-[10px] font-bold transition-all ${
+              active
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 export function Navbar() {
   const { isAuthenticated, user } = useAuth();
+  const { dictionary, locale } = useI18n();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const to = (href: string) => localizeHref(href, locale);
 
-  const isHome = pathname === "/";
+  const isHome = stripLocale(pathname || "/") === "/";
   const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : "U";
 
   useEffect(() => {
@@ -53,7 +111,7 @@ export function Navbar() {
       >
         {/* Left Side: Logo */}
         <Link
-          href="/"
+          href={to("/")}
           onClick={() => {
             if (isHome) {
               window.scrollTo({ top: 0, behavior: "smooth" });
@@ -77,41 +135,42 @@ export function Navbar() {
               onClick={scrollToSection("features")}
               className="hover:text-primary transition-colors cursor-pointer"
             >
-              Features
+              {dictionary.nav.features}
             </a>
             <a
               href="#how-it-works"
               onClick={scrollToSection("how-it-works")}
               className="hover:text-primary transition-colors cursor-pointer"
             >
-              How It Works
+              {dictionary.nav.howItWorks}
             </a>
             <a
               href="#mini-demo"
               onClick={scrollToSection("mini-demo")}
               className="hover:text-primary transition-colors cursor-pointer"
             >
-              Interactive Simulator
+              {dictionary.nav.interactiveSimulator}
             </a>
           </div>
         )}
 
         {/* Right Side: Auth buttons / Profile */}
         <div className="hidden md:flex items-center gap-3">
+          <LocaleSwitcher />
           {isAuthenticated === true && (
             <>
               {isHome && (
-                <Link href="/dashboard">
+                <Link href={to("/dashboard")}>
                   <Button
                     variant="ghost"
                     size="sm"
                     className="h-9 px-5 rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-800/50 text-muted-foreground hover:text-foreground font-semibold"
                   >
-                    Dashboard
+                    {dictionary.nav.dashboard}
                   </Button>
                 </Link>
               )}
-              <Link href="/profile" className="flex items-center">
+              <Link href={to("/profile")} className="flex items-center">
                 <div className="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-serif font-bold shadow-sm select-none border border-white/5 pb-[2px] transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer">
                   {userInitial}
                 </div>
@@ -121,36 +180,38 @@ export function Navbar() {
 
           {isAuthenticated === false && (
             <div className="flex gap-3">
-              <Link href="/login">
+              <Link href={to("/login")}>
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-9 px-5 rounded-full hover:bg-stone-200/50 dark:hover:bg-stone-800/50 text-muted-foreground hover:text-foreground font-semibold"
                 >
-                  Login
+                  {dictionary.nav.login}
                 </Button>
               </Link>
-              <Link href="/register">
+              <Link href={to("/register")}>
                 <Button
                   size="sm"
                   className="h-9 px-5 bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 rounded-full transition-colors shadow-sm font-semibold border-none"
                 >
-                  Sign Up
+                  {dictionary.nav.signUp}
                 </Button>
               </Link>
             </div>
           )}
         </div>
 
-        {/* Mobile menu toggle button */}
-        {isHome && (
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 text-foreground/80 hover:text-foreground transition-colors cursor-pointer"
-          >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        )}
+        <div className="flex items-center gap-2 md:hidden">
+          <LocaleSwitcher onSwitch={() => setMenuOpen(false)} />
+          {isHome && (
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 text-foreground/80 hover:text-foreground transition-colors cursor-pointer"
+            >
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          )}
+        </div>
       </nav>
 
       {/* Mobile Drawer Menu */}
@@ -161,39 +222,39 @@ export function Navbar() {
             onClick={scrollToSection("features")}
             className="text-foreground/85 hover:text-primary transition-colors cursor-pointer uppercase tracking-widest text-lg font-bold"
           >
-            Features
+            {dictionary.nav.features}
           </a>
           <a
             href="#how-it-works"
             onClick={scrollToSection("how-it-works")}
             className="text-foreground/85 hover:text-primary transition-colors cursor-pointer uppercase tracking-widest text-lg font-bold"
           >
-            How It Works
+            {dictionary.nav.howItWorks}
           </a>
           <a
             href="#mini-demo"
             onClick={scrollToSection("mini-demo")}
             className="text-foreground/85 hover:text-primary transition-colors cursor-pointer uppercase tracking-widest text-lg font-bold"
           >
-            Interactive Simulator
+            {dictionary.nav.interactiveSimulator}
           </a>
           <div className="w-16 h-px bg-border my-2"></div>
           {isAuthenticated === true ? (
-            <Link href="/dashboard" onClick={() => setMenuOpen(false)}>
+            <Link href={to("/dashboard")} onClick={() => setMenuOpen(false)}>
               <Button size="lg" className="px-8 rounded-full bg-foreground text-background font-bold border-none shadow-md">
-                Go to Dashboard
+                {dictionary.nav.goToDashboard}
               </Button>
             </Link>
           ) : (
             <div className="flex flex-col gap-4 w-full max-w-[200px]">
-              <Link href="/login" onClick={() => setMenuOpen(false)} className="w-full text-center">
+              <Link href={to("/login")} onClick={() => setMenuOpen(false)} className="w-full text-center">
                 <Button variant="outline" className="w-full rounded-full font-bold">
-                  Login
+                  {dictionary.nav.login}
                 </Button>
               </Link>
-              <Link href="/register" onClick={() => setMenuOpen(false)} className="w-full text-center">
+              <Link href={to("/register")} onClick={() => setMenuOpen(false)} className="w-full text-center">
                 <Button className="w-full rounded-full bg-foreground text-background font-bold border-none shadow-md">
-                  Sign Up
+                  {dictionary.nav.signUp}
                 </Button>
               </Link>
             </div>

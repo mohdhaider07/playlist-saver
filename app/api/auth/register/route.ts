@@ -3,9 +3,21 @@ import { getUsersCollection } from "@/lib/db";
 import { hashPassword, generateOtp } from "@/lib/auth";
 import { registerSchema } from "@/lib/validation";
 import { sendEmail } from "@/lib/Email-service";
+import {
+  getLocaleDirection,
+  getPreferredLocale,
+  localeCookieName,
+} from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export async function POST(request: NextRequest) {
   try {
+    const locale = getPreferredLocale(
+      request.headers.get("accept-language"),
+      request.cookies.get(localeCookieName)?.value,
+    );
+    const direction = getLocaleDirection(locale);
+    const emailCopy = getDictionary(locale).email;
     const body = await request.json();
     const result = registerSchema.safeParse(body);
     if (!result.success) {
@@ -44,12 +56,12 @@ export async function POST(request: NextRequest) {
 
     await sendEmail({
       to: emailLower,
-      subject: "Verify your Playzen Account",
-      text: `This email is safe for account registration. Your Playzen verification code is: ${otpCode}. It is valid for 10 minutes.`,
+      subject: emailCopy.verifySubject,
+      text: emailCopy.verifyText.replace("{otp}", otpCode),
       html: `
-          <div style="font-family: sans-serif; padding: 20px; color: #333;">
-            <p>This email is safe for account registration. Your Playzen OTP code is: <strong>${otpCode}</strong></p>
-            <p>This code is valid for 10 minutes.</p>
+          <div dir="${direction}" style="font-family: sans-serif; padding: 20px; color: #333; text-align: ${direction === "rtl" ? "right" : "left"};">
+            <p>${emailCopy.verifyIntro} <strong>${otpCode}</strong></p>
+            <p>${emailCopy.validFor}</p>
           </div>
         `,
     });

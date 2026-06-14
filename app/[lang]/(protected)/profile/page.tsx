@@ -17,9 +17,14 @@ import {
 import { motion } from "motion/react";
 import { LogOut, User, Calendar, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
+  const { dictionary, locale } = useI18n();
+  const t = dictionary.profile;
+  const to = useLocalePath();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -28,9 +33,9 @@ export default function ProfilePage() {
     setIsLoggingOut(true);
     try {
       await logout();
-      router.push("/login");
+      router.push(to("/login"));
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error(t.logoutError, error);
       setIsLoggingOut(false);
     }
   };
@@ -39,22 +44,22 @@ export default function ProfilePage() {
 
   // Format creation date
   const joinedDate = user?.createdAt
-    ? new Date(user.createdAt).toLocaleDateString("en-US", {
+    ? new Date(user.createdAt).toLocaleDateString(locale === "ar" ? "ar" : "en-US", {
         year: "numeric",
         month: "long",
         day: "numeric",
       })
-    : "Recently joined";
+    : dictionary.common.recentlyJoined;
 
   return (
     <div className="min-h-screen bg-background pt-24 px-4 sm:px-6 pb-16 w-full max-w-2xl mx-auto z-10 relative">
       <div className="mb-6">
         <Link
-          href="/dashboard"
+          href={to("/dashboard")}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
         >
           <ArrowLeft className="size-4 transition-transform duration-200 group-hover:-translate-x-1" />
-          <span>Back to Dashboard</span>
+          <span>{t.backToDashboard}</span>
         </Link>
       </div>
 
@@ -72,10 +77,10 @@ export default function ProfilePage() {
             {userInitial}
           </div>
           <h1 className="text-2xl font-serif font-semibold text-foreground tracking-wide">
-            {user?.name || "User"}
+            {user?.name || dictionary.common.user}
           </h1>
           <p className="text-[10px] text-primary font-bold tracking-widest uppercase mt-1">
-            Learner
+            {dictionary.common.learner}
           </p>
         </div>
 
@@ -84,10 +89,10 @@ export default function ProfilePage() {
             <User className="size-5 text-primary mt-0.5 shrink-0" />
             <div className="space-y-0.5">
               <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                Email Address
+                {t.emailAddress}
               </p>
               <p className="text-sm font-medium text-foreground truncate max-w-md">
-                {user?.email || "Loading..."}
+                {user?.email || t.loading}
               </p>
             </div>
           </div>
@@ -96,7 +101,7 @@ export default function ProfilePage() {
             <Calendar className="size-5 text-primary mt-0.5 shrink-0" />
             <div className="space-y-0.5">
               <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                Joined Date
+                {t.joinedDate}
               </p>
               <p className="text-sm font-medium text-foreground">
                 {joinedDate}
@@ -112,28 +117,27 @@ export default function ProfilePage() {
             className="rounded-full px-8 h-10 font-bold transition-all gap-2 bg-rose-600 hover:bg-rose-700 text-white border-none cursor-pointer"
           >
             <LogOut className="size-4" />
-            Sign Out
+            {t.signOut}
           </Button>
 
           <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Confirm Sign Out</AlertDialogTitle>
+                <AlertDialogTitle>{t.confirmTitle}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to sign out? You will need to log in
-                  again to access your saved playlists and tracking progress.
+                  {t.confirmDescription}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel disabled={isLoggingOut}>
-                  Cancel
+                  {dictionary.common.cancel}
                 </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleLogout}
                   disabled={isLoggingOut}
                   className="bg-rose-600 hover:bg-rose-700 text-white border-none rounded-md"
                 >
-                  {isLoggingOut ? "Signing Out..." : "Sign Out"}
+                  {isLoggingOut ? t.signingOut : t.signOut}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
@@ -9,9 +9,18 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/hooks/use-auth";
 import { motion } from "motion/react";
-import { loginSchema } from "@/lib/validation";
+import { createLoginSchema } from "@/lib/validation";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
 export function LoginForm() {
+  const { dictionary } = useI18n();
+  const t = dictionary.auth.loginForm;
+  const to = useLocalePath();
+  const loginSchema = useMemo(
+    () => createLoginSchema(dictionary.validation),
+    [dictionary.validation],
+  );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -53,9 +62,9 @@ export function LoginForm() {
       if (data.token) {
         login(data.token, data.user);
       }
-      router.push("/dashboard");
+      router.push(to("/dashboard"));
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      setError(err instanceof Error ? err.message : t.fallbackError);
     } finally {
       setLoading(false);
     }
@@ -73,9 +82,9 @@ export function LoginForm() {
       if (data.token) {
         login(data.token, data.user);
       }
-      router.push("/dashboard");
+      router.push(to("/dashboard"));
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Guest login failed");
+      setError(err instanceof Error ? err.message : t.guestFallbackError);
     } finally {
       setGuestLoading(false);
     }
@@ -97,7 +106,7 @@ export function LoginForm() {
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          Email Address
+          {t.emailAddress}
         </label>
         <Input
           type="email"
@@ -107,7 +116,7 @@ export function LoginForm() {
             setEmail(e.target.value);
             setTouched((prev) => ({ ...prev, email: true }));
           }}
-          placeholder="you@example.com"
+          placeholder={dictionary.common.emailPlaceholder}
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
             fieldErrors.email ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
           }`}
@@ -121,12 +130,12 @@ export function LoginForm() {
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase flex justify-between items-center pl-1">
-          <span>Password</span>
+          <span>{t.password}</span>
           <Link
-            href="/forgot-password"
+            href={to("/forgot-password")}
             className="text-primary hover:underline font-semibold transition-colors normal-case"
           >
-            Forgot Password?
+            {t.forgotPassword}
           </Link>
         </label>
         <Input
@@ -137,7 +146,7 @@ export function LoginForm() {
             setPassword(e.target.value);
             setTouched((prev) => ({ ...prev, password: true }));
           }}
-          placeholder="••••••••"
+          placeholder={dictionary.common.passwordPlaceholder}
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
             fieldErrors.password ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
           }`}
@@ -157,17 +166,17 @@ export function LoginForm() {
         {loading ? (
           <span className="flex items-center justify-center gap-2">
             <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
-            Signing in...
+            {t.signingIn}
           </span>
         ) : (
-          "Sign In"
+          t.signIn
         )}
       </Button>
 
       <div className="flex items-center gap-3">
         <div className="h-px flex-1 bg-border" />
         <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-          Or
+          {t.or}
         </span>
         <div className="h-px flex-1 bg-border" />
       </div>
@@ -182,10 +191,10 @@ export function LoginForm() {
         {guestLoading ? (
           <span className="flex items-center justify-center gap-2">
             <span className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            Logging in as guest...
+            {t.guestLoggingIn}
           </span>
         ) : (
-          "Guest Login"
+          t.guestLogin
         )}
       </Button>
     </form>

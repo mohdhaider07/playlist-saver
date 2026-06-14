@@ -5,6 +5,7 @@ import { PlaylistVideoItem, ProgressMap } from "@/types";
 import { VideoListItem } from "./video-list-item";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useI18n } from "@/components/i18n-provider";
 
 interface PlaylistSidebarProps {
   videos: PlaylistVideoItem[];
@@ -19,6 +20,8 @@ export function PlaylistSidebar({
   progressMap,
   onSelectVideo,
 }: PlaylistSidebarProps) {
+  const { dictionary } = useI18n();
+  const t = dictionary.playlistSidebar;
   const [searchQuery, setSearchQuery] = useState("");
   const [displayCount, setDisplayCount] = useState(50);
 
@@ -51,7 +54,7 @@ export function PlaylistSidebar({
       {/* Sidebar Progress Tracker */}
       <div className="p-4 bg-secondary/40 border-b border-border space-y-2 select-none shrink-0">
         <div className="flex items-center justify-between text-[9px] font-bold text-muted-foreground uppercase tracking-widest">
-          <span>Overall Progress</span>
+          <span>{t.overallProgress}</span>
           <span className="text-primary font-serif italic font-semibold">
             {overallPct}% ({completedCount}/{videos.length})
           </span>
@@ -67,13 +70,13 @@ export function PlaylistSidebar({
       {/* Sidebar Live Search */}
       <div className="p-3 border-b border-border shrink-0 select-none bg-card">
         <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5" />
+          <Search className="absolute start-2.5 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5" />
           <Input
             type="text"
-            placeholder="Search videos in playlist..."
+            placeholder={t.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8 h-9 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-xs text-foreground placeholder:text-muted-foreground/60"
+            className="ps-8 h-9 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-xs text-foreground placeholder:text-muted-foreground/60"
           />
         </div>
       </div>
@@ -85,7 +88,7 @@ export function PlaylistSidebar({
       >
         {filteredVideos.length === 0 ? (
           <div className="text-center text-xs text-muted-foreground py-8 select-none">
-            No videos match your search.
+            {t.noMatches}
           </div>
         ) : (
           visibleVideos.map((video) => {
@@ -109,4 +112,3 @@ export function PlaylistSidebar({
     </div>
   );
 }
-

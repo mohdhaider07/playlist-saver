@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { RegisterForm } from "@/components/auth/register-form";
-import { OtpForm } from "@/components/auth/otp-form";
+import { LoginForm } from "@/components/auth/login-form";
 import { motion } from "motion/react";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
-export default function RegisterPage() {
-  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
+export default function LoginPage() {
+  const { dictionary } = useI18n();
+  const t = dictionary.auth.login;
+  const to = useLocalePath();
 
   return (
     <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -24,17 +26,15 @@ export default function RegisterPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/icon.png"
-          alt="Playzen Icon"
+          alt={dictionary.auth.iconAlt}
           className="w-14 h-14 object-contain mb-4 transition-transform duration-300 hover:scale-105"
         />
         <h2 className="text-center text-3xl font-serif font-semibold tracking-wide text-foreground">
-          {registeredEmail ? "Verify your email" : "Create your account"}
+          {t.title}
         </h2>
         <div className="w-12 h-0.5 bg-primary mt-4 opacity-80"></div>
         <p className="mt-3 text-center text-sm text-muted-foreground font-light">
-          {registeredEmail
-            ? "Enter the verification code below"
-            : "Start managing your learning playlists today"}
+          {t.subtitle}
         </p>
       </motion.div>
 
@@ -45,26 +45,19 @@ export default function RegisterPage() {
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10"
       >
         <div className="glass-panel py-10 px-4 shadow-lg sm:rounded-2xl sm:px-10 border border-border/80 relative">
-          {!registeredEmail ? (
-            <RegisterForm onSuccess={setRegisteredEmail} />
-          ) : (
-            <OtpForm email={registeredEmail} />
-          )}
+          <LoginForm />
 
-          {!registeredEmail && (
-            <div className="mt-8 text-center text-sm text-muted-foreground">
-              Already have an account?{" "}
-              <Link
-                href="/login"
-                className="text-primary hover:underline font-semibold transition-colors"
-              >
-                Log in
-              </Link>
-            </div>
-          )}
+          <div className="mt-8 text-center text-sm text-muted-foreground">
+            {t.noAccount}{" "}
+            <Link
+              href={to("/register")}
+              className="text-primary hover:underline font-semibold transition-colors"
+            >
+              {t.signUpLink}
+            </Link>
+          </div>
         </div>
       </motion.div>
     </div>
   );
 }
-

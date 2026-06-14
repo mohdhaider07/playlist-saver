@@ -8,8 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { motion } from "motion/react";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
 function ResetPasswordForm() {
+  const { dictionary } = useI18n();
+  const t = dictionary.auth.reset;
+  const to = useLocalePath();
   const router = useRouter();
   const searchParams = useSearchParams();
   const emailParam = searchParams.get("email") || "";
@@ -28,12 +33,12 @@ function ResetPasswordForm() {
     setSuccess("");
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t.passwordsDoNotMatch);
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError(t.passwordTooShort);
       return;
     }
 
@@ -44,12 +49,12 @@ function ResetPasswordForm() {
         method: "POST",
         body: JSON.stringify({ email, otp, password, confirmPassword }),
       });
-      setSuccess(data.message || "Password reset successfully!");
+      setSuccess(data.message || t.success);
       setTimeout(() => {
-        router.push("/login");
+        router.push(to("/login"));
       }, 2000);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to reset password");
+      setError(err instanceof Error ? err.message : t.fallbackError);
     } finally {
       setLoading(false);
     }
@@ -83,21 +88,21 @@ function ResetPasswordForm() {
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          Email Address
+          {t.emailAddress}
         </label>
         <Input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
+          placeholder={dictionary.common.emailPlaceholder}
           className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
         />
       </div>
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          Verification OTP Code
+          {t.otpCode}
         </label>
         <Input
           type="text"
@@ -105,35 +110,35 @@ function ResetPasswordForm() {
           maxLength={6}
           value={otp}
           onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-          placeholder="123456"
+          placeholder={dictionary.common.otpPlaceholder}
           className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground tracking-widest font-mono text-center text-lg"
         />
       </div>
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          New Password
+          {t.newPassword}
         </label>
         <Input
           type="password"
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
+          placeholder={dictionary.common.passwordPlaceholder}
           className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
         />
       </div>
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          Confirm New Password
+          {t.confirmNewPassword}
         </label>
         <Input
           type="password"
           required
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="••••••••"
+          placeholder={dictionary.common.passwordPlaceholder}
           className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
         />
       </div>
@@ -146,10 +151,10 @@ function ResetPasswordForm() {
         {loading ? (
           <span className="flex items-center justify-center gap-2">
             <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
-            Resetting Password...
+            {t.resetting}
           </span>
         ) : (
-          "Reset Password"
+          t.resetPassword
         )}
       </Button>
     </form>
@@ -157,6 +162,10 @@ function ResetPasswordForm() {
 }
 
 export default function ResetPasswordPage() {
+  const { dictionary } = useI18n();
+  const t = dictionary.auth.reset;
+  const to = useLocalePath();
+
   return (
     <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Decorative Glow Elements */}
@@ -172,15 +181,15 @@ export default function ResetPasswordPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/icon.png"
-          alt="Playzen Icon"
+          alt={dictionary.auth.iconAlt}
           className="w-14 h-14 object-contain mb-4 transition-transform duration-300 hover:scale-105"
         />
         <h2 className="text-center text-3xl font-serif font-semibold tracking-wide text-foreground">
-          Reset Password
+          {t.title}
         </h2>
         <div className="w-12 h-0.5 bg-primary mt-4 opacity-80"></div>
         <p className="mt-3 text-center text-sm text-muted-foreground font-light">
-          Enter the verification code sent to your email to set a new password
+          {t.subtitle}
         </p>
       </motion.div>
 
@@ -200,12 +209,12 @@ export default function ResetPasswordPage() {
           </Suspense>
 
           <div className="mt-8 text-center text-sm text-muted-foreground">
-            Back to{" "}
+            {t.backTo}{" "}
             <Link
-              href="/login"
+              href={to("/login")}
               className="text-primary hover:underline font-semibold transition-colors"
             >
-              Log in
+              {t.loginLink}
             </Link>
           </div>
         </div>

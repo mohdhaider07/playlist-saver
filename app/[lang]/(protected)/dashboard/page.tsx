@@ -7,6 +7,7 @@ import { AddPlaylistModal } from "@/components/dashboard/add-playlist-modal";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PlaylistFormatted } from "@/types";
+import { useI18n } from "@/components/i18n-provider";
 import { motion, AnimatePresence } from "motion/react";
 import {
   BookOpen,
@@ -19,6 +20,8 @@ import {
 } from "lucide-react";
 
 export default function DashboardPage() {
+  const { dictionary } = useI18n();
+  const t = dictionary.dashboard;
   const [playlists, setPlaylists] = useState<PlaylistFormatted[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -112,17 +115,20 @@ export default function DashboardPage() {
       >
         <div>
           <h1 className="text-3xl md:text-4xl font-serif font-semibold tracking-wide text-foreground flex items-center gap-3">
-            Workspace <span className="text-[9px] bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-sans font-bold uppercase tracking-widest">Dashboard</span>
+            {t.title}{" "}
+            <span className="text-[9px] bg-primary/10 text-primary border border-primary/20 px-3 py-1 rounded-full font-sans font-bold uppercase tracking-widest">
+              {t.badge}
+            </span>
           </h1>
           <p className="text-muted-foreground text-sm mt-2 font-light">
-            Track and manage your online learning paths and video playlists.
+            {t.description}
           </p>
         </div>
         <Button
           onClick={() => setModalOpen(true)}
           className="h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold transition-all shadow-sm gap-1.5 self-start md:self-auto border-none px-6"
         >
-          <Plus className="size-4" /> Add Playlist
+          <Plus className="size-4" /> {t.addPlaylist}
         </Button>
       </motion.div>
 
@@ -138,7 +144,7 @@ export default function DashboardPage() {
             <BookOpen className="size-5" />
           </div>
           <div>
-            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Playlists</p>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{t.stats.playlists}</p>
             <h3 className="text-xl font-serif font-semibold text-foreground">{totalPlaylists}</h3>
           </div>
         </motion.div>
@@ -148,7 +154,7 @@ export default function DashboardPage() {
             <Video className="size-5" />
           </div>
           <div>
-            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Total Videos</p>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{t.stats.totalVideos}</p>
             <h3 className="text-xl font-serif font-semibold text-foreground">{totalVideos}</h3>
           </div>
         </motion.div>
@@ -158,7 +164,7 @@ export default function DashboardPage() {
             <CheckCircle2 className="size-5" />
           </div>
           <div>
-            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Completed</p>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{t.stats.completed}</p>
             <h3 className="text-xl font-serif font-semibold text-foreground">{completedVideos}</h3>
           </div>
         </motion.div>
@@ -168,7 +174,7 @@ export default function DashboardPage() {
             <TrendingUp className="size-5" />
           </div>
           <div>
-            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Progress Avg</p>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">{t.stats.progressAvg}</p>
             <h3 className="text-xl font-serif font-semibold text-foreground">{overallProgress}%</h3>
           </div>
         </motion.div>
@@ -187,13 +193,13 @@ export default function DashboardPage() {
           {/* Filter drop down */}
           <div className="flex gap-2 w-full sm:w-auto justify-end">
             <div className="relative w-full sm:w-48">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5" />
+              <Filter className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5" />
               <select
                 value={channelFilter}
                 onChange={(e) => setChannelFilter(e.target.value)}
-                className="w-full h-10 pl-8 pr-3 rounded-xl bg-card border border-border text-xs font-semibold text-foreground focus:outline-none focus:border-primary/60 cursor-pointer appearance-none"
+                className="w-full h-10 ps-8 pe-3 rounded-xl bg-card border border-border text-xs font-semibold text-foreground focus:outline-none focus:border-primary/60 cursor-pointer appearance-none"
               >
-                <option value="">All Channels</option>
+                <option value="">{t.allChannels}</option>
                 {channels.map((chan) => (
                   <option key={chan} value={chan}>
                     {chan}
@@ -225,22 +231,22 @@ export default function DashboardPage() {
               <Inbox className="size-8" />
             </div>
             <h3 className="text-2xl font-serif font-semibold text-foreground mb-2">
-              No playlists added yet
+              {t.emptyTitle}
             </h3>
             <p className="text-muted-foreground text-sm mb-6 leading-relaxed font-light">
-              Connect and save your first YouTube playlist URL to begin tracking your watch progress and learning steps.
+              {t.emptyDescription}
             </p>
             <Button
               onClick={() => setModalOpen(true)}
               className="h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold shadow-sm gap-1.5 border-none px-6"
             >
-              <Plus className="size-4" /> Add Your First Playlist
+              <Plus className="size-4" /> {t.addFirst}
             </Button>
           </div>
         </motion.div>
       ) : filteredPlaylists.length === 0 ? (
         <div className="text-center py-16 text-muted-foreground">
-          No playlists matches your search query or selected channel filters.
+          {t.noMatches}
         </div>
       ) : (
         <motion.div

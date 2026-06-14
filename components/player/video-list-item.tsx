@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { PlaylistVideoItem } from "@/types";
 import { Play, Check, Film } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
 
 interface VideoListItemProps {
   video: PlaylistVideoItem;
@@ -32,6 +33,7 @@ export function VideoListItem({
   isCompleted,
   onClick,
 }: VideoListItemProps) {
+  const { dictionary } = useI18n();
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const thumbnailUrl = video.thumbnailUrl?.trim();
@@ -126,7 +128,7 @@ export function VideoListItem({
           </span>
           {isCompleted && (
             <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-0.5 rounded flex items-center gap-0.5 ml-auto shrink-0 uppercase tracking-widest">
-              <Check className="size-2.5 stroke-[3]" /> Done
+              <Check className="size-2.5 stroke-[3]" /> {dictionary.common.done}
             </span>
           )}
         </div>

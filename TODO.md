@@ -2,9 +2,9 @@
 
 Validation:
 
-0. add a guest login button
-1. add button to mark that video is watched completely.
-2. convert it into arabic
+0. add a guest login button => done
+1. add button to mark that video is watched completely. => done
+2. convert it into arabic => done
 
 TODO:
 

@@ -1,39 +1,49 @@
 import { z } from "zod";
+import { dictionaries, Dictionary } from "@/lib/i18n/dictionaries";
 
-export const loginSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, "Email is required")
-    .email("Invalid email format"),
-  password: z.string().min(1, "Password is required"),
-});
+type ValidationMessages = Dictionary["validation"];
 
-export const registerSchema = z
-  .object({
-    name: z
-      .string()
-      .trim()
-      .min(1, "Name is required")
-      .min(2, "Name must be at least 2 characters"),
+export function createLoginSchema(messages: ValidationMessages) {
+  return z.object({
     email: z
       .string()
       .trim()
-      .min(1, "Email is required")
-      .email("Invalid email format"),
-    password: z
-      .string()
-      .min(1, "Password is required")
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-      .regex(/[0-9]/, "Password must contain at least one digit"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
+      .min(1, messages.emailRequired)
+      .email(messages.invalidEmail),
+    password: z.string().min(1, messages.passwordRequired),
   });
+}
+
+export function createRegisterSchema(messages: ValidationMessages) {
+  return z
+    .object({
+      name: z
+        .string()
+        .trim()
+        .min(1, messages.nameRequired)
+        .min(2, messages.nameTooShort),
+      email: z
+        .string()
+        .trim()
+        .min(1, messages.emailRequired)
+        .email(messages.invalidEmail),
+      password: z
+        .string()
+        .min(1, messages.passwordRequired)
+        .min(8, messages.passwordTooShortEight)
+        .regex(/[A-Z]/, messages.passwordUppercase)
+        .regex(/[a-z]/, messages.passwordLowercase)
+        .regex(/[0-9]/, messages.passwordDigit),
+      confirmPassword: z.string().min(1, messages.confirmPasswordRequired),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: messages.passwordsDoNotMatch,
+      path: ["confirmPassword"],
+    });
+}
+
+export const loginSchema = createLoginSchema(dictionaries.en.validation);
+export const registerSchema = createRegisterSchema(dictionaries.en.validation);
 
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;

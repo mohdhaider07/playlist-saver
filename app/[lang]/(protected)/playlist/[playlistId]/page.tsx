@@ -9,6 +9,8 @@ import { PlaylistSidebar } from "@/components/player/playlist-sidebar";
 import { PlaylistVideoItem, ProgressMap } from "@/types";
 import { CheckCircle2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
 interface PlaylistData {
   playlist: {
@@ -28,9 +30,15 @@ interface PlaylistData {
 export default function PlaylistPage({
   params,
 }: {
-  params: Promise<{ playlistId: string }>;
+  params: Promise<{ lang: string; playlistId: string }>;
 }) {
   const { playlistId } = use(params);
+  const { dictionary, direction } = useI18n();
+  const t = dictionary.playlistPage;
+  const isRtl = direction === "rtl";
+  const PreviousIcon = isRtl ? ChevronRight : ChevronLeft;
+  const NextIcon = isRtl ? ChevronLeft : ChevronRight;
+  const to = useLocalePath();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [data, setData] = useState<PlaylistData | null>(null);
@@ -62,11 +70,11 @@ export default function PlaylistPage({
       // Auto-select first video if none selected
       if (!searchParams.get("v") && res.playlist.videos.length > 0) {
         router.replace(
-          `/playlist/${playlistId}?v=${res.playlist.videos[0].youtubeVideoId}`,
+          to(`/playlist/${playlistId}?v=${res.playlist.videos[0].youtubeVideoId}`),
         );
       }
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Failed to load playlist");
+      setError(e instanceof Error ? e.message : t.failedToLoad);
     } finally {
       setLoading(false);
     }
@@ -139,7 +147,7 @@ export default function PlaylistPage({
         currentProgressRef.current.duration,
       );
     }
-    router.replace(`/playlist/${playlistId}?v=${videoId}`);
+    router.replace(to(`/playlist/${playlistId}?v=${videoId}`));
   };
 
   const handleMarkComplete = async () => {
@@ -163,7 +171,7 @@ export default function PlaylistPage({
     );
 
     if (!saved) {
-      setManualCompleteError("Could not mark this video complete. Try again.");
+      setManualCompleteError(t.markCompleteError);
       setIsMarkingComplete(false);
       return;
     }
@@ -226,7 +234,7 @@ export default function PlaylistPage({
       <div className="flex items-center justify-center min-h-screen bg-background pt-14">
         <div className="text-muted-foreground flex flex-col items-center">
           <Loader2 className="animate-spin h-8 w-8 mb-4 text-primary" />
-          <p>Loading playlist workspace...</p>
+          <p>{t.loading}</p>
         </div>
       </div>
     );
@@ -252,7 +260,7 @@ export default function PlaylistPage({
             />
           ) : (
             <div className="aspect-video flex items-center justify-center text-muted-foreground bg-card rounded-xl border border-border">
-              Select a video to play
+              {t.selectVideo}
             </div>
           )}
 
@@ -266,8 +274,8 @@ export default function PlaylistPage({
                 disabled={!hasPrev}
                 className="rounded-full h-9 px-4 gap-1 border-border text-xs font-semibold hover:bg-secondary"
               >
-                <ChevronLeft className="size-3.5" />
-                Prev
+                <PreviousIcon className="size-3.5" />
+                {t.prev}
               </Button>
               <Button
                 variant="outline"
@@ -276,8 +284,8 @@ export default function PlaylistPage({
                 disabled={!hasNext}
                 className="rounded-full h-9 px-4 gap-1 border-border text-xs font-semibold hover:bg-secondary"
               >
-                Next
-                <ChevronRight className="size-3.5" />
+                {t.next}
+                <NextIcon className="size-3.5" />
               </Button>
               <Button
                 size="sm"
@@ -299,7 +307,7 @@ export default function PlaylistPage({
                 ) : (
                   <CheckCircle2 className="size-3.5" />
                 )}
-                {isActiveVideoCompleted ? "Completed" : "Mark Complete"}
+                {isActiveVideoCompleted ? t.completed : t.markComplete}
               </Button>
             </div>
 
@@ -309,18 +317,27 @@ export default function PlaylistPage({
                 className="text-[10px] font-bold text-muted-foreground tracking-widest uppercase cursor-pointer select-none"
                 htmlFor="autoplay-toggle"
               >
-                Autoplay Next
+                {t.autoplayNext}
               </label>
               <button
+                type="button"
                 id="autoplay-toggle"
+                role="switch"
+                aria-checked={autoplay}
                 onClick={() => setAutoplay(!autoplay)}
-                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out outline-none ${
+                className={`relative inline-block h-5 w-9 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out outline-none ${
                   autoplay ? "bg-primary" : "bg-secondary"
                 }`}
               >
                 <span
-                  className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-y-[1px] ${
-                    autoplay ? "translate-x-[17px]" : "translate-x-[1px]"
+                  className={`pointer-events-none absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-white shadow ring-0 transition-[left,right] duration-200 ease-in-out ${
+                    autoplay
+                      ? isRtl
+                        ? "left-0.5"
+                        : "right-0.5"
+                      : isRtl
+                        ? "right-0.5"
+                        : "left-0.5"
                   }`}
                 />
               </button>
@@ -350,7 +367,7 @@ export default function PlaylistPage({
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
-                Video Description
+                {t.videoDescription}
               </button>
               <button
                 onClick={() => setActiveTab("playlist")}
@@ -360,16 +377,16 @@ export default function PlaylistPage({
                     : "border-transparent text-muted-foreground hover:text-foreground"
                 }`}
               >
-                Playlist Information
+                {t.playlistInformation}
               </button>
             </div>
 
             <div className="text-sm text-foreground/80 leading-relaxed bg-card/40 p-6 rounded-xl border border-border border-l-4 border-l-primary whitespace-pre-wrap max-h-[400px] overflow-y-auto shadow-inner font-light">
               {activeTab === "info"
                 ? activeVideo?.description ||
-                  "No description available for this video."
+                  t.noVideoDescription
                 : data.playlist.description ||
-                  "No description available for this playlist."}
+                  t.noPlaylistDescription}
             </div>
           </div>
         </div>
@@ -382,7 +399,7 @@ export default function PlaylistPage({
             </h2>
             <p className="text-[9px] font-bold text-muted-foreground/80 tracking-widest uppercase mt-1">
               {data.playlist.channelTitle} • {data.playlist.videos.length}{" "}
-              videos
+              {dictionary.common.videos}
             </p>
           </div>
 

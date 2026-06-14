@@ -1,10 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { LoginForm } from "@/components/auth/login-form";
+import { RegisterForm } from "@/components/auth/register-form";
+import { OtpForm } from "@/components/auth/otp-form";
 import { motion } from "motion/react";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
-export default function LoginPage() {
+export default function RegisterPage() {
+  const { dictionary } = useI18n();
+  const t = dictionary.auth.register;
+  const to = useLocalePath();
+  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
+
   return (
     <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Decorative Glow Elements */}
@@ -20,15 +29,17 @@ export default function LoginPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/icon.png"
-          alt="Playzen Icon"
+          alt={dictionary.auth.iconAlt}
           className="w-14 h-14 object-contain mb-4 transition-transform duration-300 hover:scale-105"
         />
         <h2 className="text-center text-3xl font-serif font-semibold tracking-wide text-foreground">
-          Welcome back to <span className="italic font-normal text-muted-foreground">Playzen</span>
+          {registeredEmail ? t.verifyTitle : t.createTitle}
         </h2>
         <div className="w-12 h-0.5 bg-primary mt-4 opacity-80"></div>
         <p className="mt-3 text-center text-sm text-muted-foreground font-light">
-          Sign in to continue tracking your learning progress
+          {registeredEmail
+            ? t.verifySubtitle
+            : t.createSubtitle}
         </p>
       </motion.div>
 
@@ -39,20 +50,25 @@ export default function LoginPage() {
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10"
       >
         <div className="glass-panel py-10 px-4 shadow-lg sm:rounded-2xl sm:px-10 border border-border/80 relative">
-          <LoginForm />
+          {!registeredEmail ? (
+            <RegisterForm onSuccess={setRegisteredEmail} />
+          ) : (
+            <OtpForm email={registeredEmail} />
+          )}
 
-          <div className="mt-8 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="text-primary hover:underline font-semibold transition-colors"
-            >
-              Sign up
-            </Link>
-          </div>
+          {!registeredEmail && (
+            <div className="mt-8 text-center text-sm text-muted-foreground">
+              {t.alreadyAccount}{" "}
+              <Link
+                href={to("/login")}
+                className="text-primary hover:underline font-semibold transition-colors"
+              >
+                {t.loginLink}
+              </Link>
+            </div>
+          )}
         </div>
       </motion.div>
     </div>
   );
 }
-

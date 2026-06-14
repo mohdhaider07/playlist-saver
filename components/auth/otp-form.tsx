@@ -8,12 +8,17 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { motion } from "motion/react";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
 interface OtpFormProps {
   email: string;
 }
 
 export function OtpForm({ email }: OtpFormProps) {
+  const { dictionary } = useI18n();
+  const t = dictionary.auth.otp;
+  const to = useLocalePath();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -31,9 +36,9 @@ export function OtpForm({ email }: OtpFormProps) {
         method: "POST",
         body: JSON.stringify({ email }),
       });
-      setSuccess(data.message || "OTP resent successfully!");
+      setSuccess(data.message || t.resent);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to resend OTP");
+      setError(err instanceof Error ? err.message : t.resendFallbackError);
     } finally {
       setLoading(false);
     }
@@ -64,7 +69,7 @@ export function OtpForm({ email }: OtpFormProps) {
     e.preventDefault();
     const code = otp.join("");
     if (code.length < 6) {
-      setError("Please enter the 6-digit OTP");
+      setError(t.enterSixDigit);
       return;
     }
 
@@ -80,9 +85,9 @@ export function OtpForm({ email }: OtpFormProps) {
       if (data.token) {
         login(data.token, data.user);
       }
-      router.push("/dashboard");
+      router.push(to("/dashboard"));
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Verification failed");
+      setError(err instanceof Error ? err.message : t.verifyFallbackError);
       setOtp(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
     } finally {
@@ -94,10 +99,11 @@ export function OtpForm({ email }: OtpFormProps) {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="text-center select-none">
         <h2 className="text-xl font-serif font-semibold text-foreground mb-1">
-          Verify your email
+          {t.title}
         </h2>
         <p className="text-sm text-muted-foreground mb-3">
-          We sent a verification code to <span className="font-semibold text-foreground">{email}</span>
+          {t.sentCodeTo}{" "}
+          <span className="font-semibold text-foreground">{email}</span>
         </p>
       </div>
 
@@ -152,10 +158,10 @@ export function OtpForm({ email }: OtpFormProps) {
         {loading ? (
           <span className="flex items-center justify-center gap-2">
             <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
-            Verifying...
+            {t.verifying}
           </span>
         ) : (
-          "Verify Code"
+          t.verifyCode
         )}
       </Button>
 
@@ -167,10 +173,9 @@ export function OtpForm({ email }: OtpFormProps) {
           disabled={loading}
           className="text-xs text-muted-foreground hover:text-primary transition-colors font-medium hover:no-underline disabled:opacity-50"
         >
-          Resend OTP
+          {t.resendOtp}
         </Button>
       </div>
     </form>
   );
 }
-

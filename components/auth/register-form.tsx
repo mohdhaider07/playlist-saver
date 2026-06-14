@@ -1,18 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { motion } from "motion/react";
-import { registerSchema } from "@/lib/validation";
+import { createRegisterSchema } from "@/lib/validation";
+import { useI18n } from "@/components/i18n-provider";
 
 interface RegisterFormProps {
   onSuccess: (email: string) => void;
 }
 
 export function RegisterForm({ onSuccess }: RegisterFormProps) {
+  const { dictionary } = useI18n();
+  const t = dictionary.auth.registerForm;
+  const registerSchema = useMemo(
+    () => createRegisterSchema(dictionary.validation),
+    [dictionary.validation],
+  );
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,7 +74,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
       });
       onSuccess(email);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Registration failed");
+      setError(err instanceof Error ? err.message : t.fallbackError);
     } finally {
       setLoading(false);
     }
@@ -94,7 +101,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          Full Name
+          {t.fullName}
         </label>
         <Input
           type="text"
@@ -104,7 +111,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             setName(e.target.value);
             setTouched((prev) => ({ ...prev, name: true }));
           }}
-          placeholder="John Doe"
+          placeholder={t.fullNamePlaceholder}
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
             fieldErrors.name
               ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
@@ -120,7 +127,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          Email Address
+          {t.emailAddress}
         </label>
         <Input
           type="email"
@@ -130,7 +137,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             setEmail(e.target.value);
             setTouched((prev) => ({ ...prev, email: true }));
           }}
-          placeholder="you@example.com"
+          placeholder={dictionary.common.emailPlaceholder}
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
             fieldErrors.email
               ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
@@ -146,7 +153,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          Password
+          {t.password}
         </label>
         <Input
           type="password"
@@ -156,7 +163,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             setPassword(e.target.value);
             setTouched((prev) => ({ ...prev, password: true }));
           }}
-          placeholder="••••••••"
+          placeholder={dictionary.common.passwordPlaceholder}
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
             fieldErrors.password
               ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
@@ -172,7 +179,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-          Confirm Password
+          {t.confirmPassword}
         </label>
         <Input
           type="password"
@@ -182,7 +189,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             setConfirmPassword(e.target.value);
             setTouched((prev) => ({ ...prev, confirmPassword: true }));
           }}
-          placeholder="••••••••"
+          placeholder={dictionary.common.passwordPlaceholder}
           className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
             fieldErrors.confirmPassword
               ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
@@ -204,10 +211,10 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         {loading ? (
           <span className="flex items-center justify-center gap-2">
             <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
-            Creating Account...
+            {t.creatingAccount}
           </span>
         ) : (
-          "Sign Up"
+          t.signUp
         )}
       </Button>
     </form>

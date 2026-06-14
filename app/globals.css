@@ -133,6 +133,20 @@
     color-scheme: light dark;
   }
 
+  html[dir="rtl"] {
+    text-align: right;
+  }
+
+  html[dir="rtl"] .font-serif {
+    font-family: "Geeza Pro", "Noto Naskh Arabic", "Noto Sans Arabic", Tahoma,
+      var(--font-serif);
+  }
+
+  html[dir="rtl"] body {
+    font-family: "Geeza Pro", "Noto Naskh Arabic", "Noto Sans Arabic", Tahoma,
+      var(--font-sans);
+  }
+
   body {
     @apply bg-background text-foreground min-h-screen relative overflow-x-hidden;
     background-image:

@@ -8,8 +8,10 @@ import {
   ListMusic,
   Loader2,
   RefreshCw,
+  ArrowLeft,
   ArrowRight,
 } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
 
 interface MockVideo {
   id: string;
@@ -20,47 +22,29 @@ interface MockVideo {
   completed: boolean;
 }
 
-const INITIAL_VIDEOS: MockVideo[] = [
-  {
-    id: "v1",
-    title: "01. Minimalism in Visual Interface Design",
-    duration: "12:45",
-    channel: "DesignCourse",
+function buildVideos(
+  videos: Array<{ title: string; duration: string; channel: string }>,
+): MockVideo[] {
+  return videos.map((video, index) => ({
+    ...video,
+    id: `v${index + 1}`,
     progress: 0,
     completed: false,
-  },
-  {
-    id: "v2",
-    title: "02. Advanced Typography and Hierarchy Rules",
-    duration: "18:20",
-    channel: "DesignCourse",
-    progress: 0,
-    completed: false,
-  },
-  {
-    id: "v3",
-    title: "03. Mastering Layout Grids & Whitespace",
-    duration: "14:10",
-    channel: "DesignCourse",
-    progress: 0,
-    completed: false,
-  },
-  {
-    id: "v4",
-    title: "04. Micro-interactions and Animation Polish",
-    duration: "11:05",
-    channel: "DesignCourse",
-    progress: 0,
-    completed: false,
-  },
-];
+  }));
+}
 
 export function MiniDemo() {
+  const { dictionary, direction } = useI18n();
+  const t = dictionary.miniDemo;
+  const isRtl = direction === "rtl";
+  const ForwardArrow = isRtl ? ArrowLeft : ArrowRight;
   const [step, setStep] = useState<"input" | "syncing" | "player">("input");
   const [playlistUrl, setPlaylistUrl] = useState(
     "https://www.youtube.com/playlist?list=PL_design_zen_masterclass"
   );
-  const [videos, setVideos] = useState<MockVideo[]>(INITIAL_VIDEOS);
+  const [videos, setVideos] = useState<MockVideo[]>(() =>
+    buildVideos(t.videos),
+  );
   const [activeVideoId, setActiveVideoId] = useState("v1");
   const [isPlaying, setIsPlaying] = useState(false);
   const [progressVal, setProgressVal] = useState(0);
@@ -169,7 +153,7 @@ export function MiniDemo() {
     setIsPlaying(false);
     setProgressVal(0);
     setActiveVideoId("v1");
-    setVideos(INITIAL_VIDEOS.map((v) => ({ ...v, progress: 0, completed: false })));
+    setVideos(buildVideos(t.videos));
     setStep("input");
   };
 
@@ -181,7 +165,10 @@ export function MiniDemo() {
   );
 
   return (
-    <div className="w-full max-w-4xl mx-auto glass-panel border border-border rounded-2xl overflow-hidden shadow-md bg-card">
+    <div
+      dir={direction}
+      className="w-full max-w-4xl mx-auto glass-panel border border-border rounded-2xl overflow-hidden shadow-md bg-card"
+    >
       {/* Widget Header bar */}
       <div className="px-6 py-4 border-b border-border/80 flex items-center justify-between bg-secondary/30 select-none">
         <div className="flex items-center gap-2">
@@ -190,8 +177,8 @@ export function MiniDemo() {
             <span className="w-3 h-3 rounded-full bg-yellow-400/80 block"></span>
             <span className="w-3 h-3 rounded-full bg-green-400/80 block"></span>
           </div>
-          <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground ml-2">
-            Interactive Simulator
+          <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground ms-2">
+            {t.headerLabel}
           </span>
         </div>
         {step === "player" && (
@@ -199,7 +186,7 @@ export function MiniDemo() {
             onClick={handleResetDemo}
             className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase bg-transparent border-none cursor-pointer"
           >
-            <RefreshCw size={10} /> Reset Demo
+            <RefreshCw size={10} /> {t.resetDemo}
           </button>
         )}
       </div>
@@ -221,26 +208,27 @@ export function MiniDemo() {
               </div>
               <div className="space-y-2">
                 <h4 className="font-serif text-xl font-semibold text-foreground">
-                  Connect Your Playlists
+                  {t.connectTitle}
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed max-w-md mx-auto font-light">
-                  Paste any public YouTube playlist URL. Playzen compiles it into a focused list, free from distractions.
+                  {t.connectDescription}
                 </p>
               </div>
 
               <form onSubmit={handleStartSync} className="flex flex-col sm:flex-row gap-2.5">
                 <input
+                  dir="ltr"
                   type="text"
                   value={playlistUrl}
                   onChange={(e) => setPlaylistUrl(e.target.value)}
-                  className="flex-1 h-11 px-4 text-xs bg-secondary/50 border border-border focus:border-primary/80 focus:outline-none rounded-full text-foreground/80 font-medium font-mono"
-                  placeholder="https://www.youtube.com/playlist?list=..."
+                  className="flex-1 h-11 px-4 text-left text-xs bg-secondary/50 border border-border focus:border-primary/80 focus:outline-none rounded-full text-foreground/80 font-medium font-mono"
+                  placeholder={t.playlistPlaceholder}
                 />
                 <button
                   type="submit"
                   className="h-11 px-6 bg-foreground text-background font-bold text-xs hover:bg-stone-800 dark:hover:bg-stone-200 rounded-full transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-sm"
                 >
-                  Sync Playlist <ArrowRight size={13} />
+                  {t.syncPlaylist} <ForwardArrow size={13} />
                 </button>
               </form>
             </motion.div>
@@ -258,10 +246,10 @@ export function MiniDemo() {
               <Loader2 className="animate-spin h-10 w-10 text-primary" />
               <div className="space-y-1">
                 <p className="text-xs font-bold uppercase tracking-wider text-foreground">
-                  Syncing Workspace...
+                  {t.syncingTitle}
                 </p>
                 <p className="text-[11px] text-muted-foreground font-light italic">
-                  Parsing Youtube metadata & setting up tracking...
+                  {t.syncingDescription}
                 </p>
               </div>
             </motion.div>
@@ -274,10 +262,16 @@ export function MiniDemo() {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
+              dir="ltr"
               className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start"
             >
               {/* Simulator Left Column - Video Player */}
-              <div className="md:col-span-7 space-y-4">
+              <div
+                dir={direction}
+                className={`md:col-span-7 space-y-4 ${
+                  isRtl ? "md:order-2" : "md:order-1"
+                }`}
+              >
                 {/* Widescreen Video Box */}
                 <div className="aspect-video bg-stone-900 rounded-xl overflow-hidden relative border border-border/80 flex items-center justify-center shadow-inner group">
                   {/* Mock Video Canvas background */}
@@ -285,7 +279,11 @@ export function MiniDemo() {
                     {/* Simulated Abstract Nature Grid */}
                     <div className="absolute inset-0 opacity-15">
                       <div className="w-full h-full border border-primary/20 scale-110 rotate-12 blur-xs"></div>
-                      <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
+                      <div
+                        className={`absolute top-1/2 w-32 h-32 bg-primary/20 rounded-full blur-2xl ${
+                          isRtl ? "right-1/4" : "left-1/4"
+                        }`}
+                      ></div>
                     </div>
 
                     {/* Progress Glowing Overlay */}
@@ -316,17 +314,24 @@ export function MiniDemo() {
                       )}
                     </button>
                     <span className="text-[10px] font-bold text-white/80 tracking-widest uppercase bg-stone-950/40 px-3 py-1 rounded-full backdrop-blur-xs">
-                      {isPlaying ? "Simulating Watch" : progressVal >= 100 ? "Rewatch Video" : "Click Play to Test"}
+                      {isPlaying
+                        ? t.simulatingWatch
+                        : progressVal >= 100
+                          ? t.rewatchVideo
+                          : t.clickPlayToTest}
                     </span>
                   </div>
 
                   {/* Video Duration / Metadata Overlay */}
-                  <div className="absolute bottom-3 left-3 right-3 flex justify-between items-center z-10 select-none">
-                    <span className="text-[10px] text-white/90 font-mono bg-stone-950/50 px-2 py-0.5 rounded backdrop-blur-xs">
+                  <div className="absolute bottom-3 inset-x-3 flex justify-between items-center z-10 select-none">
+                    <span
+                      dir="ltr"
+                      className="text-[10px] text-white/90 font-mono bg-stone-950/50 px-2 py-0.5 rounded backdrop-blur-xs"
+                    >
                       {Math.floor((progressVal / 100) * 12)}m : {Math.round((progressVal % 10) * 5.9)}s / {activeVideo.duration}
                     </span>
                     <span className="text-[9px] font-bold tracking-widest text-primary bg-stone-950/60 border border-primary/30 px-2.5 py-0.5 rounded uppercase">
-                      Workspace mode
+                      {t.workspaceMode}
                     </span>
                   </div>
                 </div>
@@ -334,7 +339,7 @@ export function MiniDemo() {
                 {/* Progress bar container */}
                 <div className="bg-secondary/40 p-4 rounded-xl border border-border/70 space-y-3">
                   <div className="flex justify-between items-center">
-                    <div>
+                    <div className="min-w-0 text-start">
                       <h5 className="font-serif text-sm font-semibold text-foreground line-clamp-1">
                         {activeVideo.title}
                       </h5>
@@ -342,8 +347,8 @@ export function MiniDemo() {
                         {activeVideo.channel}
                       </p>
                     </div>
-                    <div className="text-right">
-                      <span className="text-xs font-serif font-bold text-primary">
+                    <div className="text-end shrink-0">
+                      <span dir="ltr" className="text-xs font-serif font-bold text-primary">
                         {progressVal}%
                       </span>
                     </div>
@@ -352,7 +357,9 @@ export function MiniDemo() {
                   {/* Custom progress Slider track */}
                   <div className="h-1.5 w-full bg-secondary border border-border/80 rounded-full overflow-hidden relative">
                     <motion.div
-                      className="absolute left-0 top-0 h-full bg-primary"
+                      className={`absolute top-0 h-full bg-primary ${
+                        isRtl ? "right-0" : "left-0"
+                      }`}
                       style={{ width: `${progressVal}%` }}
                       transition={{ ease: "linear" }}
                     />
@@ -361,37 +368,45 @@ export function MiniDemo() {
               </div>
 
               {/* Simulator Right Column - Playlist sidebar */}
-              <div className="md:col-span-5 space-y-4">
+              <div
+                dir={direction}
+                className={`md:col-span-5 space-y-4 ${
+                  isRtl ? "md:order-1" : "md:order-2"
+                }`}
+              >
                 {/* Statistics Box */}
                 <div className="bg-secondary/20 border border-border/80 rounded-xl p-3.5 flex justify-around items-center select-none text-center">
                   <div>
-                    <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">
-                      Overall Progress
+                      <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">
+                      {t.overallProgress}
                     </p>
-                    <h6 className="text-base font-serif font-semibold text-foreground mt-0.5">
+                    <h6 dir="ltr" className="text-base font-serif font-semibold text-foreground mt-0.5">
                       {overallProgress}%
                     </h6>
                   </div>
                   <div className="h-6 w-px bg-border"></div>
                   <div>
                     <p className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">
-                      Completed
+                      {t.completed}
                     </p>
-                    <h6 className="text-base font-serif font-semibold text-foreground mt-0.5 flex items-center justify-center gap-1">
+                    <h6
+                      dir="ltr"
+                      className="text-base font-serif font-semibold text-foreground mt-0.5 flex items-center justify-center gap-1"
+                    >
                       {completedCount} <span className="text-muted-foreground/60 text-xs font-normal">/ {totalVideos}</span>
                     </h6>
                   </div>
                 </div>
 
                 {/* Video list panel */}
-                <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-[220px] overflow-y-auto pe-1">
                   {videos.map((vid) => {
                     const isActive = vid.id === activeVideoId;
                     return (
                       <div
                         key={vid.id}
                         onClick={() => handleSelectVideo(vid.id)}
-                        className={`w-full text-left p-2.5 rounded-xl border flex items-center justify-between gap-3 transition-all cursor-pointer ${
+                        className={`w-full text-start p-2.5 rounded-xl border flex items-center justify-between gap-3 transition-all cursor-pointer ${
                           isActive
                             ? "bg-card border-primary/50 shadow-sm ring-1 ring-primary/20"
                             : "bg-secondary/35 border-transparent hover:border-border hover:bg-secondary/50"
@@ -406,7 +421,19 @@ export function MiniDemo() {
                             {vid.title}
                           </p>
                           <p className="text-[9px] text-muted-foreground/75 font-mono mt-0.5">
-                            {vid.duration} • {vid.channel}
+                            {isRtl ? (
+                              <span className="inline-flex flex-wrap items-center gap-1">
+                                <span>{vid.channel}</span>
+                                <span>•</span>
+                                <span dir="ltr">{vid.duration}</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex flex-wrap items-center gap-1">
+                                <span dir="ltr">{vid.duration}</span>
+                                <span>•</span>
+                                <span>{vid.channel}</span>
+                              </span>
+                            )}
                           </p>
                         </div>
 
@@ -415,7 +442,10 @@ export function MiniDemo() {
                           {vid.completed ? (
                             <CheckCircle2 size={15} className="text-emerald-500 fill-emerald-500/10" />
                           ) : vid.progress > 0 ? (
-                            <div className="text-[9px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 rounded px-1.5">
+                            <div
+                              dir="ltr"
+                              className="text-[9px] font-mono font-bold text-primary bg-primary/10 border border-primary/20 rounded px-1.5"
+                            >
                               {vid.progress}%
                             </div>
                           ) : (
@@ -428,9 +458,11 @@ export function MiniDemo() {
                 </div>
 
                 {/* Explanatory callout */}
-                <div className="p-3 bg-primary/5 rounded-lg border border-primary/20 text-[11px] text-stone-600 leading-relaxed font-light">
-                  <span className="font-semibold text-primary block mb-0.5">💡 Interactive Insight</span>
-                  Watch how Playzen auto-saves watch progress in the background. If you stop playing midway, it remembers the exact timestamp.
+                <div className="p-3 bg-primary/5 rounded-lg border border-primary/20 text-[11px] text-stone-600 leading-relaxed font-light text-start">
+                  <span className="font-semibold text-primary block mb-0.5">
+                    {t.insightTitle}
+                  </span>
+                  {t.insightDescription}
                 </div>
               </div>
             </motion.div>

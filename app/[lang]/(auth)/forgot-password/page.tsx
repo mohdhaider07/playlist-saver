@@ -8,8 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { motion } from "motion/react";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
 export default function ForgotPasswordPage() {
+  const { dictionary } = useI18n();
+  const t = dictionary.auth.forgot;
+  const to = useLocalePath();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -27,12 +32,12 @@ export default function ForgotPasswordPage() {
         method: "POST",
         body: JSON.stringify({ email }),
       });
-      setSuccess(data.message || "OTP code sent to your email address!");
+      setSuccess(data.message || t.success);
       setTimeout(() => {
-        router.push(`/reset-password?email=${encodeURIComponent(email)}`);
+        router.push(to(`/reset-password?email=${encodeURIComponent(email)}`));
       }, 2000);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to send reset code");
+      setError(err instanceof Error ? err.message : t.fallbackError);
     } finally {
       setLoading(false);
     }
@@ -53,15 +58,15 @@ export default function ForgotPasswordPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/icon.png"
-          alt="Playzen Icon"
+          alt={dictionary.auth.iconAlt}
           className="w-14 h-14 object-contain mb-4 transition-transform duration-300 hover:scale-105"
         />
         <h2 className="text-center text-3xl font-serif font-semibold tracking-wide text-foreground">
-          Forgot Password
+          {t.title}
         </h2>
         <div className="w-12 h-0.5 bg-primary mt-4 opacity-80"></div>
         <p className="mt-3 text-center text-sm text-muted-foreground font-light">
-          Enter your email to receive a password reset verification code
+          {t.subtitle}
         </p>
       </motion.div>
 
@@ -99,14 +104,14 @@ export default function ForgotPasswordPage() {
 
             <div className="space-y-1.5">
               <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">
-                Email Address
+                {t.emailAddress}
               </label>
               <Input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder={dictionary.common.emailPlaceholder}
                 className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
               />
             </div>
@@ -119,21 +124,21 @@ export default function ForgotPasswordPage() {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="h-4 w-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
-                  Sending Code...
+                  {t.sending}
                 </span>
               ) : (
-                "Send Reset Code"
+                t.sendCode
               )}
             </Button>
           </form>
 
           <div className="mt-8 text-center text-sm text-muted-foreground">
-            Remember your password?{" "}
+            {t.remember}{" "}
             <Link
-              href="/login"
+              href={to("/login")}
               className="text-primary hover:underline font-semibold transition-colors"
             >
-              Log in
+              {t.loginLink}
             </Link>
           </div>
         </div>

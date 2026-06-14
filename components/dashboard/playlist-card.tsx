@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { PlaylistFormatted } from "@/types";
 import { Trash2, Film } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
+import { useLocalePath } from "@/hooks/use-locale-path";
 
 interface PlaylistCardProps {
   playlist: PlaylistFormatted;
@@ -12,6 +14,9 @@ interface PlaylistCardProps {
 }
 
 export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
+  const { dictionary, locale } = useI18n();
+  const t = dictionary.playlistCard;
+  const to = useLocalePath();
   const completedCount = playlist.completedCount || 0;
   const progressPercent = playlist.progressPercent || 0;
   const thumbnailUrl = playlist.thumbnailUrl?.trim();
@@ -19,7 +24,7 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
   return (
     <div className="bg-card rounded-xl overflow-hidden shadow-sm border border-border hover:shadow-md hover:border-primary/50 flex flex-col group transition-all duration-300 relative">
       <Link
-        href={`/playlist/${playlist.id}`}
+        href={to(`/playlist/${playlist.id}`)}
         className="block relative aspect-video overflow-hidden"
       >
         {thumbnailUrl ? (
@@ -37,7 +42,8 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
           </div>
         )}
         <div className="absolute bottom-2.5 right-2.5 bg-stone-900/90 dark:bg-stone-950/90 backdrop-blur-md px-2 py-1 rounded text-[9px] font-bold text-stone-100 tracking-wider flex items-center gap-1 uppercase">
-          <Film className="size-3 text-primary" /> {playlist.videoCount} videos
+          <Film className="size-3 text-primary" /> {playlist.videoCount}{" "}
+          {dictionary.common.videos}
         </div>
 
         {/* Floating Delete Button */}
@@ -48,11 +54,7 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (
-              window.confirm(
-                "Are you sure you want to delete this playlist?"
-              )
-            ) {
+            if (window.confirm(t.confirmDelete)) {
               onDelete(playlist.id);
             }
           }}
@@ -63,7 +65,7 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
 
       <div className="p-5 flex-1 flex flex-col">
         <Link
-          href={`/playlist/${playlist.id}`}
+          href={to(`/playlist/${playlist.id}`)}
           className="font-serif text-xl text-foreground line-clamp-2 hover:text-primary transition-colors mb-2 font-medium leading-snug"
         >
           {playlist.title}
@@ -78,7 +80,7 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
         {/* Progress Bar Section */}
         <div className="my-2 space-y-1.5 select-none">
           <div className="flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-muted-foreground/80">
-            <span>Watch Progress</span>
+            <span>{t.watchProgress}</span>
             <span className="text-primary font-serif italic font-semibold">
               {progressPercent}% ({completedCount}/{playlist.videoCount})
             </span>
@@ -94,7 +96,10 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
         <div className="mt-auto pt-3 border-t border-border/60">
           <div className="flex items-center justify-between text-[9px] font-bold text-muted-foreground/60 tracking-wider uppercase">
             <span>
-              Added {new Date(playlist.addedAt).toLocaleDateString()}
+              {t.added}{" "}
+              {new Date(playlist.addedAt).toLocaleDateString(
+                locale === "ar" ? "ar" : "en-US",
+              )}
             </span>
           </div>
         </div>

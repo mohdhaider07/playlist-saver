@@ -16,6 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PlaylistFormatted } from "@/types";
 import { motion } from "motion/react";
 import { Link2, Sparkles } from "lucide-react";
+import { useI18n } from "@/components/i18n-provider";
 
 interface AddPlaylistModalProps {
   open: boolean;
@@ -28,6 +29,8 @@ export function AddPlaylistModal({
   onOpenChange,
   onSuccess,
 }: AddPlaylistModalProps) {
+  const { dictionary } = useI18n();
+  const t = dictionary.addPlaylist;
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -48,7 +51,7 @@ export function AddPlaylistModal({
       setUrl("");
       onOpenChange(false);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to add playlist");
+      setError(err instanceof Error ? err.message : t.fallbackError);
     } finally {
       setLoading(false);
     }
@@ -56,45 +59,69 @@ export function AddPlaylistModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md rounded-xl bg-card border border-border shadow-lg p-6 overflow-hidden">
+      <DialogContent className="sm:max-w-lg rounded-xl bg-card border border-border shadow-lg p-6 overflow-hidden">
         <DialogHeader className="select-none">
           <DialogTitle className="text-xl font-serif font-semibold text-foreground flex items-center gap-2">
-            <Sparkles className="size-5 text-primary" /> Add New Playlist
+            <Sparkles className="size-5 text-primary" /> {t.title}
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground mt-1 font-light">
-            Connect a public YouTube playlist to watch and save your progress.
+            {t.description}
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+        <div className="mt-4 border-l-4 border-l-primary bg-secondary/30 p-4 rounded-r-xl rounded-l-sm flex flex-col gap-2 shadow-sm">
+          <h4 className="text-xs font-bold text-foreground font-serif tracking-widest uppercase">
+            {t.instructionsTitle}
+          </h4>
+          <div className="text-[11px] text-stone-600 dark:text-stone-400 space-y-1.5 font-medium leading-relaxed">
+            <p className="flex items-start gap-1.5">
+              <span className="text-primary font-bold font-serif">—</span>
+              <span>{t.step1}</span>
+            </p>
+            <p className="flex items-start gap-1.5">
+              <span className="text-primary font-bold font-serif">—</span>
+              <span>{t.step2}</span>
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           {error && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               className="overflow-hidden"
             >
-              <Alert variant="destructive" className="rounded-xl border border-destructive/20 bg-destructive/5 text-destructive-foreground">
-                <AlertDescription className="text-xs font-semibold">{error}</AlertDescription>
+              <Alert
+                variant="destructive"
+                className="rounded-xl border border-destructive/20 bg-destructive/5 text-destructive-foreground"
+              >
+                <AlertDescription className="text-xs font-semibold">
+                  {error}
+                </AlertDescription>
               </Alert>
             </motion.div>
           )}
 
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">
-              YouTube Playlist Link
+              {t.label}
             </label>
             <div className="relative">
-              <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4" />
+              <Link2 className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground size-4" />
               <Input
-                placeholder="https://www.youtube.com/playlist?list=..."
+                placeholder={t.placeholder}
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 disabled={loading}
-                className="pl-9 h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground text-sm"
+                className="ps-9 h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground text-sm"
               />
             </div>
             <p className="text-[10px] text-muted-foreground/70 leading-relaxed pl-1">
-              Example: <code className="text-primary font-mono font-semibold">https://www.youtube.com/playlist?list=PL...</code>
+              {dictionary.common.example}:{" "}
+              <code className="text-primary font-mono font-semibold">
+                https://www.youtube.com/playlist?list=PL...
+              </code>
             </p>
           </div>
 
@@ -106,7 +133,7 @@ export function AddPlaylistModal({
               disabled={loading}
               className="h-10 rounded-full font-semibold hover:bg-stone-200/50 dark:hover:bg-stone-800/50 px-5"
             >
-              Cancel
+              {dictionary.common.cancel}
             </Button>
             <Button
               type="submit"
@@ -116,10 +143,10 @@ export function AddPlaylistModal({
               {loading ? (
                 <span className="flex items-center gap-1.5">
                   <span className="h-4.5 w-4.5 border-2 border-background border-t-transparent rounded-full animate-spin" />
-                  Adding...
+                  {t.adding}
                 </span>
               ) : (
-                "Add Playlist"
+                t.add
               )}
             </Button>
           </DialogFooter>
