@@ -72,7 +72,7 @@ export default function ProfilePage() {
             {userInitial}
           </div>
           <h1 className="text-2xl font-serif font-semibold text-foreground tracking-wide">
-            User Profile
+            {user?.name || "User"}
           </h1>
           <p className="text-[10px] text-primary font-bold tracking-widest uppercase mt-1">
             Learner
@@ -88,18 +88,6 @@ export default function ProfilePage() {
               </p>
               <p className="text-sm font-medium text-foreground truncate max-w-md">
                 {user?.email || "Loading..."}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-[auto_1fr] items-start gap-4 p-4 rounded-xl bg-secondary/35 border border-border/40">
-            <Shield className="size-5 text-primary mt-0.5 shrink-0" />
-            <div className="space-y-0.5">
-              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                Account Role
-              </p>
-              <p className="text-sm font-medium text-foreground">
-                Learner (Full Access)
               </p>
             </div>
           </div>
@@ -132,11 +120,14 @@ export default function ProfilePage() {
               <AlertDialogHeader>
                 <AlertDialogTitle>Confirm Sign Out</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to sign out? You will need to log in again to access your saved playlists and tracking progress.
+                  Are you sure you want to sign out? You will need to log in
+                  again to access your saved playlists and tracking progress.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel disabled={isLoggingOut}>Cancel</AlertDialogCancel>
+                <AlertDialogCancel disabled={isLoggingOut}>
+                  Cancel
+                </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleLogout}
                   disabled={isLoggingOut}

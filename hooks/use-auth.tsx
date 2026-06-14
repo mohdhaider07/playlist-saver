@@ -5,12 +5,22 @@ import { apiFetch } from "@/lib/api";
 
 interface AuthContextType {
   isAuthenticated: boolean | null;
-  user: { id: string; email: string; createdAt?: string | Date } | null;
+  user: {
+    id: string;
+    email: string;
+    name?: string;
+    createdAt?: string | Date;
+  } | null;
   checkAuth: () => Promise<void>;
   logout: () => Promise<void>;
   login: (
     token: string,
-    user?: { id: string; email: string; createdAt?: string | Date }
+    user?: {
+      id: string;
+      email: string;
+      name?: string;
+      createdAt?: string | Date;
+    },
   ) => void;
 }
 
@@ -27,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<{
     id: string;
     email: string;
+    name?: string;
     createdAt?: string | Date;
   } | null>(null);
 
@@ -60,8 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     window.addEventListener("unauthorized", handleUnauthorized);
-    return () =>
-      window.removeEventListener("unauthorized", handleUnauthorized);
+    return () => window.removeEventListener("unauthorized", handleUnauthorized);
   }, []);
 
   const logout = async () => {
@@ -77,7 +87,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = (
     token: string,
-    userData?: { id: string; email: string; createdAt?: string | Date }
+    userData?: {
+      id: string;
+      email: string;
+      name?: string;
+      createdAt?: string | Date;
+    },
   ) => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);

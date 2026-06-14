@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     if (!result.success) {
       return NextResponse.json(
         { error: result.error.issues[0].message },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const { email, password } = result.data;
@@ -20,16 +20,13 @@ export async function POST(request: NextRequest) {
     const user = await users.findOne({ email: emailLower });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     if (!user.isEmailVerified) {
       return NextResponse.json(
         { error: "Please verify your email before logging in." },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -37,7 +34,7 @@ export async function POST(request: NextRequest) {
     if (!isMatch) {
       return NextResponse.json(
         { error: "Invalid email or password" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -50,9 +47,9 @@ export async function POST(request: NextRequest) {
       {
         token,
         message: "Logged in successfully.",
-        user: { id: user._id.toString(), email: user.email },
+        user: { id: user._id.toString(), email: user.email, name: user.name },
       },
-      { status: 200 }
+      { status: 200 },
     );
 
     response.cookies.set("token", token, {
@@ -67,7 +64,7 @@ export async function POST(request: NextRequest) {
     console.error("[POST /api/auth/login]", error);
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

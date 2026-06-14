@@ -22,6 +22,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const validation = registerSchema.safeParse({
+    name,
     email,
     password,
     confirmPassword,
@@ -38,10 +39,16 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setTouched({ email: true, password: true, confirmPassword: true });
+    setTouched({
+      name: true,
+      email: true,
+      password: true,
+      confirmPassword: true,
+    });
     setError("");
 
     const validation = registerSchema.safeParse({
+      name,
       email,
       password,
       confirmPassword,
@@ -93,10 +100,22 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           type="text"
           required
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            setTouched((prev) => ({ ...prev, name: true }));
+          }}
           placeholder="John Doe"
-          className="h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground"
+          className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
+            fieldErrors.name
+              ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
+              : ""
+          }`}
         />
+        {fieldErrors.name && (
+          <p className="text-[10px] font-bold text-destructive pl-1">
+            {fieldErrors.name}
+          </p>
+        )}
       </div>
 
       <div className="space-y-1.5">

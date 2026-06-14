@@ -1,5 +1,6 @@
 export interface UserDocument {
   _id: string;
+  name?: string;
   email: string;
   passwordHash: string;
   isEmailVerified: boolean;
