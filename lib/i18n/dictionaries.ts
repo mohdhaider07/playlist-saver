@@ -296,7 +296,7 @@ const en = defineDictionary({
     instructionsTitle: "How to get a playlist URL",
     step1: "1. Go to YouTube and open the playlist you want to add.",
     step2:
-      "2. Copy the URL from your browser's address bar or the Share button.",
+      "2. Copy the URL from your browser's address bar.",
     label: "YouTube Playlist Link",
     placeholder: "https://www.youtube.com/playlist?list=...",
     adding: "Adding...",
