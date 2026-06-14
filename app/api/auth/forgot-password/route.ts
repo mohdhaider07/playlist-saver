@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       },
     );
 
-    sendEmail({
+    await sendEmail({
       to: emailLower,
       subject: "Playzen Password Reset OTP",
       text: `This email is safe for resetting the password. Your Playzen password reset verification code is: ${otpCode}. It is valid for 10 minutes.`,

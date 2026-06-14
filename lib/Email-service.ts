@@ -20,7 +20,6 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
-  console.log("e33");
   const mailOptions = {
     from: "Playzen<mohdhaider.altide@gmail.com>",
     to: options.to,
@@ -29,13 +28,9 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
     html: options.html,
     attachments: options.attachments,
   };
-  console.log("e44");
 
   try {
-    console.log("i am here");
     const res = await transporter.sendMail(mailOptions);
-    console.log("e6");
-    console.log("res", res);
   } catch (error) {
     console.error("Email sending failed for", options.to, ":", error);
     throw error;
