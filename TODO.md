@@ -6,6 +6,8 @@ Validation:
 1. add button to mark that video is watched completely. => done
 2. convert it into arabic => done
 
+Research about it in the GCC region
+
 TODO:
 
 1. buy new domain.
