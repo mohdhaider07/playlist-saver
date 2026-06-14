@@ -28,6 +28,7 @@ const transporter = nodemailer.createTransport({
 export const sendEmail = async (options: EmailOptions): Promise<void> => {
   const recipients = Array.isArray(options.to) ? options.to : [options.to];
 
+  console.log("e3");
   for (const recipient of recipients) {
     const mailOptions = {
       from: "Playzen<mohdhaider.altide@gmail.com>",
@@ -37,6 +38,7 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
       html: options.html,
       attachments: options.attachments,
     };
+    console.log("e4");
 
     try {
       await transporter.sendMail(mailOptions);

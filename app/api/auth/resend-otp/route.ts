@@ -40,7 +40,8 @@ export async function POST(request: NextRequest) {
       },
     );
 
-    void sendEmail({
+    console.log("e2");
+    sendEmail({
       to: emailLower,
       subject: "Verify your Playzen Account",
       text: `This email is safe for account registration verification. Your Playzen verification code is: ${otpCode}. It is valid for 10 minutes.`,
@@ -53,6 +54,8 @@ export async function POST(request: NextRequest) {
     }).catch((emailError) => {
       console.error("[RESEND_EMAIL_ERROR]", emailError);
     });
+
+    console.log("e3");
 
     return NextResponse.json(
       { message: "Verification code resent successfully." },
