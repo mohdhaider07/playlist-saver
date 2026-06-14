@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { ClientProviders } from "../providers";
+import { Analytics } from "@vercel/analytics/next";
 import {
   Locale,
   getLocaleDirection,
@@ -64,6 +65,7 @@ export default async function RootLayout({
         <ClientProviders locale={locale} dictionary={dictionary}>
           {children}
         </ClientProviders>
+        <Analytics />
       </body>
     </html>
   );
