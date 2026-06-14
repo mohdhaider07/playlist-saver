@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date(),
     });
 
-    void sendEmail({
+    await sendEmail({
       to: emailLower,
       subject: "Verify your Playzen Account",
       text: `This email is safe for account registration. Your Playzen verification code is: ${otpCode}. It is valid for 10 minutes.`,
@@ -52,8 +52,6 @@ export async function POST(request: NextRequest) {
             <p>This code is valid for 10 minutes.</p>
           </div>
         `,
-    }).catch((emailError) => {
-      console.error("[REGISTER_EMAIL_ERROR]", emailError);
     });
 
     return NextResponse.json(

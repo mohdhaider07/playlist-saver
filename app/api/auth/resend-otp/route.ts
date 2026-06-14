@@ -40,7 +40,6 @@ export async function POST(request: NextRequest) {
       },
     );
 
-    console.log("e2");
     sendEmail({
       to: emailLower,
       subject: "Verify your Playzen Account",
@@ -51,8 +50,6 @@ export async function POST(request: NextRequest) {
             <p>This code is valid for 10 minutes.</p>
           </div>
         `,
-    }).catch((emailError) => {
-      console.error("[RESEND_EMAIL_ERROR]", emailError);
     });
 
     console.log("e3");
