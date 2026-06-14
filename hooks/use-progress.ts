@@ -9,7 +9,7 @@ export function useProgress(playlistId: string) {
     durationSeconds: number
   ) => {
     try {
-      if (durationSeconds <= 0) return;
+      if (durationSeconds <= 0) return false;
       await apiFetch("/api/progress", {
         method: "POST",
         body: JSON.stringify({
@@ -19,8 +19,10 @@ export function useProgress(playlistId: string) {
           durationSeconds,
         }),
       });
+      return true;
     } catch (e) {
       console.error("Failed to save progress", e);
+      return false;
     }
   };
 

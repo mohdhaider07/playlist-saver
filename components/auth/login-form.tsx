@@ -16,6 +16,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const router = useRouter();
   const { login } = useAuth();
@@ -57,6 +58,26 @@ export function LoginForm() {
       setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    setError("");
+    setGuestLoading(true);
+
+    try {
+      const data = await apiFetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ guest: true }),
+      });
+      if (data.token) {
+        login(data.token, data.user);
+      }
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Guest login failed");
+    } finally {
+      setGuestLoading(false);
     }
   };
 
@@ -131,7 +152,7 @@ export function LoginForm() {
       <Button
         type="submit"
         className="w-full h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold transition-all mt-6 shadow-sm"
-        disabled={loading}
+        disabled={loading || guestLoading}
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
@@ -140,6 +161,31 @@ export function LoginForm() {
           </span>
         ) : (
           "Sign In"
+        )}
+      </Button>
+
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          Or
+        </span>
+        <div className="h-px flex-1 bg-border" />
+      </div>
+
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full h-10 rounded-full border-primary/30 bg-secondary/30 text-foreground hover:border-primary/60 hover:bg-primary/10 font-bold transition-all"
+        disabled={loading || guestLoading}
+        onClick={handleGuestLogin}
+      >
+        {guestLoading ? (
+          <span className="flex items-center justify-center gap-2">
+            <span className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            Logging in as guest...
+          </span>
+        ) : (
+          "Guest Login"
         )}
       </Button>
     </form>

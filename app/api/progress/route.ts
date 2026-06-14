@@ -32,7 +32,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (durationSeconds <= 0) {
+    const watchedSecondsNumber = Number(watchedSeconds);
+    const durationSecondsNumber = Number(durationSeconds);
+
+    if (
+      !Number.isFinite(watchedSecondsNumber) ||
+      !Number.isFinite(durationSecondsNumber)
+    ) {
+      return NextResponse.json(
+        { error: "watchedSeconds and durationSeconds must be valid numbers" },
+        { status: 400 }
+      );
+    }
+
+    if (durationSecondsNumber <= 0) {
       return NextResponse.json(
         { error: "durationSeconds must be > 0" },
         { status: 400 }
@@ -46,20 +59,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const percentComplete =
-      Math.round(
-        (Math.min(watchedSeconds, durationSeconds) / durationSeconds) * 10000
-      ) / 100;
-    const isCompleted = percentComplete >= 90;
-
     const progressCol = await getProgressCollection();
+    const clampedWatchedSeconds = Math.min(
+      Math.max(watchedSecondsNumber, 0),
+      durationSecondsNumber
+    );
+    const existingProgress = await progressCol.findOne({
+      userId: user.id,
+      youtubeVideoId,
+      playlistId,
+    });
+    const nextWatchedSeconds = Math.max(
+      existingProgress?.watchedSeconds ?? 0,
+      clampedWatchedSeconds
+    );
+    const computedPercentComplete =
+      Math.round(
+        (Math.min(nextWatchedSeconds, durationSecondsNumber) /
+          durationSecondsNumber) *
+          10000
+      ) / 100;
+    const percentComplete = Math.max(
+      existingProgress?.percentComplete ?? 0,
+      computedPercentComplete
+    );
+    const isCompleted =
+      Boolean(existingProgress?.isCompleted) || percentComplete >= 90;
 
     await progressCol.findOneAndUpdate(
       { userId: user.id, youtubeVideoId, playlistId },
       {
         $set: {
-          watchedSeconds: Math.min(watchedSeconds, durationSeconds),
-          durationSeconds,
+          watchedSeconds: Math.min(nextWatchedSeconds, durationSecondsNumber),
+          durationSeconds: durationSecondsNumber,
           percentComplete,
           isCompleted,
           lastWatchedAt: new Date(),
