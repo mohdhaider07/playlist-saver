@@ -6,12 +6,12 @@ function defineDictionary<T>(dictionary: T) {
 
 const en = defineDictionary({
   metadata: {
-    title: "Playzen — YouTube Playlist Manager",
+    title: "MyTaalim — YouTube Playlist Manager",
     description:
-      "Save, organize, and track your YouTube playlist watch progress with Playzen.",
+      "Save, organize, and track your YouTube playlist watch progress with MyTaalim.",
   },
   common: {
-    brand: "Playzen",
+    brand: "MyTaalim",
     cancel: "Cancel",
     loading: "Loading...",
     user: "User",
@@ -48,7 +48,7 @@ const en = defineDictionary({
     startLearningFree: "Start Learning Free",
     signIn: "Sign In",
     discoverMore: "Discover More",
-    why: "Why Playzen?",
+    why: "Why MyTaalim?",
     featuresTitle: "Distraction-Free Environment Built for Online Study",
     featureCards: [
       {
@@ -76,7 +76,7 @@ const en = defineDictionary({
       eyebrow: "Workflow Phase 1",
       title: "Seamless Playlist Syncing",
       description:
-        "Playzen makes it incredibly simple to organize your resources. By copying and pasting a standard YouTube playlist URL into the workspace, our application immediately connects and pulls in the material.",
+        "MyTaalim makes it incredibly simple to organize your resources. By copying and pasting a standard YouTube playlist URL into the workspace, our application immediately connects and pulls in the material.",
       steps: [
         {
           title: "Paste Public URL",
@@ -94,7 +94,7 @@ const en = defineDictionary({
             "The playlist appears as a beautiful modular course card in your dashboard lobby.",
         },
       ],
-      dashboardAlt: "Playzen Dashboard Workspace",
+      dashboardAlt: "MyTaalim Dashboard Workspace",
     },
     workflowTwo: {
       eyebrow: "Workflow Phase 2",
@@ -107,21 +107,21 @@ const en = defineDictionary({
         "Description & Notebook Side Panels",
         "Clean Widescreen Layout",
       ],
-      playlistAlt: "Playzen Playlist Playback",
+      playlistAlt: "MyTaalim Playlist Playback",
     },
     demo: {
       eyebrow: "Playground Demo",
-      title: "Experience Playzen in Action",
+      title: "Experience MyTaalim in Action",
       description:
         "Interact with the mock simulator below to preview playlist syncing and automated watch state updates.",
     },
     quote:
-      "Online courses on YouTube are gold mines, but the platform is built to distract. Playzen turns noise into a structured, silent university study hall. It has completely transformed my learning efficiency.",
-    quoteBy: "Playzen User Community",
+      "Online courses on YouTube are gold mines, but the platform is built to distract. MyTaalim turns noise into a structured, silent university study hall. It has completely transformed my learning efficiency.",
+    quoteBy: "MyTaalim User Community",
     quoteSpace: "YouTube Self-Education Space",
     finalTitle: "Ready to Structure Your Learning?",
     finalDescription:
-      "Join thousands of students and developers who use Playzen to organize tutorials, course bundles, and learning logs.",
+      "Join thousands of students and developers who use MyTaalim to organize tutorials, course bundles, and learning logs.",
     enterDashboard: "Enter Dashboard Workspace",
     createFreeAccount: "Create Free Account",
     footerDescription:
@@ -130,7 +130,7 @@ const en = defineDictionary({
     footerRegister: "Register",
     footerGithub: "Github",
     copyrightSuffix:
-      "Playzen. All rights reserved. Created in partnership with Advanced Agentic Coding.",
+      "MyTaalim. All rights reserved.",
   },
   miniDemo: {
     videos: [
@@ -159,7 +159,7 @@ const en = defineDictionary({
     resetDemo: "Reset Demo",
     connectTitle: "Connect Your Playlists",
     connectDescription:
-      "Paste any public YouTube playlist URL. Playzen compiles it into a focused list, free from distractions.",
+      "Paste any public YouTube playlist URL. MyTaalim compiles it into a focused list, free from distractions.",
     playlistPlaceholder: "https://www.youtube.com/playlist?list=...",
     syncPlaylist: "Sync Playlist",
     syncingTitle: "Syncing Workspace...",
@@ -172,12 +172,12 @@ const en = defineDictionary({
     completed: "Completed",
     insightTitle: "Interactive Insight",
     insightDescription:
-      "Watch how Playzen auto-saves watch progress in the background. If you stop playing midway, it remembers the exact timestamp.",
+      "Watch how MyTaalim auto-saves watch progress in the background. If you stop playing midway, it remembers the exact timestamp.",
   },
   auth: {
-    iconAlt: "Playzen Icon",
+    iconAlt: "MyTaalim Icon",
     login: {
-      title: "Welcome back to Playzen",
+      title: "Welcome back to MyTaalim",
       subtitle: "Sign in to continue tracking your learning progress",
       noAccount: "Don't have an account?",
       signUpLink: "Sign up",
@@ -254,20 +254,20 @@ const en = defineDictionary({
     },
   },
   email: {
-    verifySubject: "Verify your Playzen Account",
+    verifySubject: "Verify your MyTaalim Account",
     verifyIntro:
-      "This email is safe for account registration. Your Playzen OTP code is:",
+      "This email is safe for account registration. Your MyTaalim OTP code is:",
     verifyText:
-      "This email is safe for account registration. Your Playzen verification code is: {otp}. It is valid for 10 minutes.",
+      "This email is safe for account registration. Your MyTaalim verification code is: {otp}. It is valid for 10 minutes.",
     resendIntro:
-      "This email is safe for account registration verification. Your Playzen OTP code is:",
+      "This email is safe for account registration verification. Your MyTaalim OTP code is:",
     resendText:
-      "This email is safe for account registration verification. Your Playzen verification code is: {otp}. It is valid for 10 minutes.",
-    resetSubject: "Playzen Password Reset OTP",
+      "This email is safe for account registration verification. Your MyTaalim verification code is: {otp}. It is valid for 10 minutes.",
+    resetSubject: "MyTaalim Password Reset OTP",
     resetIntro:
-      "This email is safe for resetting the password. Your Playzen password reset OTP code is:",
+      "This email is safe for resetting the password. Your MyTaalim password reset OTP code is:",
     resetText:
-      "This email is safe for resetting the password. Your Playzen password reset verification code is: {otp}. It is valid for 10 minutes.",
+      "This email is safe for resetting the password. Your MyTaalim password reset verification code is: {otp}. It is valid for 10 minutes.",
     validFor: "This code is valid for 10 minutes.",
   },
   dashboard: {
@@ -424,12 +424,12 @@ export type Dictionary = typeof en;
 
 const ar: Dictionary = {
   metadata: {
-    title: "Playzen — مدير قوائم تشغيل يوتيوب",
+    title: "MyTaalim — مدير قوائم تشغيل يوتيوب",
     description:
-      "احفظ قوائم تشغيل يوتيوب ونظمها وتابع تقدم المشاهدة داخل Playzen.",
+      "احفظ قوائم تشغيل يوتيوب ونظمها وتابع تقدم المشاهدة داخل MyTaalim.",
   },
   common: {
-    brand: "Playzen",
+    brand: "MyTaalim",
     cancel: "إلغاء",
     loading: "جار التحميل...",
     user: "المستخدم",
@@ -466,7 +466,7 @@ const ar: Dictionary = {
     startLearningFree: "ابدأ التعلم مجانًا",
     signIn: "تسجيل الدخول",
     discoverMore: "اكتشف المزيد",
-    why: "لماذا Playzen؟",
+    why: "لماذا MyTaalim؟",
     featuresTitle: "بيئة خالية من المشتتات مصممة للتعلم عبر الإنترنت",
     featureCards: [
       {
@@ -494,7 +494,7 @@ const ar: Dictionary = {
       eyebrow: "المرحلة الأولى",
       title: "مزامنة سلسة لقوائم التشغيل",
       description:
-        "يجعل Playzen تنظيم مصادر التعلم بسيطًا جدًا. انسخ رابط قائمة تشغيل يوتيوب والصقه في مساحة العمل، وسيتصل التطبيق فورًا لجلب المحتوى.",
+        "يجعل MyTaalim تنظيم مصادر التعلم بسيطًا جدًا. انسخ رابط قائمة تشغيل يوتيوب والصقه في مساحة العمل، وسيتصل التطبيق فورًا لجلب المحتوى.",
       steps: [
         {
           title: "الصق الرابط العام",
@@ -511,7 +511,7 @@ const ar: Dictionary = {
             "تظهر القائمة كبطاقة دورة جميلة ومنظمة داخل لوحة التحكم.",
         },
       ],
-      dashboardAlt: "مساحة لوحة تحكم Playzen",
+      dashboardAlt: "مساحة لوحة تحكم MyTaalim",
     },
     workflowTwo: {
       eyebrow: "المرحلة الثانية",
@@ -524,21 +524,21 @@ const ar: Dictionary = {
         "لوحات للوصف والملاحظات",
         "تخطيط عريض ونظيف",
       ],
-      playlistAlt: "تشغيل قائمة Playzen",
+      playlistAlt: "تشغيل قائمة MyTaalim",
     },
     demo: {
       eyebrow: "عرض تجريبي",
-      title: "جرّب Playzen أثناء العمل",
+      title: "جرّب MyTaalim أثناء العمل",
       description:
         "تفاعل مع المحاكي أدناه لمعاينة مزامنة القوائم وتحديث حالة المشاهدة تلقائيًا.",
     },
     quote:
-      "الدورات التعليمية على يوتيوب كنوز حقيقية، لكن المنصة مليئة بالمشتتات. يحوّل Playzen هذا الضجيج إلى قاعة دراسة منظمة وهادئة، وقد غيّر كفاءة تعلمي بالكامل.",
-    quoteBy: "مجتمع مستخدمي Playzen",
+      "الدورات التعليمية على يوتيوب كنوز حقيقية، لكن المنصة مليئة بالمشتتات. يحوّل MyTaalim هذا الضجيج إلى قاعة دراسة منظمة وهادئة، وقد غيّر كفاءة تعلمي بالكامل.",
+    quoteBy: "مجتمع مستخدمي MyTaalim",
     quoteSpace: "مساحة التعلم الذاتي عبر يوتيوب",
     finalTitle: "هل أنت جاهز لتنظيم تعلمك؟",
     finalDescription:
-      "انضم إلى طلاب ومطورين يستخدمون Playzen لتنظيم الشروحات والدورات وسجلات التعلم.",
+      "انضم إلى طلاب ومطورين يستخدمون MyTaalim لتنظيم الشروحات والدورات وسجلات التعلم.",
     enterDashboard: "ادخل إلى لوحة التحكم",
     createFreeAccount: "أنشئ حسابًا مجانيًا",
     footerDescription: "مساحة منظمة لدورات يوتيوب وتتبع تقدم المشاهدة.",
@@ -546,7 +546,7 @@ const ar: Dictionary = {
     footerRegister: "إنشاء حساب",
     footerGithub: "Github",
     copyrightSuffix:
-      "Playzen. جميع الحقوق محفوظة. تم إنشاؤه بالشراكة مع Advanced Agentic Coding.",
+      "MyTaalim. جميع الحقوق محفوظة.",
   },
   miniDemo: {
     videos: [
@@ -575,7 +575,7 @@ const ar: Dictionary = {
     resetDemo: "إعادة العرض",
     connectTitle: "اربط قوائم التشغيل",
     connectDescription:
-      "الصق رابط أي قائمة تشغيل عامة من يوتيوب، وسيحولها Playzen إلى قائمة مركزة وخالية من المشتتات.",
+      "الصق رابط أي قائمة تشغيل عامة من يوتيوب، وسيحولها MyTaalim إلى قائمة مركزة وخالية من المشتتات.",
     playlistPlaceholder: "https://www.youtube.com/playlist?list=...",
     syncPlaylist: "مزامنة القائمة",
     syncingTitle: "جار مزامنة مساحة العمل...",
@@ -588,12 +588,12 @@ const ar: Dictionary = {
     completed: "المكتمل",
     insightTitle: "لمحة تفاعلية",
     insightDescription:
-      "لاحظ كيف يحفظ Playzen تقدم المشاهدة في الخلفية. إذا توقفت في منتصف الفيديو، فسيتذكر الوقت المحدد.",
+      "لاحظ كيف يحفظ MyTaalim تقدم المشاهدة في الخلفية. إذا توقفت في منتصف الفيديو، فسيتذكر الوقت المحدد.",
   },
   auth: {
-    iconAlt: "أيقونة Playzen",
+    iconAlt: "أيقونة MyTaalim",
     login: {
-      title: "مرحبًا بعودتك إلى Playzen",
+      title: "مرحبًا بعودتك إلى MyTaalim",
       subtitle: "سجّل الدخول لمواصلة تتبع تقدم تعلمك",
       noAccount: "ليس لديك حساب؟",
       signUpLink: "أنشئ حسابًا",
@@ -670,20 +670,20 @@ const ar: Dictionary = {
     },
   },
   email: {
-    verifySubject: "تحقق من حسابك في Playzen",
+    verifySubject: "تحقق من حسابك في MyTaalim",
     verifyIntro:
-      "هذا البريد آمن لتسجيل الحساب. رمز التحقق الخاص بك في Playzen هو:",
+      "هذا البريد آمن لتسجيل الحساب. رمز التحقق الخاص بك في MyTaalim هو:",
     verifyText:
-      "هذا البريد آمن لتسجيل الحساب. رمز التحقق الخاص بك في Playzen هو: {otp}. الرمز صالح لمدة 10 دقائق.",
+      "هذا البريد آمن لتسجيل الحساب. رمز التحقق الخاص بك في MyTaalim هو: {otp}. الرمز صالح لمدة 10 دقائق.",
     resendIntro:
-      "هذا البريد آمن للتحقق من تسجيل الحساب. رمز التحقق الخاص بك في Playzen هو:",
+      "هذا البريد آمن للتحقق من تسجيل الحساب. رمز التحقق الخاص بك في MyTaalim هو:",
     resendText:
-      "هذا البريد آمن للتحقق من تسجيل الحساب. رمز التحقق الخاص بك في Playzen هو: {otp}. الرمز صالح لمدة 10 دقائق.",
-    resetSubject: "رمز إعادة تعيين كلمة مرور Playzen",
+      "هذا البريد آمن للتحقق من تسجيل الحساب. رمز التحقق الخاص بك في MyTaalim هو: {otp}. الرمز صالح لمدة 10 دقائق.",
+    resetSubject: "رمز إعادة تعيين كلمة مرور MyTaalim",
     resetIntro:
-      "هذا البريد آمن لإعادة تعيين كلمة المرور. رمز إعادة تعيين كلمة المرور في Playzen هو:",
+      "هذا البريد آمن لإعادة تعيين كلمة المرور. رمز إعادة تعيين كلمة المرور في MyTaalim هو:",
     resetText:
-      "هذا البريد آمن لإعادة تعيين كلمة المرور. رمز التحقق لإعادة تعيين كلمة مرور Playzen هو: {otp}. الرمز صالح لمدة 10 دقائق.",
+      "هذا البريد آمن لإعادة تعيين كلمة المرور. رمز التحقق لإعادة تعيين كلمة مرور MyTaalim هو: {otp}. الرمز صالح لمدة 10 دقائق.",
     validFor: "هذا الرمز صالح لمدة 10 دقائق.",
   },
   dashboard: {

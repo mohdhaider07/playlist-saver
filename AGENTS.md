@@ -4,7 +4,7 @@
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
 
-# Playzen Coding & Styling Guidelines
+# MyTaalim Coding & Styling Guidelines
 
 To ensure the premium, editorial design of the application remains consistent, all agents must adhere to the following design patterns and coding conventions:
 

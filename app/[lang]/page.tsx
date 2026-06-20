@@ -386,9 +386,18 @@ export default function Home() {
           
           <div className="space-y-2">
             <div className="flex items-center justify-center md:justify-start gap-2">
-              <span className="font-serif font-bold text-xl text-foreground tracking-wide">
-                PLAYZEN
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo-light.png"
+                alt="MyTaalim Logo"
+                className="h-16 w-auto object-contain dark:hidden"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/logo-dark.png"
+                alt="MyTaalim Logo"
+                className="h-16 w-auto object-contain hidden dark:block"
+              />
             </div>
             <p className="text-xs text-muted-foreground/75 font-light">
               {t.footerDescription}

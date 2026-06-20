@@ -180,9 +180,15 @@ export default function ResetPasswordPage() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/icon.png"
+          src="/icon-light.png"
           alt={dictionary.auth.iconAlt}
-          className="w-14 h-14 object-contain mb-4 transition-transform duration-300 hover:scale-105"
+          className="w-14 h-14 object-contain mb-4 transition-transform duration-300 hover:scale-105 dark:hidden"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/icon-dark.png"
+          alt={dictionary.auth.iconAlt}
+          className="w-14 h-14 object-contain mb-4 transition-transform duration-300 hover:scale-105 hidden dark:block"
         />
         <h2 className="text-center text-3xl font-serif font-semibold tracking-wide text-foreground">
           {t.title}

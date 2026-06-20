@@ -4,7 +4,7 @@ export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "en";
 export const localeCookieName = "NEXT_LOCALE";
-export const localeStorageKey = "playzen-locale";
+export const localeStorageKey = "mytaalim-locale";
 
 export const localeLabels: Record<Locale, { short: string; native: string }> = {
   en: { short: "EN", native: "EN" },

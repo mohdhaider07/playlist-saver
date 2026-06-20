@@ -121,9 +121,15 @@ export function Navbar() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo.png"
-            alt="Playzen Logo"
-            className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-102"
+            src="/logo-light.png"
+            alt="MyTaalim Logo"
+            className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-102 dark:hidden"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-dark.png"
+            alt="MyTaalim Logo"
+            className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-102 hidden dark:block"
           />
         </Link>
 

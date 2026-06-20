@@ -168,7 +168,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
               setTouched((prev) => ({ ...prev, password: true }));
             }}
             placeholder={dictionary.common.passwordPlaceholder}
-            className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground pr-10 w-full ${
+            className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground pe-10 w-full ${
               fieldErrors.password
                 ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
                 : ""
@@ -177,7 +177,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center p-1 rounded-md focus-visible:ring-2 focus-visible:ring-primary/20 focus:outline-hidden cursor-pointer"
+            className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center p-1 rounded-md focus-visible:ring-2 focus-visible:ring-primary/20 focus:outline-hidden cursor-pointer"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? (
@@ -208,7 +208,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
               setTouched((prev) => ({ ...prev, confirmPassword: true }));
             }}
             placeholder={dictionary.common.passwordPlaceholder}
-            className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground pr-10 w-full ${
+            className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground pe-10 w-full ${
               fieldErrors.confirmPassword
                 ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
                 : ""
@@ -217,7 +217,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           <button
             type="button"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center p-1 rounded-md focus-visible:ring-2 focus-visible:ring-primary/20 focus:outline-hidden cursor-pointer"
+            className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center p-1 rounded-md focus-visible:ring-2 focus-visible:ring-primary/20 focus:outline-hidden cursor-pointer"
             aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
           >
             {showConfirmPassword ? (
