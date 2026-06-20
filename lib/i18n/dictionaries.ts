@@ -304,6 +304,7 @@ const en = defineDictionary({
     add: "Add Playlist",
     fallbackError: "Failed to add playlist",
     singleVideoError: "Single video links are not allowed. Please provide a playlist URL instead.",
+    singleVideoNotice: "Note: This video will be imported as a single-video course.",
   },
   playlistCard: {
     confirmDelete: "Are you sure you want to delete this playlist?",
@@ -704,6 +705,7 @@ const ar: Dictionary = {
     add: "إضافة القائمة",
     fallbackError: "فشل إضافة القائمة",
     singleVideoError: "روابط الفيديوهات الفردية غير مسموح بها. يرجى توفير رابط قائمة تشغيل يوتيوب بدلاً من ذلك.",
+    singleVideoNotice: "ملاحظة: سيتم إضافة هذا الفيديو كقائمة تشغيل من فيديو واحد.",
   },
   playlistCard: {
     confirmDelete: "هل أنت متأكد من حذف هذه القائمة؟",

@@ -163,11 +163,7 @@ export function AddPlaylistModal({
                   if (error) setError("");
                 }}
                 disabled={loading}
-                className={`ps-9 h-10 rounded-xl bg-secondary/30 text-foreground text-sm focus-visible:ring-primary/10 transition-colors ${
-                  isSingleVideo
-                    ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10"
-                    : "border-border focus-visible:border-primary/60"
-                }`}
+                className="ps-9 h-10 rounded-xl bg-secondary/30 text-foreground text-sm border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 transition-colors"
               />
             </div>
             {isSingleVideo && (
@@ -176,9 +172,9 @@ export function AddPlaylistModal({
                 animate={{ opacity: 1, height: "auto" }}
                 className="overflow-hidden"
               >
-                <p className="text-xs font-semibold text-destructive pl-1 flex items-center gap-1.5 mt-1">
-                  <AlertCircle className="size-3.5" />
-                  {t.singleVideoError}
+                <p className="text-xs font-semibold text-primary pl-1 flex items-center gap-1.5 mt-1">
+                  <Sparkles className="size-3.5" />
+                  {t.singleVideoNotice}
                 </p>
               </motion.div>
             )}
@@ -202,7 +198,7 @@ export function AddPlaylistModal({
             </Button>
             <Button
               type="submit"
-              disabled={loading || !url || isSingleVideo}
+              disabled={loading || !url}
               className="h-10 rounded-full bg-foreground text-background hover:bg-stone-800 dark:hover:bg-stone-200 font-bold transition-all px-5 shadow-sm"
             >
               {loading ? (

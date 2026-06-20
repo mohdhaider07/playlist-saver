@@ -111,10 +111,7 @@ export function VideoListItem({
         {/* Progress bar overlay at bottom */}
         <div className="absolute bottom-0 left-0 w-full h-[3px] bg-secondary/50">
           <div
-            className={cn(
-              "h-full bg-primary rounded-full transition-all duration-300",
-              isRtl ? "ms-auto" : ""
-            )}
+            className="h-full bg-primary rounded-full transition-all duration-300"
             style={{ width: `${progressPct}%` }}
           ></div>
         </div>

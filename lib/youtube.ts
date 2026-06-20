@@ -89,3 +89,32 @@ export async function getVideoDurations(
 
   return durations;
 }
+
+export async function getVideoMetadata(
+  videoId: string,
+  apiKey: string
+) {
+  const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoId}&key=${apiKey}`;
+  const response = await fetch(url);
+  const data = await response.json();
+
+  if (!response.ok || !data.items || data.items.length === 0) {
+    throw new Error("Video not found or is private.");
+  }
+
+  const snippet = data.items[0].snippet;
+  const contentDetails = data.items[0].contentDetails;
+
+  return {
+    title: snippet.title,
+    description: snippet.description || "",
+    channelTitle: snippet.channelTitle || "",
+    thumbnailUrl:
+      snippet.thumbnails?.maxres?.url ||
+      snippet.thumbnails?.high?.url ||
+      snippet.thumbnails?.medium?.url ||
+      `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+    duration: contentDetails.duration || "PT0S",
+  };
+}
+

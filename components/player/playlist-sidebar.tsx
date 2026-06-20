@@ -62,9 +62,7 @@ export function PlaylistSidebar({
         </div>
         <div className="w-full h-1 bg-secondary rounded-full overflow-hidden border border-border/20">
           <div
-            className={`h-full bg-primary rounded-full transition-all duration-500${
-              isRtl ? " ms-auto" : ""
-            }`}
+            className="h-full bg-primary rounded-full transition-all duration-500"
             style={{ width: `${overallPct}%` }}
           ></div>
         </div>

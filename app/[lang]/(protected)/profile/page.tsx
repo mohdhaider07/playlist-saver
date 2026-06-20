@@ -15,10 +15,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { motion } from "motion/react";
-import { LogOut, User, Calendar, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { LogOut, User, Calendar } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 import { useLocalePath } from "@/hooks/use-locale-path";
+import { BackToDashboardButton } from "@/components/ui/back-to-dashboard-button";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
@@ -54,13 +54,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-background pt-24 px-4 sm:px-6 pb-16 w-full max-w-2xl mx-auto z-10 relative">
       <div className="mb-6">
-        <Link
-          href={to("/dashboard")}
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-        >
-          <ArrowLeft className="size-4 transition-transform duration-200 group-hover:-translate-x-1" />
-          <span>{t.backToDashboard}</span>
-        </Link>
+        <BackToDashboardButton />
       </div>
 
       <motion.div
