@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "motion/react";
-import { Moon, Sun, Eye, EyeOff } from "lucide-react";
+import { Moon, Sun, Eye } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,

@@ -1,0 +1,15 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /en/dashboard
+Disallow: /ar/dashboard
+Disallow: /en/profile
+Disallow: /ar/profile
+Disallow: /en/playlist
+Disallow: /ar/playlist
+
+# Host
+Host: https://www.mytaalim.xyz
+
+# Sitemaps
+Sitemap: https://www.mytaalim.xyz/sitemap.xml

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 import { ClientProviders } from "../providers";
 import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   Locale,
   getLocaleDirection,
@@ -12,6 +12,8 @@ import {
   locales,
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { createMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -32,10 +34,12 @@ export async function generateMetadata({
   const locale = hasLocale(lang) ? lang : "en";
   const dictionary = getDictionary(locale);
 
-  return {
+  return createMetadata({
     title: dictionary.metadata.title,
     description: dictionary.metadata.description,
-  };
+    path: "",
+    locale,
+  });
 }
 
 export function generateStaticParams() {
@@ -64,6 +68,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans">
+        <JsonLd />
         <ClientProviders locale={locale} dictionary={dictionary}>
           {children}
         </ClientProviders>
@@ -73,3 +78,4 @@ export default async function RootLayout({
     </html>
   );
 }
+

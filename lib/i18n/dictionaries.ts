@@ -42,7 +42,7 @@ const en = defineDictionary({
     heroTitle: "Elevate Your Study.",
     heroTitleAccent: "Master Your Playlists.",
     heroDescription:
-      "Connect any YouTube playlist, strip away distractions, check off your chapters, and track your watch progress in a premium dashboard.",
+      "Connect any YouTube playlist to our study workspace, strip away distractions, organize your materials with our playlist organizer, check off your chapters, and monitor progress using our course progress tracker and youtube learning tracker.",
     goToWorkspace: "Go to Workspace",
     exploreFeatures: "Explore Features",
     startLearningFree: "Start Learning Free",
@@ -460,7 +460,7 @@ const ar: Dictionary = {
     heroTitle: "ارتق بدراستك.",
     heroTitleAccent: "أتقن قوائمك التعليمية.",
     heroDescription:
-      "اربط أي قائمة تشغيل من يوتيوب، أبعد المشتتات، علّم الفصول المنجزة، وتابع تقدم المشاهدة داخل لوحة أنيقة.",
+      "اربط أي قائمة تشغيل من يوتيوب بـ منصة تعليم متكاملة، أبعد المشتتات في بيئة تعلم بدون تشتيت، علّم الفصول المنجزة لتسهيل تنظيم الدورات التعليمية، وقم بـ إدارة قوائم تشغيل يوتيوب مع تتبع التقدم الدراسي بدقة داخل لوحة أنيقة.",
     goToWorkspace: "اذهب إلى مساحة العمل",
     exploreFeatures: "استكشف المزايا",
     startLearningFree: "ابدأ التعلم مجانًا",

@@ -20,9 +20,8 @@ export function PlaylistSidebar({
   progressMap,
   onSelectVideo,
 }: PlaylistSidebarProps) {
-  const { dictionary, direction } = useI18n();
+  const { dictionary } = useI18n();
   const t = dictionary.playlistSidebar;
-  const isRtl = direction === "rtl";
   const [searchQuery, setSearchQuery] = useState("");
   const [displayCount, setDisplayCount] = useState(50);
 

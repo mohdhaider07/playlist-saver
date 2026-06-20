@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { PlaylistFormatted } from "@/types";
 import { motion } from "motion/react";
-import { Link2, Sparkles, AlertCircle } from "lucide-react";
+import { Link2, Sparkles } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 
 function isSingleVideoUrl(urlStr: string): boolean {
