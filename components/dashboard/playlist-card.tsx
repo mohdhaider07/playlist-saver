@@ -4,14 +4,14 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { PlaylistFormatted } from "@/types";
-import { Trash2, Film, MoreVertical } from "lucide-react";
+import { Trash2, Film, MoreVertical, Loader2 } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 import { useLocalePath } from "@/hooks/use-locale-path";
 import { motion, AnimatePresence } from "motion/react";
 
 interface PlaylistCardProps {
   playlist: PlaylistFormatted;
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => void | Promise<void>;
 }
 
 export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
@@ -23,6 +23,7 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
   const thumbnailUrl = playlist.thumbnailUrl?.trim();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -94,18 +95,28 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
             >
               <button
                 type="button"
-                onClick={(e) => {
+                disabled={isDeleting}
+                onClick={async (e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setDropdownOpen(false);
                   if (window.confirm(t.confirmDelete)) {
-                    onDelete(playlist.id);
+                    setIsDeleting(true);
+                    try {
+                      await onDelete(playlist.id);
+                    } catch (err) {
+                      console.error(err);
+                      setIsDeleting(false);
+                    }
                   }
                 }}
-                className="flex items-center gap-2 w-full px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/20 transition-colors text-left cursor-pointer"
+                className="flex items-center gap-2 w-full px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/20 transition-colors text-left cursor-pointer disabled:opacity-50"
               >
-                <Trash2 className="size-3.5" />
-                {t.delete}
+                {isDeleting ? (
+                  <Loader2 className="size-3.5 animate-spin text-muted-foreground" />
+                ) : (
+                  <Trash2 className="size-3.5" />
+                )}
+                {isDeleting ? dictionary.common.loading : t.delete}
               </button>
             </motion.div>
           )}

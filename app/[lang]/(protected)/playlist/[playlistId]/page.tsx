@@ -11,6 +11,7 @@ import { CheckCircle2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/components/i18n-provider";
 import { useLocalePath } from "@/hooks/use-locale-path";
+import { BackToDashboardButton } from "@/components/ui/back-to-dashboard-button";
 
 interface PlaylistData {
   playlist: {
@@ -257,6 +258,9 @@ export default function PlaylistPage({
 
   return (
     <div className="min-h-screen bg-background pt-24 px-4 sm:px-6 pb-16 w-full max-w-[1600px] mx-auto z-10 relative">
+      <div className="mb-6">
+        <BackToDashboardButton />
+      </div>
       <div className="flex flex-col lg:flex-row gap-6 items-start">
         {/* Left/Main Column - Player */}
         <div className="w-full flex-1 flex flex-col">
