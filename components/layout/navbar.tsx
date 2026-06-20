@@ -9,7 +9,6 @@ import { Menu, X } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 import {
   Locale,
-  localeCookieName,
   localeLabels,
   locales,
   localizeHref,
@@ -90,7 +89,8 @@ export function Navbar() {
       if (element) {
         const headerOffset = 80;
         const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
 
         window.scrollTo({
           top: offsetPosition,
@@ -203,6 +203,13 @@ export function Navbar() {
 
         <div className="flex items-center gap-2 md:hidden">
           <LocaleSwitcher onSwitch={() => setMenuOpen(false)} />
+          {isAuthenticated === true && !isHome && (
+            <Link href={to("/profile")} className="flex items-center ml-2">
+              <div className="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-serif font-bold shadow-sm select-none border border-white/5 pb-[2px] transition-transform duration-300 hover:scale-105 active:scale-95 cursor-pointer">
+                {userInitial}
+              </div>
+            </Link>
+          )}
           {isHome && (
             <button
               onClick={() => setMenuOpen(!menuOpen)}
@@ -240,19 +247,41 @@ export function Navbar() {
           </a>
           <div className="w-16 h-px bg-border my-2"></div>
           {isAuthenticated === true ? (
-            <Link href={to("/dashboard")} onClick={() => setMenuOpen(false)}>
-              <Button size="lg" className="px-8 rounded-full bg-foreground text-background font-bold border-none shadow-md">
-                {dictionary.nav.goToDashboard}
-              </Button>
-            </Link>
+            <>
+              <Link
+                href={to("/dashboard")}
+                onClick={() => setMenuOpen(false)}
+                className="text-foreground/85 hover:text-primary transition-colors cursor-pointer uppercase tracking-widest text-lg font-bold"
+              >
+                {dictionary.nav.dashboard}
+              </Link>
+              <Link
+                href={to("/profile")}
+                onClick={() => setMenuOpen(false)}
+                className="text-foreground/85 hover:text-primary transition-colors cursor-pointer uppercase tracking-widest text-lg font-bold"
+              >
+                {dictionary.nav.profile}
+              </Link>
+            </>
           ) : (
             <div className="flex flex-col gap-4 w-full max-w-[200px]">
-              <Link href={to("/login")} onClick={() => setMenuOpen(false)} className="w-full text-center">
-                <Button variant="outline" className="w-full rounded-full font-bold">
+              <Link
+                href={to("/login")}
+                onClick={() => setMenuOpen(false)}
+                className="w-full text-center"
+              >
+                <Button
+                  variant="outline"
+                  className="w-full rounded-full font-bold"
+                >
                   {dictionary.nav.login}
                 </Button>
               </Link>
-              <Link href={to("/register")} onClick={() => setMenuOpen(false)} className="w-full text-center">
+              <Link
+                href={to("/register")}
+                onClick={() => setMenuOpen(false)}
+                className="w-full text-center"
+              >
                 <Button className="w-full rounded-full bg-foreground text-background font-bold border-none shadow-md">
                   {dictionary.nav.signUp}
                 </Button>

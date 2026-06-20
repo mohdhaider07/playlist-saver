@@ -12,6 +12,7 @@ import { motion } from "motion/react";
 import { createLoginSchema } from "@/lib/validation";
 import { useI18n } from "@/components/i18n-provider";
 import { useLocalePath } from "@/hooks/use-locale-path";
+import { Eye, EyeOff } from "lucide-react";
 
 export function LoginForm() {
   const { dictionary } = useI18n();
@@ -23,6 +24,7 @@ export function LoginForm() {
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [guestLoading, setGuestLoading] = useState(false);
@@ -138,19 +140,33 @@ export function LoginForm() {
             {t.forgotPassword}
           </Link>
         </label>
-        <Input
-          type="password"
-          required
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-            setTouched((prev) => ({ ...prev, password: true }));
-          }}
-          placeholder={dictionary.common.passwordPlaceholder}
-          className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground ${
-            fieldErrors.password ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
-          }`}
-        />
+        <div className="relative">
+          <Input
+            type={showPassword ? "text" : "password"}
+            required
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setTouched((prev) => ({ ...prev, password: true }));
+            }}
+            placeholder={dictionary.common.passwordPlaceholder}
+            className={`h-10 rounded-xl bg-secondary/30 border-border focus-visible:border-primary/60 focus-visible:ring-primary/10 text-foreground pr-10 w-full ${
+              fieldErrors.password ? "border-destructive/60 focus-visible:border-destructive/60 focus-visible:ring-destructive/10" : ""
+            }`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center p-1 rounded-md focus-visible:ring-2 focus-visible:ring-primary/20 focus:outline-hidden cursor-pointer"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? (
+              <EyeOff className="size-4" />
+            ) : (
+              <Eye className="size-4" />
+            )}
+          </button>
+        </div>
         {fieldErrors.password && (
           <p className="text-[10px] font-bold text-destructive pl-1">
             {fieldErrors.password}

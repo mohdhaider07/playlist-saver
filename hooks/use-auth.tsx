@@ -42,13 +42,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   } | null>(null);
 
   const checkAuth = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setIsAuthenticated(false);
-      setUser(null);
-      return;
-    }
-
     try {
       const data = await apiFetch("/api/auth/me");
       setUser(data.user);

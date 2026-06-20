@@ -29,6 +29,7 @@ const en = defineDictionary({
     howItWorks: "How It Works",
     interactiveSimulator: "Interactive Simulator",
     dashboard: "Dashboard",
+    profile: "Profile",
     login: "Login",
     signUp: "Sign Up",
     goToDashboard: "Go to Dashboard",
@@ -302,11 +303,13 @@ const en = defineDictionary({
     adding: "Adding...",
     add: "Add Playlist",
     fallbackError: "Failed to add playlist",
+    singleVideoError: "Single video links are not allowed. Please provide a playlist URL instead.",
   },
   playlistCard: {
     confirmDelete: "Are you sure you want to delete this playlist?",
     watchProgress: "Watch Progress",
     added: "Added",
+    delete: "Delete",
   },
   profile: {
     backToDashboard: "Back to Dashboard",
@@ -432,6 +435,7 @@ const ar: Dictionary = {
     howItWorks: "طريقة العمل",
     interactiveSimulator: "المحاكي التفاعلي",
     dashboard: "لوحة التحكم",
+    profile: "الملف الشخصي",
     login: "تسجيل الدخول",
     signUp: "إنشاء حساب",
     goToDashboard: "الذهاب إلى لوحة التحكم",
@@ -699,11 +703,13 @@ const ar: Dictionary = {
     adding: "جار الإضافة...",
     add: "إضافة القائمة",
     fallbackError: "فشل إضافة القائمة",
+    singleVideoError: "روابط الفيديوهات الفردية غير مسموح بها. يرجى توفير رابط قائمة تشغيل يوتيوب بدلاً من ذلك.",
   },
   playlistCard: {
     confirmDelete: "هل أنت متأكد من حذف هذه القائمة؟",
     watchProgress: "تقدم المشاهدة",
     added: "أضيف في",
+    delete: "حذف",
   },
   profile: {
     backToDashboard: "العودة إلى لوحة التحكم",
