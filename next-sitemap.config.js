@@ -1,7 +1,11 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: "https://www.mytaalim.xyz",
+
   generateRobotsTxt: true,
+
+  sitemapSize: 7000,
+
   alternateRefs: [
     {
       href: "https://www.mytaalim.xyz/en",
@@ -12,6 +16,7 @@ module.exports = {
       hreflang: "ar",
     },
   ],
+
   exclude: [
     "/*/dashboard",
     "/*/dashboard/*",
@@ -19,8 +24,14 @@ module.exports = {
     "/*/profile/*",
     "/*/playlist",
     "/*/playlist/*",
+
+    "/icon.png",
+    "/robots.txt"
   ],
+
   robotsTxtOptions: {
+    includeNonIndexSitemaps: true,
+
     policies: [
       {
         userAgent: "*",
