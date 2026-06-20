@@ -61,6 +61,7 @@ export default async function RootLayout({
       lang={locale}
       dir={direction}
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans">
         <ClientProviders locale={locale} dictionary={dictionary}>
