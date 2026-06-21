@@ -13,4 +13,3 @@ Host: https://www.mytaalim.xyz
 
 # Sitemaps
 Sitemap: https://www.mytaalim.xyz/sitemap.xml
-Sitemap: https://www.mytaalim.xyz/sitemap-0.xml

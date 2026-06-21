@@ -3,6 +3,7 @@ module.exports = {
   siteUrl: "https://www.mytaalim.xyz",
 
   generateRobotsTxt: true,
+  generateIndexSitemap: false,
 
   sitemapSize: 7000,
 
