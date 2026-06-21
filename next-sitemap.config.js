@@ -7,16 +7,30 @@ module.exports = {
 
   sitemapSize: 7000,
 
-  alternateRefs: [
-    {
-      href: "https://www.mytaalim.xyz/en",
-      hreflang: "en",
-    },
-    {
-      href: "https://www.mytaalim.xyz/ar",
-      hreflang: "ar",
-    },
-  ],
+  transform: async (config, path) => {
+    // Strip existing locale prefix from the path, e.g. /ar/login -> /login
+    const pathWithoutLocale = path.replace(/^\/(en|ar)(\/|$)/, "/");
+    const cleanPath = pathWithoutLocale === "/" ? "" : pathWithoutLocale;
+
+    return {
+      loc: path,
+      changefreq: config.changefreq,
+      priority: config.priority,
+      lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
+      alternateRefs: [
+        {
+          href: `${config.siteUrl}/en${cleanPath}`,
+          hreflang: "en",
+          hrefIsAbsolute: true,
+        },
+        {
+          href: `${config.siteUrl}/ar${cleanPath}`,
+          hreflang: "ar",
+          hrefIsAbsolute: true,
+        },
+      ],
+    };
+  },
 
   exclude: [
     "/*/dashboard",
