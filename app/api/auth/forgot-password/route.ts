@@ -1,22 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "@/lib/db";
 import { generateOtp } from "@/lib/auth";
-import { sendEmail } from "@/lib/Email-service";
-import {
-  getLocaleDirection,
-  getPreferredLocale,
-  localeCookieName,
-} from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/dictionaries";
+import { sendForgotPasswordEmailOtp } from "@/lib/email-service";
 
 export async function POST(request: NextRequest) {
   try {
-    const locale = getPreferredLocale(
-      request.headers.get("accept-language"),
-      request.cookies.get(localeCookieName)?.value,
-    );
-    const direction = getLocaleDirection(locale);
-    const emailCopy = getDictionary(locale).email;
     const { email } = await request.json();
 
     if (!email) {
@@ -48,16 +36,10 @@ export async function POST(request: NextRequest) {
       },
     );
 
-    await sendEmail({
-      to: emailLower,
-      subject: emailCopy.resetSubject,
-      text: emailCopy.resetText.replace("{otp}", otpCode),
-      html: `
-          <div dir="${direction}" style="font-family: sans-serif; padding: 20px; color: #333; text-align: ${direction === "rtl" ? "right" : "left"};">
-            <p>${emailCopy.resetIntro} <strong>${otpCode}</strong></p>
-            <p>${emailCopy.validFor}</p>
-          </div>
-        `,
+    await sendForgotPasswordEmailOtp({
+      emailLower,
+      otpCode,
+      lng: "en",
     });
 
     return NextResponse.json(

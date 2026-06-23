@@ -2,22 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "@/lib/db";
 import { hashPassword, generateOtp } from "@/lib/auth";
 import { registerSchema } from "@/lib/validation";
-import { sendEmail } from "@/lib/Email-service";
-import {
-  getLocaleDirection,
-  getPreferredLocale,
-  localeCookieName,
-} from "@/lib/i18n/config";
-import { getDictionary } from "@/lib/i18n/dictionaries";
+import { sendVerifyEmailOtp } from "@/lib/email-service";
 
 export async function POST(request: NextRequest) {
   try {
-    const locale = getPreferredLocale(
-      request.headers.get("accept-language"),
-      request.cookies.get(localeCookieName)?.value,
-    );
-    const direction = getLocaleDirection(locale);
-    const emailCopy = getDictionary(locale).email;
     const body = await request.json();
     const result = registerSchema.safeParse(body);
     if (!result.success) {
@@ -54,16 +42,10 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date(),
     });
 
-    await sendEmail({
-      to: emailLower,
-      subject: emailCopy.verifySubject,
-      text: emailCopy.verifyText.replace("{otp}", otpCode),
-      html: `
-          <div dir="${direction}" style="font-family: sans-serif; padding: 20px; color: #333; text-align: ${direction === "rtl" ? "right" : "left"};">
-            <p>${emailCopy.verifyIntro} <strong>${otpCode}</strong></p>
-            <p>${emailCopy.validFor}</p>
-          </div>
-        `,
+    await sendVerifyEmailOtp({
+      emailLower,
+      otpCode,
+      lng: "en",
     });
 
     return NextResponse.json(
