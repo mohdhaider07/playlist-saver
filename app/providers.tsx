@@ -19,9 +19,10 @@ export function ClientProviders({
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="dark"
-      enableSystem={false}
+      defaultTheme="system"
+      enableSystem={true}
       disableTransitionOnChange={false}
+      scriptProps={{ suppressHydrationWarning: true }}
     >
       <I18nProvider locale={locale} dictionary={dictionary}>
         <AuthProvider>

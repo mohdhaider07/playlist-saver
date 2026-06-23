@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "motion/react";
 import { Moon, Sun, Eye } from "lucide-react";
@@ -17,12 +17,22 @@ import {
 import { useI18n } from "@/components/i18n-provider";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const { dictionary } = useI18n();
   const t = dictionary.profile;
   const [showLightWarning, setShowLightWarning] = useState(false);
 
-  const isDark = theme === "dark";
+  // useSyncExternalStore: returns false on server, true on client
+  // This is the React-canonical way to detect client mount without
+  // setState-in-effect, avoiding both hydration mismatches and lint errors.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
+
+  // Before mount (SSR), default to dark so server & client render identically
+  const isDark = mounted ? resolvedTheme === "dark" : true;
 
   const handleThemeSelect = (newTheme: "dark" | "light") => {
     if (newTheme === "light" && isDark) {
