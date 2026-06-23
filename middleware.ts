@@ -35,6 +35,14 @@ function withLocaleCookie(response: NextResponse, locale: string) {
   return response;
 }
 
+function getRequestCountry(request: NextRequest) {
+  return (
+    request.headers.get("x-vercel-ip-country") ||
+    request.headers.get("cf-ipcountry") ||
+    request.headers.get("x-country")
+  );
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const pathnameLocale = getPathLocale(pathname);
@@ -43,6 +51,7 @@ export async function middleware(request: NextRequest) {
     const locale = getPreferredLocale(
       request.headers.get("accept-language"),
       request.cookies.get(localeCookieName)?.value,
+      getRequestCountry(request),
     );
     const url = request.nextUrl.clone();
     url.pathname = pathname === "/" ? `/${locale}` : `/${locale}${pathname}`;

@@ -2,6 +2,8 @@ export const locales = ["en", "ar"] as const;
 
 export type Locale = (typeof locales)[number];
 
+export const gccCountries = ["SA", "AE", "QA", "KW", "BH", "OM"] as const;
+
 export const defaultLocale: Locale = "en";
 export const localeCookieName = "NEXT_LOCALE";
 export const localeStorageKey = "mytaalim-locale";
@@ -29,14 +31,25 @@ export function stripLocale(pathname: string) {
   if (!locale) return pathname || "/";
 
   const withoutLocale = pathname.slice(locale.length + 1);
-  return withoutLocale.startsWith("/") ? withoutLocale || "/" : `/${withoutLocale}`;
+  return withoutLocale.startsWith("/")
+    ? withoutLocale || "/"
+    : `/${withoutLocale}`;
 }
 
 export function getPreferredLocale(
   acceptLanguage: string | null,
   cookieLocale?: string | null,
+  country?: string | null,
 ): Locale {
   if (hasLocale(cookieLocale)) return cookieLocale;
+
+  const normalizedCountry = country?.toUpperCase();
+  if (
+    normalizedCountry &&
+    gccCountries.includes(normalizedCountry as (typeof gccCountries)[number])
+  ) {
+    return "ar";
+  }
 
   const accepted = (acceptLanguage || "")
     .split(",")
@@ -73,7 +86,9 @@ export function localizeHref(href: string, locale: Locale) {
   const queryIndex = beforeHash.indexOf("?");
   const query = queryIndex >= 0 ? beforeHash.slice(queryIndex) : "";
   const pathname =
-    queryIndex >= 0 ? beforeHash.slice(0, queryIndex) || "/" : beforeHash || "/";
+    queryIndex >= 0
+      ? beforeHash.slice(0, queryIndex) || "/"
+      : beforeHash || "/";
   const cleanPathname = stripLocale(pathname);
   const localizedPathname =
     cleanPathname === "/" ? `/${locale}` : `/${locale}${cleanPathname}`;
