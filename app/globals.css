@@ -137,7 +137,7 @@
   /* Apply zoom only on desktop — mobile screens are already well-sized */
   @media (min-width: 1024px) {
     html {
-      zoom: 1.25;
+      zoom: 1.10;
     }
   }
 
