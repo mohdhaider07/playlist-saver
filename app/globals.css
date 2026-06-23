@@ -132,8 +132,13 @@
   html {
     @apply font-sans scroll-smooth;
     color-scheme: light dark;
-    /* Replicate 125% browser zoom uniformly — scales px, rem, em, borders, icons, everything */
-    zoom: 1.25;
+  }
+
+  /* Apply zoom only on desktop — mobile screens are already well-sized */
+  @media (min-width: 1024px) {
+    html {
+      zoom: 1.25;
+    }
   }
 
   html[dir="rtl"] {
