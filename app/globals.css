@@ -48,6 +48,7 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
 }
 
 :root {
@@ -131,6 +132,8 @@
   html {
     @apply font-sans scroll-smooth;
     color-scheme: light dark;
+    /* Replicate 125% browser zoom uniformly — scales px, rem, em, borders, icons, everything */
+    zoom: 1.25;
   }
 
   html[dir="rtl"] {
