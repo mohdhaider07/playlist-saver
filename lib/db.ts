@@ -46,3 +46,13 @@ export async function getProgressCollection() {
   const db = await getDb();
   return db.collection("progress");
 }
+
+export async function getYoutubeVideoSnapshotsCollection() {
+  const db = await getDb();
+  return db.collection("youtube_video_snapshots");
+}
+
+export async function getYoutubePlaylistCheckLogsCollection() {
+  const db = await getDb();
+  return db.collection("youtube_playlist_check_logs");
+}

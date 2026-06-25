@@ -77,3 +77,19 @@ export interface ProgressMap {
     lastWatchedAt: Date;
   };
 }
+
+export interface YoutubeVideoSnapshot {
+  _id: string;
+  youtubeVideoId: string;
+  title: string;
+  addedAt: Date;
+}
+
+export interface YoutubePlaylistCheckLog {
+  _id: string;
+  checkDate: Date;
+  newVideosFound: string[];
+  totalVideosInDb: number;
+  apiCallStatus: "success" | "failed";
+  error?: string;
+}

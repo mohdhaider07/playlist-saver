@@ -67,7 +67,10 @@ export default async function RootLayout({
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
+      <body
+        className="min-h-full flex flex-col font-sans"
+        suppressHydrationWarning
+      >
         <JsonLd />
         <ClientProviders locale={locale} dictionary={dictionary}>
           {children}
@@ -78,4 +81,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
