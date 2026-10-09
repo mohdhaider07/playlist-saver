@@ -7,11 +7,13 @@ import { useProgress } from "@/hooks/use-progress";
 import { VideoPlayer } from "@/components/player/video-player";
 import { PlaylistSidebar } from "@/components/player/playlist-sidebar";
 import { PlaylistVideoItem, ProgressMap } from "@/types";
-import { CheckCircle2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { CheckCircle2, ChevronLeft, ChevronRight, Loader2, Plus, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/components/i18n-provider";
 import { useLocalePath } from "@/hooks/use-locale-path";
 import { BackToDashboardButton } from "@/components/ui/back-to-dashboard-button";
+import { AddVideoModal } from "@/components/player/add-video-modal";
+import { RenamePlaylistModal } from "@/components/player/rename-playlist-modal";
 
 interface PlaylistData {
   playlist: {
@@ -23,6 +25,7 @@ interface PlaylistData {
     channelTitle: string;
     videoCount: number;
     videos: PlaylistVideoItem[];
+    isCustom?: boolean;
     addedAt: Date;
   };
   progress: ProgressMap;
@@ -48,6 +51,8 @@ export default function PlaylistPage({
   const [activeTab, setActiveTab] = useState<"info" | "playlist">("info");
   const [isMarkingComplete, setIsMarkingComplete] = useState(false);
   const [manualCompleteError, setManualCompleteError] = useState("");
+  const [addVideoModalOpen, setAddVideoModalOpen] = useState(false);
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
 
   const { saveProgress } = useProgress(playlistId || "");
 
@@ -85,6 +90,33 @@ export default function PlaylistPage({
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playlistId]);
+
+  const handleAddVideoSuccess = (newVideo: PlaylistVideoItem) => {
+    setData((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        playlist: {
+          ...prev.playlist,
+          videoCount: prev.playlist.videos.length + 1,
+          videos: [...prev.playlist.videos, newVideo],
+        },
+      };
+    });
+  };
+
+  const handleRenameSuccess = (newTitle: string) => {
+    setData((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        playlist: {
+          ...prev.playlist,
+          title: newTitle,
+        },
+      };
+    });
+  };
 
   const activeVideo = data?.playlist?.videos?.find(
     (v) => v.youtubeVideoId === activeVideoId,
@@ -394,14 +426,49 @@ export default function PlaylistPage({
         </div>
 
         <div className="w-full lg:w-[400px] shrink-0 lg:sticky lg:top-24 bg-card border border-border rounded-xl overflow-hidden flex flex-col h-[600px] shadow-sm select-none">
-          <div className="px-4 py-4 bg-card border-b border-border shrink-0 select-none">
-            <h2 className="font-serif font-semibold text-foreground text-sm line-clamp-1 leading-snug">
-              {data.playlist.title}
-            </h2>
-            <p className="text-[9px] font-bold text-muted-foreground/80 tracking-widest uppercase mt-1">
-              {data.playlist.channelTitle} • {data.playlist.videos.length}{" "}
-              {dictionary.common.videos}
-            </p>
+          <div className="px-4 py-3.5 bg-card border-b border-border shrink-0 select-none">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                <h2 className="font-serif font-semibold text-foreground text-sm truncate leading-snug">
+                  {data.playlist.title}
+                </h2>
+                {data.playlist.isCustom && (
+                  <button
+                    type="button"
+                    onClick={() => setRenameModalOpen(true)}
+                    className="p-1 rounded-md text-muted-foreground hover:text-primary hover:bg-secondary transition-colors cursor-pointer shrink-0"
+                    title={t.renamePlaylist}
+                    aria-label={t.renamePlaylist}
+                  >
+                    <Pencil className="size-3.5" />
+                  </button>
+                )}
+              </div>
+              {data.playlist.isCustom && (
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => setAddVideoModalOpen(true)}
+                  className="h-7 rounded-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/25 text-[10px] font-bold uppercase tracking-wider px-2.5 gap-1 shrink-0 cursor-pointer shadow-none"
+                >
+                  <Plus className="size-3" />
+                  <span>{t.addVideo}</span>
+                </Button>
+              )}
+            </div>
+            <div className="flex items-center justify-between mt-1">
+              <p className="text-[9px] font-bold text-muted-foreground/80 tracking-widest uppercase">
+                {data.playlist.isCustom
+                  ? t.customPlaylist
+                  : data.playlist.channelTitle}{" "}
+                • {data.playlist.videos.length} {dictionary.common.videos}
+              </p>
+              {data.playlist.isCustom && (
+                <span className="text-[8px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.5 rounded-full border border-primary/20">
+                  Custom
+                </span>
+              )}
+            </div>
           </div>
 
           <PlaylistSidebar
@@ -412,6 +479,24 @@ export default function PlaylistPage({
           />
         </div>
       </div>
+
+      {data.playlist.isCustom && (
+        <>
+          <AddVideoModal
+            open={addVideoModalOpen}
+            onOpenChange={setAddVideoModalOpen}
+            playlistId={playlistId}
+            onSuccess={handleAddVideoSuccess}
+          />
+          <RenamePlaylistModal
+            open={renameModalOpen}
+            onOpenChange={setRenameModalOpen}
+            playlistId={playlistId}
+            currentTitle={data.playlist.title}
+            onSuccess={handleRenameSuccess}
+          />
+        </>
+      )}
     </div>
   );
 }

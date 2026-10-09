@@ -67,6 +67,9 @@ export async function GET(request: NextRequest) {
         channelTitle: p.channelTitle,
         videoCount: p.videoCount,
         status: (p.status as PlaylistStatus) || PlaylistStatus.IN_PROGRESS,
+        isCustom: Boolean(
+          p.isCustom || p.youtubePlaylistId?.startsWith("video-")
+        ),
         addedAt: p.addedAt,
         completedCount,
         progressPercent,
@@ -281,6 +284,7 @@ export async function POST(request: NextRequest) {
       videoCount: videos.length,
       videos,
       status: DEFAULT_PLAYLIST_STATUS,
+      isCustom: type === "video",
       addedAt: new Date(),
       updatedAt: new Date(),
     };
@@ -296,6 +300,7 @@ export async function POST(request: NextRequest) {
       channelTitle: metadata.channelTitle,
       videoCount: videos.length,
       status: newDoc.status,
+      isCustom: newDoc.isCustom,
       addedAt: newDoc.addedAt,
       completedCount: 0,
       progressPercent: 0,

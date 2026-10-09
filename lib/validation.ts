@@ -57,3 +57,25 @@ export const updatePlaylistStatusSchema = z.object({
 
 export type UpdatePlaylistStatusInput = z.infer<typeof updatePlaylistStatusSchema>;
 
+export const updatePlaylistSchema = z.object({
+  status: z
+    .enum([PlaylistStatus.IN_PROGRESS, PlaylistStatus.COMPLETED], {
+      message: "Invalid playlist status value",
+    })
+    .optional(),
+  title: z
+    .string()
+    .trim()
+    .min(1, "Title cannot be empty")
+    .max(120, "Title is too long")
+    .optional(),
+});
+
+export type UpdatePlaylistInput = z.infer<typeof updatePlaylistSchema>;
+
+export const addVideoToPlaylistSchema = z.object({
+  videoUrl: z.string().trim().min(1, "Video URL is required"),
+});
+
+export type AddVideoToPlaylistInput = z.infer<typeof addVideoToPlaylistSchema>;
+

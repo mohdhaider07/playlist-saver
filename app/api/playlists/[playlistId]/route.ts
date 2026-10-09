@@ -4,7 +4,7 @@ import { getPlaylistsCollection, getProgressCollection } from "@/lib/db";
 import { getAuthUser } from "@/lib/auth-helpers";
 import { getYouTubeThumbnailUrl } from "@/lib/youtube";
 import { PlaylistVideoItem, PlaylistStatus } from "@/types";
-import { updatePlaylistStatusSchema } from "@/lib/validation";
+import { updatePlaylistSchema } from "@/lib/validation";
 
 // GET /api/playlists/[playlistId] — get single playlist with progress
 export async function GET(
@@ -79,6 +79,9 @@ export async function GET(
       channelTitle: playlist.channelTitle,
       videoCount: playlist.videoCount,
       status: (playlist.status as PlaylistStatus) || PlaylistStatus.IN_PROGRESS,
+      isCustom: Boolean(
+        playlist.isCustom || playlist.youtubePlaylistId?.startsWith("video-")
+      ),
       videos,
       addedAt: playlist.addedAt,
     };
@@ -173,10 +176,17 @@ export async function PATCH(
     }
 
     const body = await request.json().catch(() => null);
-    const parsed = updatePlaylistStatusSchema.safeParse(body);
+    const parsed = updatePlaylistSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
         { error: parsed.error.issues[0]?.message || "Invalid input data" },
+        { status: 400 }
+      );
+    }
+
+    if (!parsed.data.status && !parsed.data.title) {
+      return NextResponse.json(
+        { error: "No update fields provided." },
         { status: 400 }
       );
     }
@@ -200,14 +210,22 @@ export async function PATCH(
       );
     }
 
+    const updateFields: Record<string, unknown> = { updatedAt: new Date() };
+    if (parsed.data.status) {
+      updateFields.status = parsed.data.status;
+    }
+    if (parsed.data.title) {
+      updateFields.title = parsed.data.title;
+    }
+
     await playlistsCol.updateOne(
       { _id: new ObjectId(playlistId) },
-      { $set: { status: parsed.data.status, updatedAt: new Date() } }
+      { $set: updateFields }
     );
 
     return NextResponse.json({
-      message: "Playlist status updated.",
-      status: parsed.data.status,
+      message: "Playlist updated successfully.",
+      ...updateFields,
     });
   } catch (error) {
     console.error("[PATCH /api/playlists/:playlistId]", error);

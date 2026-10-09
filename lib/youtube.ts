@@ -118,3 +118,63 @@ export async function getVideoMetadata(
   };
 }
 
+export function parseYouTubeUrl(urlStr: string) {
+  try {
+    const trimmed = urlStr.trim();
+    if (!trimmed) return null;
+
+    const urlWithProtocol = trimmed.startsWith("http")
+      ? trimmed
+      : `https://${trimmed}`;
+    const urlObj = new URL(urlWithProtocol);
+
+    // Validate hostname
+    const isYouTube =
+      /^(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be)\//i.test(
+        urlWithProtocol
+      );
+    if (!isYouTube) return null;
+
+    // 1. Priority: check list parameter (playlist)
+    const listId = urlObj.searchParams.get("list");
+    if (listId) {
+      return { type: "playlist" as const, id: listId };
+    }
+
+    // 2. Second: check video parameters/pathname
+    let videoId = "";
+    if (urlObj.hostname.includes("youtu.be")) {
+      // youtu.be/VIDEO_ID
+      videoId = urlObj.pathname.slice(1);
+    } else if (urlObj.pathname.startsWith("/watch")) {
+      videoId = urlObj.searchParams.get("v") || "";
+    } else if (urlObj.pathname.startsWith("/shorts/")) {
+      videoId = urlObj.pathname.split("/")[2] || "";
+    } else if (urlObj.pathname.startsWith("/embed/")) {
+      videoId = urlObj.pathname.split("/")[2] || "";
+    }
+
+    if (videoId) {
+      return { type: "video" as const, id: videoId };
+    }
+
+    return null;
+  } catch {
+    // Fallback simple regex parsing in case of URL parse failure
+    const trimmed = urlStr.trim();
+    const hasList = /[&?]list=([^&]+)/i.exec(trimmed);
+    if (hasList && hasList[1]) {
+      return { type: "playlist" as const, id: hasList[1] };
+    }
+
+    const hasVideo =
+      /(?:watch\?v=|shorts\/|embed\/|\.be\/)([^&?/]+)/i.exec(trimmed);
+    if (hasVideo && hasVideo[1]) {
+      return { type: "video" as const, id: hasVideo[1] };
+    }
+
+    return null;
+  }
+}
+
+

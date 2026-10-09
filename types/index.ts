@@ -44,6 +44,7 @@ export interface PlaylistDocument {
   videoCount: number;
   videos: PlaylistVideoItem[];
   status?: PlaylistStatus;
+  isCustom?: boolean;
   addedAt: Date;
   updatedAt: Date;
 }
@@ -76,6 +77,7 @@ export interface PlaylistFormatted {
   channelTitle: string;
   videoCount: number;
   status: PlaylistStatus;
+  isCustom?: boolean;
   addedAt: Date;
   completedCount?: number;
   progressPercent?: number;

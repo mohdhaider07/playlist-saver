@@ -29,6 +29,11 @@ All project rules are organized into dedicated documentation files located in th
 - **Description**: Establishes the editorial design system, including the Stone & Nobel Gold color palette (`#F9F8F4`, `#292524`, `#C5A059`), typography hierarchy (Serif `Playfair_Display` for headings/branding, Sans `Inter` for body/controls, Arabic fallbacks for RTL), accent classes (`.drop-cap`, `.gold-callout`, `.gold-divider`, `.glass-nav`, `.glass-panel`), pill-shaped buttons, and Framer Motion micro-interactions.
 - **Rule**: Never use generic bright/neon colors or default styles. All UI components must align with the premium academic/editorial aesthetic.
 
+### 4. Features & Capabilities
+- **Path**: [`rules/feature.md`](./rules/feature.md)
+- **Description**: Summarizes core platform capabilities (YouTube playlist ingestion, real-time progress tracking, playlist status lifecycle, and smart filtering).
+- **Rule**: All new additions must align with the existing feature workflows and state models.
+
 ---
 
 ## Mandatory Verification Command
