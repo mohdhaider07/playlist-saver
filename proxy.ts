@@ -6,14 +6,10 @@ import {
   localeCookieName,
   stripLocale,
 } from "@/lib/i18n/config";
-import { initializeYoutubePlaylistCron } from "@/lib/cron-scheduler";
 
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   "your_very_long_random_secret_here_at_least_64_chars";
-
-// Initialize cron job on server startup
-initializeYoutubePlaylistCron();
 
 const protectedRoutes = ["/dashboard", "/playlist", "/profile"];
 const authRoutes = ["/login", "/register"];
@@ -47,7 +43,7 @@ function getRequestCountry(request: NextRequest) {
   );
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const pathnameLocale = getPathLocale(pathname);
 
