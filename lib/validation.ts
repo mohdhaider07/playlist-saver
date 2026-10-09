@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { dictionaries, Dictionary } from "@/lib/i18n/dictionaries";
+import { PlaylistStatus } from "@/types";
 
 type ValidationMessages = Dictionary["validation"];
 
@@ -47,3 +48,12 @@ export const registerSchema = createRegisterSchema(dictionaries.en.validation);
 
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
+
+export const updatePlaylistStatusSchema = z.object({
+  status: z.enum([PlaylistStatus.IN_PROGRESS, PlaylistStatus.COMPLETED], {
+    message: "Invalid playlist status value",
+  }),
+});
+
+export type UpdatePlaylistStatusInput = z.infer<typeof updatePlaylistStatusSchema>;
+

@@ -21,6 +21,17 @@ export interface PlaylistVideoItem {
   channelTitle: string;
 }
 
+export enum PlaylistStatus {
+  IN_PROGRESS = "in_progress",
+  COMPLETED = "completed",
+}
+
+export enum PlaylistStatusFilter {
+  IN_PROGRESS = PlaylistStatus.IN_PROGRESS,
+  COMPLETED = PlaylistStatus.COMPLETED,
+  ALL = "all",
+}
+
 export interface PlaylistDocument {
   id?: string;
   _id: string;
@@ -32,6 +43,7 @@ export interface PlaylistDocument {
   channelTitle: string;
   videoCount: number;
   videos: PlaylistVideoItem[];
+  status?: PlaylistStatus;
   addedAt: Date;
   updatedAt: Date;
 }
@@ -63,6 +75,7 @@ export interface PlaylistFormatted {
   thumbnailUrl: string;
   channelTitle: string;
   videoCount: number;
+  status: PlaylistStatus;
   addedAt: Date;
   completedCount?: number;
   progressPercent?: number;

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPlaylistsCollection, getProgressCollection } from "@/lib/db";
 import { getAuthUser } from "@/lib/auth-helpers";
+import { PlaylistStatus } from "@/types";
+import { DEFAULT_PLAYLIST_STATUS } from "@/lib/constants";
 import {
   getPlaylistMetadata,
   getPlaylistItems,
@@ -64,6 +66,7 @@ export async function GET(request: NextRequest) {
         thumbnailUrl: p.thumbnailUrl,
         channelTitle: p.channelTitle,
         videoCount: p.videoCount,
+        status: (p.status as PlaylistStatus) || PlaylistStatus.IN_PROGRESS,
         addedAt: p.addedAt,
         completedCount,
         progressPercent,
@@ -277,6 +280,7 @@ export async function POST(request: NextRequest) {
       channelTitle: metadata.channelTitle,
       videoCount: videos.length,
       videos,
+      status: DEFAULT_PLAYLIST_STATUS,
       addedAt: new Date(),
       updatedAt: new Date(),
     };
@@ -291,6 +295,7 @@ export async function POST(request: NextRequest) {
       thumbnailUrl: metadata.thumbnailUrl,
       channelTitle: metadata.channelTitle,
       videoCount: videos.length,
+      status: newDoc.status,
       addedAt: newDoc.addedAt,
       completedCount: 0,
       progressPercent: 0,

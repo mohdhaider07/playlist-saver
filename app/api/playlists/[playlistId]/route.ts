@@ -3,7 +3,8 @@ import { ObjectId } from "mongodb";
 import { getPlaylistsCollection, getProgressCollection } from "@/lib/db";
 import { getAuthUser } from "@/lib/auth-helpers";
 import { getYouTubeThumbnailUrl } from "@/lib/youtube";
-import { PlaylistVideoItem } from "@/types";
+import { PlaylistVideoItem, PlaylistStatus } from "@/types";
+import { updatePlaylistStatusSchema } from "@/lib/validation";
 
 // GET /api/playlists/[playlistId] — get single playlist with progress
 export async function GET(
@@ -77,6 +78,7 @@ export async function GET(
       thumbnailUrl: playlist.thumbnailUrl,
       channelTitle: playlist.channelTitle,
       videoCount: playlist.videoCount,
+      status: (playlist.status as PlaylistStatus) || PlaylistStatus.IN_PROGRESS,
       videos,
       addedAt: playlist.addedAt,
     };
@@ -140,6 +142,75 @@ export async function DELETE(
     return NextResponse.json({ message: "Playlist deleted." });
   } catch (error) {
     console.error("[DELETE /api/playlists/:id]", error);
+    return NextResponse.json(
+      { error: "An unexpected error occurred." },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH /api/playlists/[playlistId] — update playlist status (in_progress / completed)
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ playlistId: string }> }
+) {
+  try {
+    const user = getAuthUser(request);
+    if (!user) {
+      return NextResponse.json(
+        { error: "Not authenticated" },
+        { status: 401 }
+      );
+    }
+
+    const { playlistId } = await params;
+
+    if (!ObjectId.isValid(playlistId)) {
+      return NextResponse.json(
+        { error: "Invalid playlist ID format" },
+        { status: 400 }
+      );
+    }
+
+    const body = await request.json().catch(() => null);
+    const parsed = updatePlaylistStatusSchema.safeParse(body);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || "Invalid input data" },
+        { status: 400 }
+      );
+    }
+
+    const playlistsCol = await getPlaylistsCollection();
+    const playlist = await playlistsCol.findOne({
+      _id: new ObjectId(playlistId),
+    });
+
+    if (!playlist) {
+      return NextResponse.json(
+        { error: "Playlist not found" },
+        { status: 404 }
+      );
+    }
+
+    if (playlist.userId !== user.id) {
+      return NextResponse.json(
+        { error: "Playlist belongs to another user" },
+        { status: 403 }
+      );
+    }
+
+    await playlistsCol.updateOne(
+      { _id: new ObjectId(playlistId) },
+      { $set: { status: parsed.data.status, updatedAt: new Date() } }
+    );
+
+    return NextResponse.json({
+      message: "Playlist status updated.",
+      status: parsed.data.status,
+    });
+  } catch (error) {
+    console.error("[PATCH /api/playlists/:playlistId]", error);
     return NextResponse.json(
       { error: "An unexpected error occurred." },
       { status: 500 }

@@ -6,7 +6,8 @@ import { PlaylistCard } from "@/components/dashboard/playlist-card";
 import { AddPlaylistModal } from "@/components/dashboard/add-playlist-modal";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { PlaylistFormatted } from "@/types";
+import { PlaylistFormatted, PlaylistStatus, PlaylistStatusFilter } from "@/types";
+import { DEFAULT_PLAYLIST_STATUS, DEFAULT_PLAYLIST_STATUS_FILTER } from "@/lib/constants";
 import { useI18n } from "@/components/i18n-provider";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -27,6 +28,9 @@ export default function DashboardPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const searchQuery = "";
   const [channelFilter, setChannelFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState<PlaylistStatusFilter>(
+    DEFAULT_PLAYLIST_STATUS_FILTER
+  );
 
   const loadPlaylists = async () => {
     try {
@@ -53,9 +57,27 @@ export default function DashboardPage() {
     }
   };
 
+  const handleToggleStatus = async (id: string, newStatus: PlaylistStatus) => {
+    // Optimistic UI update
+    setPlaylists((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, status: newStatus } : p))
+    );
+    try {
+      await apiFetch(`/api/playlists/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status: newStatus }),
+      });
+    } catch (e) {
+      console.error("Failed to update status:", e);
+      // Revert if request failed
+      await loadPlaylists();
+    }
+  };
+
   const handlePlaylistAdded = async (newPlaylist: PlaylistFormatted) => {
-    const normalizedPlaylist = {
+    const normalizedPlaylist: PlaylistFormatted = {
       ...newPlaylist,
+      status: newPlaylist.status || DEFAULT_PLAYLIST_STATUS,
       completedCount: newPlaylist.completedCount ?? 0,
       progressPercent: newPlaylist.progressPercent ?? 0,
     };
@@ -86,7 +108,15 @@ export default function DashboardPage() {
       p.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesChannel =
       !channelFilter || p.channelTitle === channelFilter;
-    return matchesSearch && matchesChannel;
+    const currentStatus = p.status || PlaylistStatus.IN_PROGRESS;
+    const matchesStatus =
+      statusFilter === PlaylistStatusFilter.ALL ||
+      (statusFilter === PlaylistStatusFilter.IN_PROGRESS &&
+        currentStatus === PlaylistStatus.IN_PROGRESS) ||
+      (statusFilter === PlaylistStatusFilter.COMPLETED &&
+        currentStatus === PlaylistStatus.COMPLETED);
+
+    return matchesSearch && matchesChannel && matchesStatus;
   });
 
   const containerVariants = {
@@ -183,13 +213,36 @@ export default function DashboardPage() {
           transition={{ duration: 0.4, delay: 0.2 }}
           className="flex flex-col sm:flex-row gap-3 items-center justify-between mb-6"
         >
-          <div className="flex gap-2 w-full sm:w-auto justify-end">
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
+            <div className="relative w-full sm:w-44">
+              <CheckCircle2 className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5 pointer-events-none" />
+              <select
+                value={statusFilter}
+                onChange={(e) =>
+                  setStatusFilter(e.target.value as PlaylistStatusFilter)
+                }
+                className="w-full h-10 ps-8 pe-3 rounded-xl bg-card border border-border text-xs font-semibold text-foreground focus:outline-none focus:border-primary/60 cursor-pointer appearance-none"
+                aria-label="Filter playlists by status"
+              >
+                <option value={PlaylistStatusFilter.IN_PROGRESS}>
+                  {t.statusFilter.inProgress}
+                </option>
+                <option value={PlaylistStatusFilter.COMPLETED}>
+                  {t.statusFilter.completed}
+                </option>
+                <option value={PlaylistStatusFilter.ALL}>
+                  {t.statusFilter.all}
+                </option>
+              </select>
+            </div>
+
             <div className="relative w-full sm:w-48">
-              <Filter className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5" />
+              <Filter className="absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground size-3.5 pointer-events-none" />
               <select
                 value={channelFilter}
                 onChange={(e) => setChannelFilter(e.target.value)}
                 className="w-full h-10 ps-8 pe-3 rounded-xl bg-card border border-border text-xs font-semibold text-foreground focus:outline-none focus:border-primary/60 cursor-pointer appearance-none"
+                aria-label="Filter playlists by channel"
               >
                 <option value="">{t.allChannels}</option>
                 {channels.map((chan) => (
@@ -254,7 +307,11 @@ export default function DashboardPage() {
                 layout
                 exit={{ opacity: 0, scale: 0.9 }}
               >
-                <PlaylistCard playlist={p} onDelete={handleDelete} />
+                <PlaylistCard
+                  playlist={p}
+                  onDelete={handleDelete}
+                  onToggleStatus={handleToggleStatus}
+                />
               </motion.div>
             ))}
           </AnimatePresence>

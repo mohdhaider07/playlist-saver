@@ -283,6 +283,11 @@ const en = defineDictionary({
       progressAvg: "Progress Avg",
     },
     allChannels: "All Channels",
+    statusFilter: {
+      all: "All Playlists",
+      inProgress: "In Progress",
+      completed: "Completed",
+    },
     emptyTitle: "No playlists added yet",
     emptyDescription:
       "Connect and save your first YouTube playlist URL to begin tracking your watch progress and learning steps.",
@@ -311,6 +316,10 @@ const en = defineDictionary({
     watchProgress: "Watch Progress",
     added: "Added",
     delete: "Delete",
+    markCompleted: "Mark as completed",
+    markInProgress: "Mark as in progress",
+    statusCompleted: "Completed",
+    statusInProgress: "In Progress",
   },
   profile: {
     backToDashboard: "Back to Dashboard",
@@ -698,6 +707,11 @@ const ar: Dictionary = {
       progressAvg: "متوسط التقدم",
     },
     allChannels: "كل القنوات",
+    statusFilter: {
+      all: "جميع القوائم",
+      inProgress: "قيد المتابعة",
+      completed: "مكتملة",
+    },
     emptyTitle: "لم تتم إضافة أي قائمة بعد",
     emptyDescription:
       "اربط واحفظ أول رابط لقائمة تشغيل يوتيوب لتبدأ تتبع تقدم المشاهدة وخطوات التعلم.",
@@ -723,6 +737,10 @@ const ar: Dictionary = {
     watchProgress: "تقدم المشاهدة",
     added: "أضيف في",
     delete: "حذف",
+    markCompleted: "تحديد كمكتملة",
+    markInProgress: "تحديد كقيد المتابعة",
+    statusCompleted: "مكتملة",
+    statusInProgress: "قيد المتابعة",
   },
   profile: {
     backToDashboard: "العودة إلى لوحة التحكم",

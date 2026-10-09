@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { PlaylistFormatted } from "@/types";
-import { Trash2, Film, MoreVertical, Loader2 } from "lucide-react";
+import { PlaylistFormatted, PlaylistStatus } from "@/types";
+import { Trash2, Film, MoreVertical, Loader2, CheckCircle2, RotateCcw } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 import { useLocalePath } from "@/hooks/use-locale-path";
 import { motion, AnimatePresence } from "motion/react";
@@ -12,18 +12,21 @@ import { motion, AnimatePresence } from "motion/react";
 interface PlaylistCardProps {
   playlist: PlaylistFormatted;
   onDelete: (id: string) => void | Promise<void>;
+  onToggleStatus?: (id: string, newStatus: PlaylistStatus) => void | Promise<void>;
 }
 
-export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
+export function PlaylistCard({ playlist, onDelete, onToggleStatus }: PlaylistCardProps) {
   const { dictionary, locale } = useI18n();
   const t = dictionary.playlistCard;
   const to = useLocalePath();
   const completedCount = playlist.completedCount || 0;
   const progressPercent = playlist.progressPercent || 0;
   const thumbnailUrl = playlist.thumbnailUrl?.trim();
+  const isCompleted = playlist.status === PlaylistStatus.COMPLETED;
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -91,11 +94,52 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -5 }}
               transition={{ duration: 0.15 }}
-              className="absolute right-0 mt-1.5 w-36 rounded-lg bg-card border border-border shadow-lg py-1 z-30 overflow-hidden"
+              className="absolute right-0 mt-1.5 w-44 rounded-lg bg-card border border-border shadow-lg py-1 z-30 overflow-hidden"
             >
+              {onToggleStatus && (
+                <button
+                  type="button"
+                  disabled={isUpdatingStatus || isDeleting}
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsUpdatingStatus(true);
+                    try {
+                      const nextStatus = isCompleted
+                        ? PlaylistStatus.IN_PROGRESS
+                        : PlaylistStatus.COMPLETED;
+                      await onToggleStatus(playlist.id, nextStatus);
+                      setDropdownOpen(false);
+                    } catch (err) {
+                      console.error(err);
+                    } finally {
+                      setIsUpdatingStatus(false);
+                    }
+                  }}
+                  className="flex items-center gap-2 w-full px-3 py-2 text-xs font-semibold text-foreground hover:bg-secondary/70 transition-colors text-left cursor-pointer disabled:opacity-50"
+                >
+                  {isUpdatingStatus ? (
+                    <Loader2 className="size-3.5 animate-spin text-muted-foreground" />
+                  ) : isCompleted ? (
+                    <RotateCcw className="size-3.5 text-primary" />
+                  ) : (
+                    <CheckCircle2 className="size-3.5 text-emerald-500" />
+                  )}
+                  <span>
+                    {isUpdatingStatus
+                      ? dictionary.common.loading
+                      : isCompleted
+                      ? t.markInProgress
+                      : t.markCompleted}
+                  </span>
+                </button>
+              )}
+
+              {onToggleStatus && <div className="my-1 border-t border-border/60" />}
+
               <button
                 type="button"
-                disabled={isDeleting}
+                disabled={isDeleting || isUpdatingStatus}
                 onClick={async (e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -124,6 +168,14 @@ export function PlaylistCard({ playlist, onDelete }: PlaylistCardProps) {
       </div>
 
       <div className="p-5 flex-1 flex flex-col">
+        {isCompleted && (
+          <div className="mb-2.5">
+            <span className="inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
+              <CheckCircle2 className="size-3" /> {t.statusCompleted}
+            </span>
+          </div>
+        )}
+
         <Link
           href={to(`/playlist/${playlist.id}`)}
           className="font-serif text-xl text-foreground line-clamp-2 hover:text-primary transition-colors mb-2 font-medium leading-snug"
