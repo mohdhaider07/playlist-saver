@@ -456,18 +456,13 @@ export default function PlaylistPage({
                 </Button>
               )}
             </div>
-            <div className="flex items-center justify-between mt-1">
+            <div className="mt-1">
               <p className="text-[9px] font-bold text-muted-foreground/80 tracking-widest uppercase">
                 {data.playlist.isCustom
                   ? t.customPlaylist
                   : data.playlist.channelTitle}{" "}
                 • {data.playlist.videos.length} {dictionary.common.videos}
               </p>
-              {data.playlist.isCustom && (
-                <span className="text-[8px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.5 rounded-full border border-primary/20">
-                  Custom
-                </span>
-              )}
             </div>
           </div>
 
