@@ -79,19 +79,32 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  let response: NextResponse;
+
   if (isProtectedPath(pathWithoutLocale) && !isAuthenticated) {
     const url = request.nextUrl.clone();
     url.pathname = `/${pathnameLocale}/login`;
-    return withLocaleCookie(NextResponse.redirect(url), pathnameLocale);
-  }
-
-  if (isAuthPath(pathWithoutLocale) && isAuthenticated) {
+    response = NextResponse.redirect(url);
+  } else if (isAuthPath(pathWithoutLocale) && isAuthenticated) {
     const url = request.nextUrl.clone();
     url.pathname = `/${pathnameLocale}/dashboard`;
-    return withLocaleCookie(NextResponse.redirect(url), pathnameLocale);
+    response = NextResponse.redirect(url);
+  } else {
+    response = NextResponse.next();
   }
 
-  return withLocaleCookie(NextResponse.next(), pathnameLocale);
+  // If a token cookie was present but is expired/invalid, clear it from the client
+  if (request.cookies.has("token") && !isAuthenticated) {
+    response.cookies.set("token", "", {
+      maxAge: 0,
+      expires: new Date(0),
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+    });
+  }
+
+  return withLocaleCookie(response, pathnameLocale);
 }
 
 export const config = {

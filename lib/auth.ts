@@ -17,6 +17,26 @@ export async function comparePassword(
   return bcrypt.compare(password, hash);
 }
 
+export function getTokenMaxAge(): number {
+  const expiresIn = process.env.JWT_EXPIRES_IN || "7d";
+  const match = expiresIn.match(/^(\d+)([smhd])$/);
+  if (!match) return 60 * 60 * 24 * 7;
+  const num = parseInt(match[1], 10);
+  const unit = match[2];
+  switch (unit) {
+    case "s":
+      return num;
+    case "m":
+      return num * 60;
+    case "h":
+      return num * 3600;
+    case "d":
+      return num * 86400;
+    default:
+      return 60 * 60 * 24 * 7;
+  }
+}
+
 export function generateToken(payload: object): string {
   const options: jwt.SignOptions = {
     expiresIn: JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],

@@ -44,12 +44,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuth = async () => {
     try {
       const data = await apiFetch("/api/auth/me");
-      setUser(data.user);
-      setIsAuthenticated(true);
+      if (data?.user) {
+        setUser(data.user);
+        setIsAuthenticated(true);
+      } else {
+        localStorage.removeItem("token");
+        setIsAuthenticated(false);
+        setUser(null);
+        apiFetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+      }
     } catch {
       localStorage.removeItem("token");
       setIsAuthenticated(false);
       setUser(null);
+      apiFetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     }
   };
 
@@ -61,6 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.removeItem("token");
       setIsAuthenticated(false);
       setUser(null);
+      apiFetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     };
 
     window.addEventListener("unauthorized", handleUnauthorized);
