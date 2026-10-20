@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
   const lang = searchParams.get("lang") === "ar" ? "ar" : "en";
 
   const appUrl = getAppUrl(request);
-  const redirectUri = `${appUrl}/api/auth/google/callback`;
+  const redirectUri = `${appUrl}/api/auth/callback/google`;
 
   const nonce = crypto.randomBytes(16).toString("hex");
   const statePayload = JSON.stringify({ nonce, lang });

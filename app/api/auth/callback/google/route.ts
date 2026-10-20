@@ -4,7 +4,7 @@ import { generateToken, getTokenMaxAge } from "@/lib/auth";
 
 function getAppUrl(request: NextRequest): string {
   if (process.env.NEXT_PUBLIC_APP_URL) {
-    return process.env.NEXT_PUBLIC_APP_URL
+    return process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
   }
   const host =
     request.headers.get("x-forwarded-host") ||
@@ -35,7 +35,7 @@ interface GoogleUserInfo {
 
 export async function GET(request: NextRequest) {
   const appUrl = getAppUrl(request);
-  const redirectUri = `${appUrl}/api/auth/google/callback`;
+  const redirectUri = `${appUrl}${request.nextUrl.pathname}`;
 
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
@@ -137,8 +137,6 @@ export async function GET(request: NextRequest) {
     let userId: string;
 
     if (existingUser) {
-      // Scenario 1: User already registered (manually or via Google).
-      // Automatically verify email and link googleId.
       userId = existingUser._id.toString();
 
       await users.updateOne(
@@ -156,7 +154,6 @@ export async function GET(request: NextRequest) {
         },
       );
     } else {
-      // Create new user with verified email
       const newUser = {
         name: profile.name || "Learner",
         email: emailLower,
@@ -204,7 +201,7 @@ export async function GET(request: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("[GET /api/auth/google/callback]", error);
+    console.error("[GET /api/auth/callback/google]", error);
     return errorRedirect("server_error");
   }
 }
