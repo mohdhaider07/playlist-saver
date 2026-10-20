@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
 const JWT_SECRET =
   process.env.JWT_SECRET ||
@@ -55,3 +56,25 @@ export function verifyToken(token: string): jwt.JwtPayload | null {
 export function generateOtp(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
+
+export function setAuthCookie(response: NextResponse, token: string): void {
+  response.cookies.set("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: getTokenMaxAge(),
+  });
+}
+
+export function clearAuthCookie(response: NextResponse): void {
+  response.cookies.set("token", "", {
+    maxAge: 0,
+    expires: new Date(0),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  });
+}
+

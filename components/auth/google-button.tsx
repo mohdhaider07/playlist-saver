@@ -7,9 +7,14 @@ import { Button } from "@/components/ui/button";
 interface GoogleButtonProps {
   disabled?: boolean;
   className?: string;
+  label?: string;
 }
 
-export function GoogleButton({ disabled, className = "" }: GoogleButtonProps) {
+export function GoogleButton({
+  disabled,
+  className = "",
+  label,
+}: GoogleButtonProps) {
   const { dictionary, locale } = useI18n();
   const [loading, setLoading] = useState(false);
 
@@ -54,7 +59,7 @@ export function GoogleButton({ disabled, className = "" }: GoogleButtonProps) {
             />
           </svg>
           <span className="text-xs">
-            {dictionary.auth.loginForm.continueWithGoogle}
+            {label || dictionary.auth.loginForm.continueWithGoogle}
           </span>
         </>
       )}

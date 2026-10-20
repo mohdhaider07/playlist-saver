@@ -103,7 +103,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         </motion.div>
       )}
 
-      <GoogleButton disabled={loading} />
+      <GoogleButton disabled={loading} label={t.continueWithGoogle} />
 
       <div className="flex items-center gap-3">
         <div className="h-px flex-1 bg-border" />

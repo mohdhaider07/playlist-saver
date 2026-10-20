@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "@/lib/db";
-import { generateToken, getTokenMaxAge } from "@/lib/auth";
+import { generateToken, setAuthCookie } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -65,13 +65,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
 
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: getTokenMaxAge(),
-    });
+    setAuthCookie(response, token);
 
     return response;
   } catch (error) {

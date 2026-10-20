@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUsersCollection } from "@/lib/db";
-import { comparePassword, generateToken, getTokenMaxAge } from "@/lib/auth";
+import { comparePassword, generateToken, setAuthCookie } from "@/lib/auth";
 import { loginSchema } from "@/lib/validation";
 
 const GUEST_LOGIN_EMAIL = "haiderahmed12786@gmail.com";
@@ -26,13 +26,7 @@ function createLoginResponse(user: LoginUser, message: string) {
     { status: 200 },
   );
 
-  response.cookies.set("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: getTokenMaxAge(),
-  });
+  setAuthCookie(response, token);
 
   return response;
 }
