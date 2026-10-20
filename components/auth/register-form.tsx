@@ -9,6 +9,7 @@ import { motion } from "motion/react";
 import { createRegisterSchema } from "@/lib/validation";
 import { useI18n } from "@/components/i18n-provider";
 import { Eye, EyeOff } from "lucide-react";
+import { GoogleButton } from "./google-button";
 
 interface RegisterFormProps {
   onSuccess: (email: string) => void;
@@ -101,6 +102,16 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
           </Alert>
         </motion.div>
       )}
+
+      <GoogleButton disabled={loading} />
+
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          {t.or}
+        </span>
+        <div className="h-px flex-1 bg-border" />
+      </div>
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">

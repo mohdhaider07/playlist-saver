@@ -2,7 +2,10 @@ export interface UserDocument {
   _id: string;
   name?: string;
   email: string;
-  passwordHash: string;
+  passwordHash?: string;
+  googleId?: string;
+  avatar?: string;
+  authProvider?: "credentials" | "google";
   isEmailVerified: boolean;
   otpCode: string | null;
   otpExpiresAt: Date | null;

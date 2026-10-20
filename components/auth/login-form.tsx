@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { createLoginSchema } from "@/lib/validation";
 import { useI18n } from "@/components/i18n-provider";
 import { useLocalePath } from "@/hooks/use-locale-path";
 import { Eye, EyeOff } from "lucide-react";
+import { GoogleButton } from "./google-button";
 
 export function LoginForm() {
   const { dictionary } = useI18n();
@@ -22,10 +23,16 @@ export function LoginForm() {
     () => createLoginSchema(dictionary.validation),
     [dictionary.validation],
   );
+  const searchParams = useSearchParams();
+  const oauthError = searchParams.get("error");
+  const initialOAuthError =
+    oauthError && oauthError !== "cancelled"
+      ? dictionary.api.googleAuthFailed
+      : "";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(initialOAuthError);
   const [loading, setLoading] = useState(false);
   const [guestLoading, setGuestLoading] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -105,6 +112,16 @@ export function LoginForm() {
           </Alert>
         </motion.div>
       )}
+
+      <GoogleButton disabled={loading || guestLoading} />
+
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          {t.or}
+        </span>
+        <div className="h-px flex-1 bg-border" />
+      </div>
 
       <div className="space-y-1.5">
         <label className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase pl-1">

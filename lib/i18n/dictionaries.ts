@@ -189,6 +189,8 @@ const en = defineDictionary({
       signIn: "Sign In",
       signingIn: "Signing in...",
       or: "Or",
+      continueWithGoogle: "Continue with Google",
+      googleLoggingIn: "Connecting to Google...",
       guestLogin: "Guest Login",
       guestLoggingIn: "Logging in as guest...",
       fallbackError: "Login failed",
@@ -210,6 +212,8 @@ const en = defineDictionary({
       fullNamePlaceholder: "John Doe",
       creatingAccount: "Creating Account...",
       signUp: "Sign Up",
+      continueWithGoogle: "Continue with Google",
+      or: "Or",
       fallbackError: "Registration failed",
     },
     otp: {
@@ -443,6 +447,10 @@ const en = defineDictionary({
     progressSaved: "Progress saved.",
     validPlaylistIdQueryRequired: "Valid playlistId query string is required.",
     unknownError: "Unknown error",
+    googleAccountNoPassword:
+      "This account was registered using Google. Please log in with Google or reset your password.",
+    googleAuthFailed: "Google authentication failed. Please try again.",
+    googleAuthMissingConfig: "Google authentication is not properly configured.",
   },
 });
 
@@ -631,6 +639,8 @@ const ar: Dictionary = {
       signIn: "تسجيل الدخول",
       signingIn: "جار تسجيل الدخول...",
       or: "أو",
+      continueWithGoogle: "المتابعة باستخدام Google",
+      googleLoggingIn: "جار الاتصال بـ Google...",
       guestLogin: "دخول كضيف",
       guestLoggingIn: "جار الدخول كضيف...",
       fallbackError: "فشل تسجيل الدخول",
@@ -652,6 +662,8 @@ const ar: Dictionary = {
       fullNamePlaceholder: "محمد أحمد",
       creatingAccount: "جار إنشاء الحساب...",
       signUp: "إنشاء حساب",
+      continueWithGoogle: "المتابعة باستخدام Google",
+      or: "أو",
       fallbackError: "فشل إنشاء الحساب",
     },
     otp: {
@@ -883,6 +895,10 @@ const ar: Dictionary = {
     validPlaylistIdQueryRequired:
       "يجب توفير معرف قائمة صحيح في رابط الاستعلام.",
     unknownError: "خطأ غير معروف",
+    googleAccountNoPassword:
+      "تم إنشاء هذا الحساب باستخدام Google. يرجى تسجيل الدخول باستخدام Google أو إعادة تعيين كلمة المرور.",
+    googleAuthFailed: "فشل تسجيل الدخول باستخدام Google. يرجى المحاولة مرة أخرى.",
+    googleAuthMissingConfig: "إعدادات تسجيل الدخول باستخدام Google غير مكتملة.",
   },
 };
 

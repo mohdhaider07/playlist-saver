@@ -97,6 +97,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!user.passwordHash) {
+      return NextResponse.json(
+        {
+          error:
+            "This account was registered using Google. Please log in with Google or reset your password.",
+        },
+        { status: 400 },
+      );
+    }
+
     const isMatch = await comparePassword(password, user.passwordHash);
     if (!isMatch) {
       return NextResponse.json(

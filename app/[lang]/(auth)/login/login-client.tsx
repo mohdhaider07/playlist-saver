@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { LoginForm } from "@/components/auth/login-form";
 import { motion } from "motion/react";
@@ -51,7 +52,9 @@ export default function LoginPage() {
         className="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10"
       >
         <div className="glass-panel py-10 px-4 shadow-lg sm:rounded-2xl sm:px-10 border border-border/80 relative">
-          <LoginForm />
+          <Suspense fallback={<div className="h-48 flex items-center justify-center"><div className="size-6 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+            <LoginForm />
+          </Suspense>
 
           <div className="mt-8 text-center text-sm text-muted-foreground">
             {t.noAccount}{" "}
