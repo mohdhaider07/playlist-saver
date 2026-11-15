@@ -14,6 +14,7 @@ import { useLocalePath } from "@/hooks/use-locale-path";
 import { BackToDashboardButton } from "@/components/ui/back-to-dashboard-button";
 import { AddVideoModal } from "@/components/player/add-video-modal";
 import { RenamePlaylistModal } from "@/components/player/rename-playlist-modal";
+import { RemoveVideoDialog } from "@/components/player/remove-video-dialog";
 
 interface PlaylistData {
   playlist: {
@@ -53,6 +54,9 @@ export default function PlaylistPage({
   const [manualCompleteError, setManualCompleteError] = useState("");
   const [addVideoModalOpen, setAddVideoModalOpen] = useState(false);
   const [renameModalOpen, setRenameModalOpen] = useState(false);
+  const [videoToRemove, setVideoToRemove] = useState<PlaylistVideoItem | null>(
+    null,
+  );
 
   const { saveProgress } = useProgress(playlistId || "");
 
@@ -114,6 +118,47 @@ export default function PlaylistPage({
           ...prev.playlist,
           title: newTitle,
         },
+      };
+    });
+  };
+
+  const handleRemoveVideoSuccess = (videoId: string) => {
+    if (videoId === activeVideoId) {
+      const currentVideos = data?.playlist.videos || [];
+      const removedIndex = currentVideos.findIndex(
+        (v) => v.youtubeVideoId === videoId,
+      );
+      const remaining = currentVideos.filter(
+        (v) => v.youtubeVideoId !== videoId,
+      );
+      const fallback = remaining[removedIndex] ?? remaining[removedIndex - 1];
+
+      // Drop tracked progress so it is not re-saved for the removed video
+      currentProgressRef.current = { watched: 0, duration: 0 };
+      router.replace(
+        to(
+          fallback
+            ? `/playlist/${playlistId}?v=${fallback.youtubeVideoId}`
+            : `/playlist/${playlistId}`,
+        ),
+      );
+    }
+
+    setData((prev) => {
+      if (!prev) return prev;
+      const remainingVideos = prev.playlist.videos.filter(
+        (v) => v.youtubeVideoId !== videoId,
+      );
+      const progress = { ...prev.progress };
+      delete progress[videoId];
+      return {
+        ...prev,
+        playlist: {
+          ...prev.playlist,
+          videoCount: remainingVideos.length,
+          videos: remainingVideos,
+        },
+        progress,
       };
     });
   };
@@ -471,6 +516,14 @@ export default function PlaylistPage({
             activeVideoId={activeVideoId || ""}
             progressMap={data.progress}
             onSelectVideo={handleSelectVideo}
+            onRemoveVideo={
+              data.playlist.isCustom
+                ? (videoId) =>
+                    setVideoToRemove(
+                      videos.find((v) => v.youtubeVideoId === videoId) ?? null,
+                    )
+                : undefined
+            }
           />
         </div>
       </div>
@@ -489,6 +542,14 @@ export default function PlaylistPage({
             playlistId={playlistId}
             currentTitle={data.playlist.title}
             onSuccess={handleRenameSuccess}
+          />
+          <RemoveVideoDialog
+            video={videoToRemove}
+            onOpenChange={(open) => {
+              if (!open) setVideoToRemove(null);
+            }}
+            playlistId={playlistId}
+            onSuccess={handleRemoveVideoSuccess}
           />
         </>
       )}

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { PlaylistVideoItem } from "@/types";
-import { Play, Check, Film } from "lucide-react";
+import { Play, Check, Film, Trash2 } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
 
 interface VideoListItemProps {
@@ -13,6 +13,7 @@ interface VideoListItemProps {
   progressPct: number;
   isCompleted: boolean;
   onClick: () => void;
+  onRemove?: () => void;
 }
 
 function formatDuration(seconds: number) {
@@ -32,6 +33,7 @@ export function VideoListItem({
   progressPct,
   isCompleted,
   onClick,
+  onRemove,
 }: VideoListItemProps) {
   const { dictionary, direction } = useI18n();
   const isRtl = direction === "rtl";
@@ -133,9 +135,26 @@ export function VideoListItem({
             {video.channelTitle}
           </span>
           {isCompleted && (
-            <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-0.5 rounded flex items-center gap-0.5 ml-auto shrink-0 uppercase tracking-widest">
+            <span className="text-[8px] font-bold text-emerald-600 dark:text-emerald-500 bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-0.5 rounded flex items-center gap-0.5 ms-auto shrink-0 uppercase tracking-widest">
               <Check className="size-2.5 stroke-[3]" /> {dictionary.common.done}
             </span>
+          )}
+          {onRemove && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove();
+              }}
+              className={cn(
+                "p-1 -my-1 rounded-md text-muted-foreground/70 hover:text-destructive hover:bg-destructive/10 transition-all duration-150 cursor-pointer shrink-0 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 pointer-fine:focus-visible:opacity-100",
+                !isCompleted && "ms-auto"
+              )}
+              title={dictionary.playlistPage.removeVideo}
+              aria-label={dictionary.playlistPage.removeVideo}
+            >
+              <Trash2 className="size-3.5" />
+            </button>
           )}
         </div>
       </div>

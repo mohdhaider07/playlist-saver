@@ -12,6 +12,7 @@ interface PlaylistSidebarProps {
   activeVideoId: string;
   progressMap: ProgressMap;
   onSelectVideo: (videoId: string) => void;
+  onRemoveVideo?: (videoId: string) => void;
 }
 
 export function PlaylistSidebar({
@@ -19,6 +20,7 @@ export function PlaylistSidebar({
   activeVideoId,
   progressMap,
   onSelectVideo,
+  onRemoveVideo,
 }: PlaylistSidebarProps) {
   const { dictionary } = useI18n();
   const t = dictionary.playlistSidebar;
@@ -104,6 +106,11 @@ export function PlaylistSidebar({
                 progressPct={progressPct}
                 isCompleted={isCompleted}
                 onClick={() => onSelectVideo(video.youtubeVideoId)}
+                onRemove={
+                  onRemoveVideo
+                    ? () => onRemoveVideo(video.youtubeVideoId)
+                    : undefined
+                }
               />
             );
           })

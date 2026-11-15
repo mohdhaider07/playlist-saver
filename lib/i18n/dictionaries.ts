@@ -379,6 +379,13 @@ const en = defineDictionary({
     save: "Save",
     cancel: "Cancel",
     customPlaylist: "Custom Course",
+    removeVideo: "Remove from playlist",
+    removeVideoTitle: "Remove Video?",
+    removeVideoDescription:
+      "This video and its watch progress will be removed from your playlist. You can add it again later.",
+    removeVideoFailed: "Could not remove this video. Try again.",
+    removing: "Removing...",
+    remove: "Remove",
   },
   playlistSidebar: {
     overallProgress: "Overall Progress",
@@ -451,6 +458,9 @@ const en = defineDictionary({
       "This account was registered using Google. Please log in with Google or reset your password.",
     googleAuthFailed: "Google authentication failed. Please try again.",
     googleAuthMissingConfig: "Google authentication is not properly configured.",
+    videoRemoved: "Video removed successfully.",
+    videoNotInPlaylist: "Video not found in playlist.",
+    removeFromCustomOnly: "Videos can only be removed from custom playlists.",
   },
 });
 
@@ -825,6 +835,13 @@ const ar: Dictionary = {
     save: "حفظ",
     cancel: "إلغاء",
     customPlaylist: "قائمة مخصصة",
+    removeVideo: "إزالة من القائمة",
+    removeVideoTitle: "إزالة الفيديو؟",
+    removeVideoDescription:
+      "ستتم إزالة هذا الفيديو وتقدم مشاهدته من قائمتك. يمكنك إضافته مرة أخرى لاحقًا.",
+    removeVideoFailed: "تعذرت إزالة هذا الفيديو. حاول مرة أخرى.",
+    removing: "جار الإزالة...",
+    remove: "إزالة",
   },
   playlistSidebar: {
     overallProgress: "التقدم العام",
@@ -899,6 +916,9 @@ const ar: Dictionary = {
       "تم إنشاء هذا الحساب باستخدام Google. يرجى تسجيل الدخول باستخدام Google أو إعادة تعيين كلمة المرور.",
     googleAuthFailed: "فشل تسجيل الدخول باستخدام Google. يرجى المحاولة مرة أخرى.",
     googleAuthMissingConfig: "إعدادات تسجيل الدخول باستخدام Google غير مكتملة.",
+    videoRemoved: "تمت إزالة الفيديو بنجاح.",
+    videoNotInPlaylist: "لم يتم العثور على الفيديو في القائمة.",
+    removeFromCustomOnly: "يمكن إزالة الفيديوهات من القوائم المخصصة فقط.",
   },
 };
 

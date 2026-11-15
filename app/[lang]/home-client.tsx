@@ -124,9 +124,21 @@ export default function HomeClient() {
                 <div className="relative p-2 bg-card border border-border/80 rounded-2xl shadow-lg shadow-primary/5 overflow-hidden group">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/images/dashboard.png"
+                    src={`/images/dashboard-${locale}-light.webp`}
                     alt={t.workflowOne.dashboardAlt}
-                    className="w-full h-auto rounded-xl object-cover"
+                    width={1600}
+                    height={1123}
+                    loading="lazy"
+                    className="w-full h-auto rounded-xl object-cover dark:hidden"
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/images/dashboard-${locale}-dark.webp`}
+                    alt={t.workflowOne.dashboardAlt}
+                    width={1600}
+                    height={1123}
+                    loading="lazy"
+                    className="w-full h-auto rounded-xl object-cover hidden dark:block"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/10 to-transparent pointer-events-none" />
                 </div>
@@ -146,9 +158,21 @@ export default function HomeClient() {
                 <div className="relative p-2 bg-background border border-border/80 rounded-2xl shadow-lg shadow-primary/5 overflow-hidden group">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/images/playlist.png"
+                    src={`/images/playlist-${locale}-light.webp`}
                     alt={t.workflowTwo.playlistAlt}
-                    className="w-full h-auto rounded-xl object-cover"
+                    width={1600}
+                    height={1123}
+                    loading="lazy"
+                    className="w-full h-auto rounded-xl object-cover dark:hidden"
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/images/playlist-${locale}-dark.webp`}
+                    alt={t.workflowTwo.playlistAlt}
+                    width={1600}
+                    height={1123}
+                    loading="lazy"
+                    className="w-full h-auto rounded-xl object-cover hidden dark:block"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-card/10 to-transparent pointer-events-none" />
                 </div>
