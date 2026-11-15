@@ -11,6 +11,7 @@ export const siteConfig = {
   name: "MyTaalim",
   url: "https://www.mytaalim.xyz",
   logo: "/logo.png",
+  twitterHandle: "@mohd_haider07",
   // Used as the sitemap <lastmod>. Bump only when public page content changes,
   // so search engines keep trusting the value.
   lastUpdated: "2026-11-15",
@@ -110,6 +111,7 @@ export function createMetadata({
     },
     twitter: {
       card: "summary_large_image",
+      creator: siteConfig.twitterHandle,
       title: currentTitle,
       description: currentDescription,
       images: [shareImage],
