@@ -1,4 +1,8 @@
 import { MetadataRoute } from "next";
+import { locales } from "@/lib/i18n/config";
+import { absoluteUrl } from "@/lib/seo";
+
+const privatePaths = ["/dashboard", "/profile", "/playlist"];
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -6,14 +10,12 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       disallow: [
-        "/en/dashboard",
-        "/ar/dashboard",
-        "/en/profile",
-        "/ar/profile",
-        "/en/playlist",
-        "/ar/playlist",
+        "/api/",
+        ...locales.flatMap((locale) =>
+          privatePaths.map((path) => `/${locale}${path}`),
+        ),
       ],
     },
-    sitemap: "https://www.mytaalim.xyz/sitemap.xml",
+    sitemap: absoluteUrl("/sitemap.xml"),
   };
 }

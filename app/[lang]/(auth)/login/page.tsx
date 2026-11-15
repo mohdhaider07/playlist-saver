@@ -1,5 +1,6 @@
 import LoginPage from "./login-client";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata, resolveLocale } from "@/lib/seo";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Metadata } from "next";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
@@ -9,11 +10,11 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  
-  const title = lang === "ar" ? "تسجيل الدخول | MyTaalim" : "Sign In | MyTaalim";
+  const page = getDictionary(resolveLocale(lang)).metadata.pages.login;
 
   return createMetadata({
-    title,
+    title: page.title,
+    description: page.description,
     path: "/login",
     locale: lang,
   });
@@ -25,21 +26,15 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
-  
-  const breadcrumbs = [
-    {
-      name: lang === "ar" ? "الرئيسية" : "Home",
-      item: `https://www.mytaalim.xyz/${lang}`,
-    },
-    {
-      name: lang === "ar" ? "تسجيل الدخول" : "Sign In",
-      item: `https://www.mytaalim.xyz/${lang}/login`,
-    },
-  ];
+  const locale = resolveLocale(lang);
 
   return (
     <>
-      <BreadcrumbSchema items={breadcrumbs} />
+      <BreadcrumbSchema
+        locale={locale}
+        name={getDictionary(locale).metadata.pages.login.title}
+        path="/login"
+      />
       <LoginPage />
     </>
   );

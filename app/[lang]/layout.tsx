@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { notFound } from "next/navigation";
 import "../globals.css";
@@ -13,7 +13,6 @@ import {
 } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { createMetadata } from "@/lib/seo";
-import { JsonLd } from "@/components/seo/JsonLd";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -31,16 +30,16 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  const locale = hasLocale(lang) ? lang : "en";
-  const dictionary = getDictionary(locale);
 
-  return createMetadata({
-    title: dictionary.metadata.title,
-    description: dictionary.metadata.description,
-    path: "",
-    locale,
-  });
+  return createMetadata({ path: "", locale: lang });
 }
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F9F8F4" },
+    { media: "(prefers-color-scheme: dark)", color: "#1C1917" },
+  ],
+};
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -71,7 +70,6 @@ export default async function RootLayout({
         className="min-h-full flex flex-col font-sans"
         suppressHydrationWarning
       >
-        <JsonLd />
         <ClientProviders locale={locale} dictionary={dictionary}>
           {children}
         </ClientProviders>

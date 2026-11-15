@@ -6,9 +6,61 @@ function defineDictionary<T>(dictionary: T) {
 
 const en = defineDictionary({
   metadata: {
-    title: "MyTaalim — YouTube Playlist Manager",
+    title: "YouTube Playlist Manager & Course Progress Tracker | MyTaalim",
     description:
-      "Save, organize, and track your YouTube playlist watch progress with MyTaalim.",
+      "Turn YouTube playlists into distraction-free online courses. Organize playlists, resume where you left off, and track your learning progress for free.",
+    keywords: [
+      "youtube playlist manager",
+      "youtube playlist organizer",
+      "youtube course tracker",
+      "youtube learning tracker",
+      "youtube progress tracker",
+      "track youtube playlist progress",
+      "distraction-free youtube",
+      "youtube without distractions",
+      "learn from youtube playlists",
+      "online course organizer",
+      "study planner for youtube",
+      "self-paced learning tracker",
+      "MyTaalim",
+      "My Taalim",
+    ],
+    featureList: [
+      "Import any public YouTube playlist or single video",
+      "Distraction-free player without recommendations or comments",
+      "Automatic watch-progress saving and resume",
+      "Per-video and per-course progress tracking",
+      "Filter courses by status, channel, and title",
+      "English and Arabic interface",
+    ],
+    ogImageAlt:
+      "MyTaalim — organize YouTube playlists and track your learning progress",
+    breadcrumbHome: "Home",
+    pages: {
+      login: {
+        title: "Sign In",
+        description:
+          "Sign in to MyTaalim to continue your YouTube courses and pick up exactly where you left off.",
+      },
+      register: {
+        title: "Create a Free Account",
+        description:
+          "Create a free MyTaalim account to organize YouTube playlists into courses and track your learning progress.",
+      },
+      forgotPassword: {
+        title: "Forgot Password",
+        description:
+          "Request a verification code to reset your MyTaalim password.",
+      },
+      resetPassword: {
+        title: "Reset Password",
+        description: "Set a new password for your MyTaalim account.",
+      },
+      authCallback: { title: "Signing In" },
+      dashboard: { title: "Dashboard" },
+      profile: { title: "Profile" },
+      playlist: { title: "Playlist" },
+    },
   },
   common: {
     brand: "MyTaalim",
@@ -40,9 +92,9 @@ const en = defineDictionary({
   home: {
     heroBadge: "Focus-Driven Learning Workspace",
     heroTitle: "Elevate Your Study.",
-    heroTitleAccent: "Master Your Playlists.",
+    heroTitleAccent: "Master Your YouTube Playlists.",
     heroDescription:
-      "Connect any YouTube playlist to our study workspace, strip away distractions, organize your materials with our playlist organizer, check off your chapters, and monitor progress using our course progress tracker and youtube learning tracker.",
+      "Turn any YouTube playlist into a structured, distraction-free course. MyTaalim strips away recommendations and comments, remembers exactly where you stopped, and tracks your progress lesson by lesson.",
     goToWorkspace: "Go to Workspace",
     exploreFeatures: "Explore Features",
     startLearningFree: "Start Learning Free",
@@ -94,7 +146,8 @@ const en = defineDictionary({
             "The playlist appears as a beautiful modular course card in your dashboard lobby.",
         },
       ],
-      dashboardAlt: "MyTaalim Dashboard Workspace",
+      dashboardAlt:
+        "MyTaalim dashboard showing organized YouTube playlists with course progress bars",
     },
     workflowTwo: {
       eyebrow: "Workflow Phase 2",
@@ -107,7 +160,8 @@ const en = defineDictionary({
         "Description & Notebook Side Panels",
         "Clean Widescreen Layout",
       ],
-      playlistAlt: "MyTaalim Playlist Playback",
+      playlistAlt:
+        "MyTaalim distraction-free YouTube player with playlist sidebar and watch progress",
     },
     demo: {
       eyebrow: "Playground Demo",
@@ -468,9 +522,59 @@ export type Dictionary = typeof en;
 
 const ar: Dictionary = {
   metadata: {
-    title: "MyTaalim — مدير قوائم تشغيل يوتيوب",
+    title: "مدير قوائم تشغيل يوتيوب ومتتبع التقدم الدراسي | MyTaalim",
     description:
-      "احفظ قوائم تشغيل يوتيوب ونظمها وتابع تقدم المشاهدة داخل MyTaalim.",
+      "حوّل قوائم تشغيل يوتيوب إلى دورات تعليمية خالية من المشتتات. نظّم قوائمك، وتابع من حيث توقفت، وتتبّع تقدمك الدراسي مجانًا.",
+    keywords: [
+      "إدارة قوائم تشغيل يوتيوب",
+      "تنظيم قوائم تشغيل يوتيوب",
+      "تتبع التقدم في يوتيوب",
+      "متابعة دورات يوتيوب",
+      "دورات يوتيوب مجانية",
+      "التعلم من يوتيوب",
+      "يوتيوب بدون تشتيت",
+      "تعلم بدون تشتيت",
+      "تنظيم الدورات التعليمية",
+      "تتبع التقدم الدراسي",
+      "منصة تعليمية مجانية",
+      "التعلم الذاتي",
+      "MyTaalim",
+      "ماي تعليم",
+    ],
+    featureList: [
+      "استيراد أي قائمة تشغيل عامة أو فيديو من يوتيوب",
+      "مشغل خالٍ من المشتتات بلا اقتراحات أو تعليقات",
+      "حفظ تقدم المشاهدة تلقائيًا والمتابعة من حيث توقفت",
+      "تتبع التقدم لكل فيديو ولكل دورة",
+      "تصفية الدورات حسب الحالة والقناة والعنوان",
+      "واجهة باللغتين العربية والإنجليزية",
+    ],
+    ogImageAlt: "MyTaalim — نظّم قوائم تشغيل يوتيوب وتتبّع تقدمك الدراسي",
+    breadcrumbHome: "الرئيسية",
+    pages: {
+      login: {
+        title: "تسجيل الدخول",
+        description:
+          "سجّل الدخول إلى MyTaalim لمتابعة دوراتك على يوتيوب من حيث توقفت تمامًا.",
+      },
+      register: {
+        title: "إنشاء حساب مجاني",
+        description:
+          "أنشئ حسابًا مجانيًا في MyTaalim لتنظيم قوائم تشغيل يوتيوب كدورات وتتبّع تقدمك الدراسي.",
+      },
+      forgotPassword: {
+        title: "نسيت كلمة المرور",
+        description: "اطلب رمز تحقق لإعادة تعيين كلمة مرور حسابك في MyTaalim.",
+      },
+      resetPassword: {
+        title: "إعادة تعيين كلمة المرور",
+        description: "عيّن كلمة مرور جديدة لحسابك في MyTaalim.",
+      },
+      authCallback: { title: "جارٍ تسجيل الدخول" },
+      dashboard: { title: "لوحة التحكم" },
+      profile: { title: "الملف الشخصي" },
+      playlist: { title: "قائمة التشغيل" },
+    },
   },
   common: {
     brand: "MyTaalim",
@@ -502,9 +606,9 @@ const ar: Dictionary = {
   home: {
     heroBadge: "مساحة تعلم مصممة للتركيز",
     heroTitle: "ارتق بدراستك.",
-    heroTitleAccent: "أتقن قوائمك التعليمية.",
+    heroTitleAccent: "أتقن قوائم يوتيوب التعليمية.",
     heroDescription:
-      "اربط أي قائمة تشغيل من يوتيوب بـ منصة تعليم متكاملة، أبعد المشتتات في بيئة تعلم بدون تشتيت، علّم الفصول المنجزة لتسهيل تنظيم الدورات التعليمية، وقم بـ إدارة قوائم تشغيل يوتيوب مع تتبع التقدم الدراسي بدقة داخل لوحة أنيقة.",
+      "حوّل أي قائمة تشغيل على يوتيوب إلى دورة تعليمية منظمة وخالية من المشتتات. يزيل MyTaalim الاقتراحات والتعليقات، ويتذكر بدقة أين توقفت، ويتتبع تقدمك الدراسي درسًا بعد درس.",
     goToWorkspace: "اذهب إلى مساحة العمل",
     exploreFeatures: "استكشف المزايا",
     startLearningFree: "ابدأ التعلم مجانًا",
@@ -555,7 +659,8 @@ const ar: Dictionary = {
             "تظهر القائمة كبطاقة دورة جميلة ومنظمة داخل لوحة التحكم.",
         },
       ],
-      dashboardAlt: "مساحة لوحة تحكم MyTaalim",
+      dashboardAlt:
+        "لوحة تحكم MyTaalim تعرض قوائم تشغيل يوتيوب المنظمة مع أشرطة تقدم الدورات",
     },
     workflowTwo: {
       eyebrow: "المرحلة الثانية",
@@ -568,7 +673,8 @@ const ar: Dictionary = {
         "لوحات للوصف والملاحظات",
         "تخطيط عريض ونظيف",
       ],
-      playlistAlt: "تشغيل قائمة MyTaalim",
+      playlistAlt:
+        "مشغل يوتيوب خالٍ من المشتتات في MyTaalim مع شريط قائمة التشغيل وتقدم المشاهدة",
     },
     demo: {
       eyebrow: "عرض تجريبي",

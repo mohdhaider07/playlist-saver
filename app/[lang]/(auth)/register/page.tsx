@@ -1,5 +1,6 @@
 import RegisterPage from "./register-client";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata, resolveLocale } from "@/lib/seo";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Metadata } from "next";
 import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
@@ -9,11 +10,11 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  
-  const title = lang === "ar" ? "إنشاء حساب | MyTaalim" : "Create Account | MyTaalim";
+  const page = getDictionary(resolveLocale(lang)).metadata.pages.register;
 
   return createMetadata({
-    title,
+    title: page.title,
+    description: page.description,
     path: "/register",
     locale: lang,
   });
@@ -25,21 +26,15 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
-  
-  const breadcrumbs = [
-    {
-      name: lang === "ar" ? "الرئيسية" : "Home",
-      item: `https://www.mytaalim.xyz/${lang}`,
-    },
-    {
-      name: lang === "ar" ? "إنشاء حساب" : "Create Account",
-      item: `https://www.mytaalim.xyz/${lang}/register`,
-    },
-  ];
+  const locale = resolveLocale(lang);
 
   return (
     <>
-      <BreadcrumbSchema items={breadcrumbs} />
+      <BreadcrumbSchema
+        locale={locale}
+        name={getDictionary(locale).metadata.pages.register.title}
+        path="/register"
+      />
       <RegisterPage />
     </>
   );

@@ -1,5 +1,6 @@
 import PlaylistPageClient from "./playlist-client";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata, resolveLocale } from "@/lib/seo";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Metadata } from "next";
 
 export async function generateMetadata({
@@ -8,8 +9,8 @@ export async function generateMetadata({
   params: Promise<{ lang: string; playlistId: string }>;
 }): Promise<Metadata> {
   const { lang, playlistId } = await params;
-  
-  const title = lang === "ar" ? "قائمة التشغيل | MyTaalim" : "Playlist | MyTaalim";
+
+  const title = getDictionary(resolveLocale(lang)).metadata.pages.playlist.title;
 
   return createMetadata({
     title,

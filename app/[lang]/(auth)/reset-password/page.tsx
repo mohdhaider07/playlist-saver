@@ -1,7 +1,7 @@
 import ResetPasswordPage from "./reset-password-client";
-import { createMetadata } from "@/lib/seo";
+import { createMetadata, resolveLocale } from "@/lib/seo";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Metadata } from "next";
-import { BreadcrumbSchema } from "@/components/seo/BreadcrumbSchema";
 
 export async function generateMetadata({
   params,
@@ -9,41 +9,17 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
-  
-  const title =
-    lang === "ar"
-      ? "إعادة تعيين كلمة المرور | MyTaalim"
-      : "Reset Password | MyTaalim";
+  const page = getDictionary(resolveLocale(lang)).metadata.pages.resetPassword;
 
   return createMetadata({
-    title,
+    title: page.title,
+    description: page.description,
     path: "/reset-password",
     locale: lang,
+    noIndex: true,
   });
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ lang: string }>;
-}) {
-  const { lang } = await params;
-  
-  const breadcrumbs = [
-    {
-      name: lang === "ar" ? "الرئيسية" : "Home",
-      item: `https://www.mytaalim.xyz/${lang}`,
-    },
-    {
-      name: lang === "ar" ? "إعادة تعيين كلمة المرور" : "Reset Password",
-      item: `https://www.mytaalim.xyz/${lang}/reset-password`,
-    },
-  ];
-
-  return (
-    <>
-      <BreadcrumbSchema items={breadcrumbs} />
-      <ResetPasswordPage />
-    </>
-  );
+export default function Page() {
+  return <ResetPasswordPage />;
 }

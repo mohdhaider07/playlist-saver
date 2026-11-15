@@ -1,15 +1,24 @@
 import React from "react";
-
-interface BreadcrumbItem {
-  name: string;
-  item: string;
-}
+import { Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import { localizedUrl } from "@/lib/seo";
+import { JsonLdScript } from "@/components/seo/JsonLd";
 
 interface BreadcrumbSchemaProps {
-  items: BreadcrumbItem[];
+  locale: Locale;
+  name: string;
+  path: string;
 }
 
-export function BreadcrumbSchema({ items }: BreadcrumbSchemaProps) {
+export function BreadcrumbSchema({ locale, name, path }: BreadcrumbSchemaProps) {
+  const items = [
+    {
+      name: getDictionary(locale).metadata.breadcrumbHome,
+      item: localizedUrl(locale),
+    },
+    { name, item: localizedUrl(locale, path) },
+  ];
+
   const schema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -21,12 +30,5 @@ export function BreadcrumbSchema({ items }: BreadcrumbSchemaProps) {
     })),
   };
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(schema),
-      }}
-    />
-  );
+  return <JsonLdScript data={schema} />;
 }

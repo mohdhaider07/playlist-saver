@@ -190,9 +190,9 @@ export default function ResetPasswordPage() {
           alt={dictionary.auth.iconAlt}
           className="w-14 h-14 object-contain mb-4 transition-transform duration-300 hover:scale-105 hidden dark:block"
         />
-        <h2 className="text-center text-3xl font-serif font-semibold tracking-wide text-foreground">
+        <h1 className="text-center text-3xl font-serif font-semibold tracking-wide text-foreground">
           {t.title}
-        </h2>
+        </h1>
         <div className="w-12 h-0.5 bg-primary mt-4 opacity-80"></div>
         <p className="mt-3 text-center text-sm text-muted-foreground font-light">
           {t.subtitle}
