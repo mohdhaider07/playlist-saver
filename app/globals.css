@@ -259,3 +259,79 @@ select,
 summary {
   cursor: pointer;
 }
+
+/* Landing hero */
+
+/* One screen of height. Desktop divides by the `zoom` set on <html> above,
+   which would otherwise push a full-height hero past the fold. */
+html {
+  --hero-vh: 100svh;
+}
+
+@media (min-width: 1024px) {
+  html {
+    --hero-vh: calc(100svh / 1.1);
+  }
+}
+
+.text-gold-shimmer {
+  --shimmer-deep: #8a6a2e;
+  --shimmer-mid: #b08a45;
+  --shimmer-light: #dcc188;
+  background-image: linear-gradient(
+    100deg,
+    var(--shimmer-deep) 0%,
+    var(--shimmer-mid) 30%,
+    var(--shimmer-light) 50%,
+    var(--shimmer-mid) 70%,
+    var(--shimmer-deep) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gold-shimmer 7s linear infinite;
+}
+
+.dark .text-gold-shimmer {
+  --shimmer-deep: #b8924c;
+  --shimmer-mid: #d4b26e;
+  --shimmer-light: #f6e7c1;
+}
+
+@keyframes gold-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -20% 0;
+  }
+}
+
+/* Fine film grain laid over hero backdrops */
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.45 0 0 0 0 0.35 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes hero-drift {
+  from {
+    transform: translate3d(-4%, -3%, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(5%, 4%, 0) scale(1.12);
+  }
+}
+
+.hero-aurora {
+  animation: hero-drift 18s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .text-gold-shimmer,
+  .hero-aurora {
+    animation: none;
+  }
+}

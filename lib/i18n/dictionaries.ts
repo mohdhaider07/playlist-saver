@@ -99,7 +99,6 @@ const en = defineDictionary({
     exploreFeatures: "Explore Features",
     startLearningFree: "Start Learning Free",
     signIn: "Sign In",
-    discoverMore: "Discover More",
     why: "Why MyTaalim?",
     featuresTitle: "Distraction-Free Environment Built for Online Study",
     featureCards: [
@@ -185,6 +184,19 @@ const en = defineDictionary({
     footerGithub: "Github",
     copyrightSuffix:
       "MyTaalim. All rights reserved.",
+    heroEdition: "N° 01",
+    heroFacts: [
+      { value: "0", label: "Ads, comments or recommendations" },
+      { value: "1", label: "Link to import a whole playlist" },
+      { value: "100%", label: "Free, in English and Arabic" },
+    ],
+    heroCards: {
+      resumeLabel: "Resume where you stopped",
+      resumeLesson: "Lesson 4 · 12:45",
+      progressLabel: "Course progress",
+      progressMeta: "14 of 23 lessons",
+      autoSaved: "Progress saved automatically",
+    },
   },
   miniDemo: {
     videos: [
@@ -613,7 +625,6 @@ const ar: Dictionary = {
     exploreFeatures: "استكشف المزايا",
     startLearningFree: "ابدأ التعلم مجانًا",
     signIn: "تسجيل الدخول",
-    discoverMore: "اكتشف المزيد",
     why: "لماذا MyTaalim؟",
     featuresTitle: "بيئة خالية من المشتتات مصممة للتعلم عبر الإنترنت",
     featureCards: [
@@ -697,6 +708,19 @@ const ar: Dictionary = {
     footerGithub: "Github",
     copyrightSuffix:
       "MyTaalim. جميع الحقوق محفوظة.",
+    heroEdition: "العدد 01",
+    heroFacts: [
+      { value: "0", label: "إعلانات أو تعليقات أو اقتراحات" },
+      { value: "1", label: "رابط واحد لاستيراد قائمة كاملة" },
+      { value: "100%", label: "مجاني، بالعربية والإنجليزية" },
+    ],
+    heroCards: {
+      resumeLabel: "تابع من حيث توقفت",
+      resumeLesson: "الدرس 4 · 12:45",
+      progressLabel: "تقدم الدورة",
+      progressMeta: "14 من 23 درسًا",
+      autoSaved: "يُحفظ التقدم تلقائيًا",
+    },
   },
   miniDemo: {
     videos: [
